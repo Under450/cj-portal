@@ -92,7 +92,7 @@ function ProjectGroup({ label, projects, activeProject, onSelect }: {
               }`}
             >
               <div className="flex items-center justify-between mb-0.5">
-                <span className={`text-[13px] font-medium ${isActive ? 'text-text' : 'text-muted'}`}>
+                <span className={`text-[14px] font-medium ${isActive ? 'text-text' : 'text-muted'}`}>
                   {p.name}
                 </span>
                 <span className={`text-[9px] font-mono tracking-wider px-1.5 py-px rounded border ${BADGE_COLORS[p.badge]}`}>

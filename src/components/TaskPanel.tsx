@@ -109,7 +109,7 @@ export function TaskPanel({ title, tasks, onToggle, onAdd, filter }: TaskPanelPr
               </button>
 
               {/* Text */}
-              <span className={`text-[14px] flex-1 leading-snug ${
+              <span className={`text-[15px] flex-1 leading-snug ${
                 t.done ? 'line-through text-muted2' : 'text-text'
               }`}>
                 {t.text}
@@ -132,7 +132,7 @@ export function TaskPanel({ title, tasks, onToggle, onAdd, filter }: TaskPanelPr
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Add task..."
-            className="flex-1 bg-transparent text-[14px] text-text placeholder:text-muted2 outline-none"
+            className="flex-1 bg-transparent text-[15px] text-text placeholder:text-muted2 outline-none"
           />
         </div>
       </form>
