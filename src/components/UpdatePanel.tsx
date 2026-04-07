@@ -30,8 +30,8 @@ const container = {
 }
 
 const item = {
-  hidden: { opacity: 0, y: 12 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.25 } },
+  hidden: { opacity: 0, y: 10 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.2 } },
 }
 
 export function UpdatePanel({ title, updates, onToggle }: UpdatePanelProps) {
@@ -40,32 +40,32 @@ export function UpdatePanel({ title, updates, onToggle }: UpdatePanelProps) {
       variants={container}
       initial="hidden"
       animate="visible"
-      className="rounded-lg border border-border bg-surface overflow-hidden"
+      className="rounded-xl border border-border bg-surface overflow-hidden"
     >
       {/* Header */}
-      <div className="px-4 py-2.5 border-b border-border">
-        <span className="text-[10px] font-mono text-muted tracking-[0.15em]">{title}</span>
+      <div className="px-5 py-3 border-b border-border">
+        <span className="text-[11px] font-mono text-muted tracking-[0.15em]">{title}</span>
       </div>
 
       {/* Entries */}
-      <div className="p-3 space-y-1.5 max-h-[400px] overflow-y-auto">
+      <div className="p-4 space-y-2">
         {updates.map(u => (
           <motion.div
             key={u.id}
             variants={item}
-            className={`rounded-md border border-border bg-surface2/50 overflow-hidden border-l-[3px] ${TYPE_BORDER[u.type]}`}
+            className={`rounded-lg border border-border bg-surface2/50 overflow-hidden border-l-[3px] ${TYPE_BORDER[u.type]}`}
           >
             {/* Clickable header */}
             <button
               onClick={() => onToggle(u.id)}
-              className="w-full text-left px-3 py-2.5 flex items-center gap-2 cursor-pointer hover:bg-surface2/80 transition-colors"
+              className="w-full text-left px-4 py-3.5 flex items-center gap-3 cursor-pointer hover:bg-surface2/80 transition-colors"
             >
               <div className="flex-1 min-w-0">
-                <div className="text-[12.5px] text-text font-medium truncate">{u.title}</div>
-                <div className="text-[10px] font-mono text-muted2 mt-0.5">{u.date}</div>
+                <div className="text-[15px] text-text font-medium">{u.title}</div>
+                <div className="text-[11px] font-mono text-muted2 mt-1">{u.date}</div>
               </div>
               <ChevronDown
-                size={14}
+                size={16}
                 className={`text-muted2 transition-transform flex-shrink-0 ${u.expanded ? 'rotate-180' : ''}`}
               />
             </button>
@@ -76,15 +76,15 @@ export function UpdatePanel({ title, updates, onToggle }: UpdatePanelProps) {
                 initial={{ height: 0, opacity: 0 }}
                 animate={{ height: 'auto', opacity: 1 }}
                 transition={{ duration: 0.2 }}
-                className="px-3 pb-3"
+                className="px-4 pb-4"
               >
-                <div className="border-t border-border pt-2 mt-0">
+                <div className="border-t border-border pt-3">
                   <p
-                    className="text-[12px] text-muted leading-relaxed [&_.text-amber]:text-amber [&_.text-teal]:text-teal [&_.text-purple]:text-purple"
+                    className="text-[13px] text-muted leading-relaxed [&_.text-amber]:text-amber [&_.text-teal]:text-teal [&_.text-purple]:text-purple"
                     dangerouslySetInnerHTML={{ __html: u.body }}
                   />
-                  <div className="mt-2">
-                    <span className={`text-[9px] font-mono tracking-wider px-1.5 py-0.5 rounded border ${PILL_STYLE[u.pill]}`}>
+                  <div className="mt-3">
+                    <span className={`text-[10px] font-mono tracking-wider px-2 py-0.5 rounded border ${PILL_STYLE[u.pill]}`}>
                       {u.pillText}
                     </span>
                   </div>
