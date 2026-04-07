@@ -1,6 +1,6 @@
 import { motion, useMotionValue, useTransform, animate } from 'framer-motion'
 import { useEffect } from 'react'
-import { BRANDS, SEED_REVENUE } from '@/lib/brands'
+import { useData } from '@/lib/DataProvider'
 import { TrendingUp } from 'lucide-react'
 
 function AnimatedCounter({ value }: { value: number }) {
@@ -16,7 +16,8 @@ function AnimatedCounter({ value }: { value: number }) {
 }
 
 export function RevenueHero() {
-  const total = Object.values(SEED_REVENUE).reduce((a, b) => a + b, 0)
+  const { brands, revenueForBrand } = useData()
+  const total = brands.reduce((sum, b) => sum + revenueForBrand(b.id), 0)
 
   return (
     <motion.div
@@ -43,8 +44,8 @@ export function RevenueHero() {
           <AnimatedCounter value={total} />
         </div>
         <div className="flex gap-3">
-          {BRANDS.map((brand) => {
-            const rev = SEED_REVENUE[brand.id] || 0
+          {brands.map((brand) => {
+            const rev = revenueForBrand(brand.id)
             const pct = total > 0 ? (rev / total) * 100 : 0
             return (
               <div key={brand.id} className="flex-1">

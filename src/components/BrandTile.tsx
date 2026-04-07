@@ -1,8 +1,8 @@
 import { useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import { ExternalLink } from 'lucide-react'
-import type { Brand } from '@/lib/brands'
-import { SEED_REVENUE } from '@/lib/brands'
+import type { Brand } from '@/lib/data'
+import { useData } from '@/lib/DataProvider'
 
 function BergasonBg() {
   return (
@@ -78,7 +78,8 @@ const TILE_TEXT: Record<string, string> = {
 
 export function BrandTile({ brand, index }: { brand: Brand; index: number }) {
   const navigate = useNavigate()
-  const revenue = SEED_REVENUE[brand.id] || 0
+  const { revenueForBrand } = useData()
+  const revenue = revenueForBrand(brand.id)
   const progress = brand.monthly_target > 0 ? Math.min((revenue / brand.monthly_target) * 100, 100) : 0
   const Bg = BG_MAP[brand.slug]
   const tileBg = TILE_BG[brand.slug] || 'bg-white'

@@ -1,28 +1,14 @@
 import { PageTransition } from '@/components/PageTransition'
 import { motion } from 'framer-motion'
 import { useState } from 'react'
-import { BRANDS } from '@/lib/brands'
+import { useData } from '@/lib/DataProvider'
+import * as api from '@/lib/data'
 import { Plus, GripVertical } from 'lucide-react'
 
-interface Task {
-  id: string
-  title: string
-  brandId: string
-  status: 'todo' | 'in-progress' | 'done'
-  priority: 'low' | 'medium' | 'high'
-}
+type TaskStatus = 'open' | 'in-progress' | 'done'
 
-const INITIAL_TASKS: Task[] = [
-  { id: '1', title: 'Fix tenant portal login', brandId: '1', status: 'todo', priority: 'high' },
-  { id: '2', title: 'Update FMM pricing page', brandId: '2', status: 'todo', priority: 'medium' },
-  { id: '3', title: 'Design Velvet onboarding', brandId: '3', status: 'in-progress', priority: 'high' },
-  { id: '4', title: 'Set up Aventus analytics', brandId: '4', status: 'in-progress', priority: 'medium' },
-  { id: '5', title: 'Bergason invoice automation', brandId: '1', status: 'done', priority: 'low' },
-  { id: '6', title: 'FMM email templates', brandId: '2', status: 'done', priority: 'medium' },
-]
-
-const COLUMNS: { key: Task['status']; label: string; colour: string }[] = [
-  { key: 'todo', label: 'To Do', colour: '#6b7280' },
+const COLUMNS: { key: TaskStatus; label: string; colour: string }[] = [
+  { key: 'open', label: 'To Do', colour: '#6b7280' },
   { key: 'in-progress', label: 'In Progress', colour: '#1d4ed8' },
   { key: 'done', label: 'Done', colour: '#15803d' },
 ]
@@ -34,27 +20,23 @@ const PRIORITY_COLOURS: Record<string, string> = {
 }
 
 export function Tasks() {
-  const [tasks, setTasks] = useState<Task[]>(INITIAL_TASKS)
+  const { brands, tasks, reloadTasks } = useData()
   const [adding, setAdding] = useState(false)
   const [newTitle, setNewTitle] = useState('')
-  const [newBrand, setNewBrand] = useState('1')
-  const [newPriority, setNewPriority] = useState<Task['priority']>('medium')
+  const [newBrand, setNewBrand] = useState(brands[0]?.id || '')
+  const [newPriority, setNewPriority] = useState<'low' | 'medium' | 'high'>('medium')
 
-  function addTask() {
-    if (!newTitle.trim()) return
-    setTasks(prev => [{
-      id: Date.now().toString(),
-      title: newTitle.trim(),
-      brandId: newBrand,
-      status: 'todo',
-      priority: newPriority,
-    }, ...prev])
+  async function addTask() {
+    if (!newTitle.trim() || !newBrand) return
+    await api.createTask({ brand_id: newBrand, title: newTitle.trim(), priority: newPriority })
     setNewTitle('')
     setAdding(false)
+    await reloadTasks()
   }
 
-  function moveTask(id: string, newStatus: Task['status']) {
-    setTasks(prev => prev.map(t => t.id === id ? { ...t, status: newStatus } : t))
+  async function moveTask(id: string, newStatus: TaskStatus) {
+    await api.updateTask(id, { status: newStatus })
+    await reloadTasks()
   }
 
   return (
@@ -71,9 +53,9 @@ export function Tasks() {
           <div className="grid grid-cols-4 gap-3">
             <input value={newTitle} onChange={e => setNewTitle(e.target.value)} onKeyDown={e => e.key === 'Enter' && addTask()} placeholder="Task title" className="col-span-2 h-9 px-3 text-sm rounded-lg border border-[#e8e6e2] outline-none" autoFocus />
             <select value={newBrand} onChange={e => setNewBrand(e.target.value)} className="h-9 px-2 text-sm rounded-lg border border-[#e8e6e2] outline-none">
-              {BRANDS.map(b => <option key={b.id} value={b.id}>{b.name}</option>)}
+              {brands.map(b => <option key={b.id} value={b.id}>{b.name}</option>)}
             </select>
-            <select value={newPriority} onChange={e => setNewPriority(e.target.value as Task['priority'])} className="h-9 px-2 text-sm rounded-lg border border-[#e8e6e2] outline-none">
+            <select value={newPriority} onChange={e => setNewPriority(e.target.value as 'low' | 'medium' | 'high')} className="h-9 px-2 text-sm rounded-lg border border-[#e8e6e2] outline-none">
               <option value="low">Low</option>
               <option value="medium">Medium</option>
               <option value="high">High</option>
@@ -96,17 +78,12 @@ export function Tasks() {
             </div>
             <div className="space-y-2 min-h-[200px]">
               {tasks.filter(t => t.status === col.key).map((task, i) => {
-                const brand = BRANDS.find(b => b.id === task.brandId)
-                const nextStatus: Task['status'] = col.key === 'todo' ? 'in-progress' : col.key === 'in-progress' ? 'done' : 'todo'
+                const brand = brands.find(b => b.id === task.brand_id)
+                const nextStatus: TaskStatus = col.key === 'open' ? 'in-progress' : col.key === 'in-progress' ? 'done' : 'open'
                 return (
-                  <motion.div
-                    key={task.id}
-                    initial={{ opacity: 0, y: 8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: i * 0.05 }}
+                  <motion.div key={task.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}
                     onClick={() => moveTask(task.id, nextStatus)}
-                    className="bg-white rounded-xl border border-[#e8e6e2] p-3 cursor-pointer hover:shadow-md transition-shadow group"
-                  >
+                    className="bg-white rounded-xl border border-[#e8e6e2] p-3 cursor-pointer hover:shadow-md transition-shadow group">
                     <div className="flex items-start gap-2">
                       <GripVertical size={14} className="text-[#d1d5db] mt-0.5 opacity-0 group-hover:opacity-100 flex-shrink-0" />
                       <div className="flex-1 min-w-0">

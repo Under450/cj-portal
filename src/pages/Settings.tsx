@@ -1,25 +1,21 @@
 import { PageTransition } from '@/components/PageTransition'
-import { BRANDS } from '@/lib/brands'
+import { useData } from '@/lib/DataProvider'
 import { motion } from 'framer-motion'
 import { ExternalLink } from 'lucide-react'
 
 export function Settings() {
+  const { brands } = useData()
+
   return (
     <PageTransition>
       <h1 className="text-xl font-bold mb-6">Settings</h1>
-
       <div className="space-y-4">
         <div className="bg-white rounded-xl border border-[#e8e6e2] p-5">
           <h3 className="text-sm font-bold mb-4">Brands</h3>
           <div className="space-y-3">
-            {BRANDS.map((brand, i) => (
-              <motion.div
-                key={brand.id}
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.06 }}
-                className="flex items-center justify-between p-3 rounded-lg border border-[#e8e6e2] hover:bg-[#fafafa]"
-              >
+            {brands.map((brand, i) => (
+              <motion.div key={brand.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.06 }}
+                className="flex items-center justify-between p-3 rounded-lg border border-[#e8e6e2] hover:bg-[#fafafa]">
                 <div className="flex items-center gap-3">
                   <div className="w-4 h-4 rounded-full" style={{ background: brand.colour }} />
                   <div>
@@ -41,17 +37,18 @@ export function Settings() {
             ))}
           </div>
         </div>
-
         <div className="bg-white rounded-xl border border-[#e8e6e2] p-5">
           <h3 className="text-sm font-bold mb-4">API Keys</h3>
           <div className="space-y-3">
             <div>
               <label className="block text-xs font-medium text-[#6b7280] mb-1">Supabase URL</label>
-              <input type="text" placeholder="https://xxx.supabase.co" className="w-full h-9 px-3 text-sm rounded-lg border border-[#e8e6e2] outline-none font-mono" readOnly value={import.meta.env.VITE_SUPABASE_URL || 'Not configured'} />
+              <input type="text" readOnly value={import.meta.env.VITE_SUPABASE_URL || 'Not configured'}
+                className="w-full h-9 px-3 text-sm rounded-lg border border-[#e8e6e2] outline-none font-mono bg-[#fafafa]" />
             </div>
             <div>
               <label className="block text-xs font-medium text-[#6b7280] mb-1">Anthropic API Key</label>
-              <input type="password" placeholder="sk-ant-..." className="w-full h-9 px-3 text-sm rounded-lg border border-[#e8e6e2] outline-none font-mono" readOnly value={import.meta.env.VITE_ANTHROPIC_API_KEY ? 'secured' : 'Not configured'} />
+              <input type="password" readOnly value={import.meta.env.VITE_ANTHROPIC_API_KEY ? '••••••••' : 'Not configured'}
+                className="w-full h-9 px-3 text-sm rounded-lg border border-[#e8e6e2] outline-none font-mono bg-[#fafafa]" />
             </div>
           </div>
         </div>
