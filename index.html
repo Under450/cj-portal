@@ -1,15 +1,993 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#1a1a1a" />
-    <link rel="manifest" href="/manifest.json" />
-    <title>CJ Portal</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CJ Ops Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&family=Fraunces:wght@700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy: #0c0f1a;
+    --navy2: #111827;
+    --navy3: #1a2235;
+    --navy4: #1e2d45;
+    --amber: #f0a500;
+    --amber-dim: rgba(240,165,0,0.12);
+    --amber-border: rgba(240,165,0,0.3);
+    --teal: #00c9a7;
+    --text: #e8eaf0;
+    --text-muted: #8892a4;
+    --text-dim: #4a5568;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.12);
+    --sidebar-w: 220px;
+  }
+
+  html, body {
+    height: 100%;
+    background: var(--navy);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    overflow: hidden;
+  }
+
+  /* Noise texture */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.4;
+  }
+
+  /* ── LAYOUT ── */
+  .app { display: flex; flex-direction: column; height: 100vh; }
+
+  /* HEADER */
+  .header {
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    height: 52px;
+    background: var(--navy2);
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+    gap: 12px;
+  }
+  .logo-mark {
+    width: 30px; height: 30px;
+    background: var(--amber);
+    border-radius: 7px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Fraunces', serif;
+    font-size: 14px; font-weight: 700;
+    color: #1a0d00;
+    box-shadow: 0 0 16px rgba(240,165,0,0.4);
+    flex-shrink: 0;
+  }
+  .logo-title {
+    font-family: 'Fraunces', serif;
+    font-size: 17px; font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.3px;
+  }
+  .live-badge {
+    display: flex; align-items: center; gap: 5px;
+    margin-left: auto;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--teal);
+    letter-spacing: 0.05em;
+  }
+  .live-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--teal);
+    box-shadow: 0 0 8px var(--teal);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+  .clock {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-left: 16px;
+  }
+
+  /* BODY */
+  .body { display: flex; flex: 1; overflow: hidden; }
+
+  /* SIDEBAR */
+  .sidebar {
+    width: var(--sidebar-w);
+    min-width: var(--sidebar-w);
+    background: var(--navy2);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+  .sidebar-scroll { flex: 1; overflow-y: auto; padding: 10px 0; }
+  .sidebar-scroll::-webkit-scrollbar { width: 3px; }
+  .sidebar-scroll::-webkit-scrollbar-track { background: transparent; }
+  .sidebar-scroll::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+  .group-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    padding: 12px 16px 5px;
+  }
+
+  .project-btn {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none;
+    border-left: 2px solid transparent;
+    padding: 9px 14px 9px 14px;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .project-btn:hover { background: rgba(255,255,255,0.04); }
+  .project-btn.active {
+    background: var(--amber-dim);
+    border-left-color: var(--amber);
+  }
+  .proj-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 3px; }
+  .proj-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+  }
+  .project-btn.active .proj-name { color: var(--amber); }
+  .proj-sub {
+    font-size: 11px;
+    color: var(--text-muted);
+    line-height: 1.4;
+    margin-bottom: 5px;
+  }
+  .proj-bar { height: 2px; background: rgba(255,255,255,0.08); border-radius: 1px; }
+  .proj-fill { height: 100%; border-radius: 1px; transition: width 0.3s; }
+
+  .badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px; font-weight: 500;
+    padding: 2px 5px;
+    border-radius: 3px;
+    letter-spacing: 0.05em;
+    flex-shrink: 0;
+  }
+  .badge-live { background: rgba(0,201,167,0.15); color: #00c9a7; }
+  .badge-wip { background: rgba(240,165,0,0.15); color: var(--amber); }
+  .badge-tbc { background: rgba(255,255,255,0.08); color: var(--text-muted); }
+
+  /* FILTER CHIPS */
+  .filter-row {
+    padding: 10px 12px;
+    border-top: 1px solid var(--border);
+    display: flex; gap: 5px; flex-wrap: wrap;
+  }
+  .filter-label { font-size: 9px; font-weight: 600; letter-spacing: 0.1em; color: var(--text-dim); text-transform: uppercase; width: 100%; margin-bottom: 4px; }
+  .chip {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px; font-weight: 500;
+    padding: 4px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    border: 1px solid var(--border2);
+    color: var(--text-muted);
+    background: transparent;
+    transition: all 0.12s;
+    letter-spacing: 0.04em;
+  }
+  .chip:active { transform: scale(0.95); }
+  .chip.on-dev { background: rgba(59,130,246,0.2); color: #60a5fa; border-color: rgba(59,130,246,0.3); }
+  .chip.on-ops { background: rgba(240,165,0,0.15); color: var(--amber); border-color: var(--amber-border); }
+  .chip.on-legal { background: rgba(167,139,250,0.2); color: #a78bfa; border-color: rgba(167,139,250,0.3); }
+  .chip.on-design { background: rgba(244,114,182,0.2); color: #f472b6; border-color: rgba(244,114,182,0.3); }
+
+  /* MAIN */
+  .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+  /* STATS BAR */
+  .stats-bar {
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+    height: 52px;
+    background: var(--navy2);
+    border-bottom: 1px solid var(--border);
+    gap: 32px;
+    flex-shrink: 0;
+  }
+  .stat { display: flex; align-items: baseline; gap: 7px; }
+  .stat-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 20px; font-weight: 500;
+    color: var(--text);
+  }
+  .stat-num.amber { color: var(--amber); }
+  .stat-num.teal { color: var(--teal); }
+  .stat-num.red { color: #f87171; }
+  .stat-lbl {
+    font-size: 10px; font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-dim);
+  }
+  .stat-divider { width: 1px; height: 24px; background: var(--border2); }
+
+  /* TAB ROW */
+  .tab-row {
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+    height: 46px;
+    border-bottom: 1px solid var(--border);
+    gap: 4px;
+    flex-shrink: 0;
+    background: var(--navy);
+  }
+  .tab-btn {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px; font-weight: 500;
+    padding: 6px 14px;
+    border-radius: 6px;
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.15s;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+  }
+  .tab-btn:hover { background: rgba(255,255,255,0.05); color: var(--text); }
+  .tab-btn.active {
+    background: var(--amber);
+    color: #1a0d00;
+    font-weight: 600;
+  }
+  .tab-btn:active { transform: scale(0.97); }
+
+  /* PANEL AREA */
+  .panel-area { flex: 1; overflow: hidden; position: relative; }
+  .panel { display: none; flex-direction: column; height: 100%; }
+  .panel.active { display: flex; }
+
+  /* PANEL HEADER */
+  .panel-hdr {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 24px 12px;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  .panel-title {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 11px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--text-muted);
+  }
+  .panel-dot { width: 7px; height: 7px; border-radius: 50%; }
+  .panel-count {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px; color: var(--text-dim);
+  }
+
+  /* TASK LIST */
+  .task-list { flex: 1; overflow-y: auto; padding: 6px 0; }
+  .task-list::-webkit-scrollbar { width: 3px; }
+  .task-list::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+  .task-section-label {
+    font-size: 10px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.1em;
+    color: var(--text-dim);
+    padding: 12px 24px 5px;
+  }
+
+  .task-item {
+    display: flex; align-items: flex-start; gap: 12px;
+    padding: 10px 24px;
+    cursor: pointer;
+    transition: background 0.1s;
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+  }
+  .task-item:hover { background: rgba(255,255,255,0.03); }
+  .task-item:active { background: rgba(255,255,255,0.06); }
+
+  .task-check {
+    width: 18px; height: 18px; min-width: 18px;
+    border-radius: 4px;
+    border: 1.5px solid var(--border2);
+    margin-top: 1px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+    background: transparent;
+  }
+  .task-check.done {
+    background: var(--teal);
+    border-color: var(--teal);
+    box-shadow: 0 0 8px rgba(0,201,167,0.3);
+  }
+  .task-check.done::after {
+    content: '';
+    display: block;
+    width: 6px; height: 4px;
+    border-left: 2px solid #0c0f1a;
+    border-bottom: 2px solid #0c0f1a;
+    transform: rotate(-45deg) translate(0.5px, -1px);
+  }
+
+  .task-text {
+    flex: 1;
+    font-size: 14px;
+    line-height: 1.45;
+    color: var(--text);
+    transition: color 0.15s;
+  }
+  .task-text.done {
+    color: var(--text-dim);
+    text-decoration: line-through;
+    text-decoration-color: rgba(255,255,255,0.2);
+  }
+
+  .tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px; font-weight: 500;
+    padding: 2px 6px;
+    border-radius: 3px;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    margin-top: 2px;
+    flex-shrink: 0;
+  }
+  .tag-dev { background: rgba(59,130,246,0.15); color: #60a5fa; }
+  .tag-ops { background: rgba(240,165,0,0.12); color: var(--amber); }
+  .tag-legal { background: rgba(167,139,250,0.15); color: #a78bfa; }
+  .tag-design { background: rgba(244,114,182,0.15); color: #f472b6; }
+
+  .task-hidden { display: none !important; }
+
+  /* ADD TASK */
+  .add-task-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 24px 14px;
+    flex-shrink: 0;
+    border-top: 1px solid var(--border);
+  }
+  .add-task-input {
+    flex: 1;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border2);
+    border-radius: 7px;
+    padding: 9px 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.15s;
+  }
+  .add-task-input::placeholder { color: var(--text-dim); }
+  .add-task-input:focus { border-color: var(--amber-border); }
+  .add-btn {
+    width: 34px; height: 34px;
+    border-radius: 7px;
+    background: var(--amber);
+    border: none;
+    color: #1a0d00;
+    font-size: 18px; font-weight: 500;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.12s;
+    flex-shrink: 0;
+  }
+  .add-btn:hover { background: #ffc020; }
+  .add-btn:active { transform: scale(0.95); }
+
+  /* UPDATE ENTRIES */
+  .update-item {
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: background 0.1s;
+  }
+  .update-item:hover { background: rgba(255,255,255,0.02); }
+  .update-hdr {
+    display: flex; align-items: center;
+    padding: 14px 24px;
+    gap: 12px;
+  }
+  .update-arrow {
+    font-size: 11px; color: var(--text-dim);
+    transition: transform 0.2s cubic-bezier(0.22,1,0.36,1);
+    flex-shrink: 0;
+  }
+  .update-item.open .update-arrow { transform: rotate(90deg); }
+  .update-title-col { flex: 1; }
+  .update-title { font-size: 14px; font-weight: 500; color: var(--text); margin-bottom: 3px; }
+  .update-meta { display: flex; align-items: center; gap: 10px; }
+  .update-date { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-dim); }
+  .update-status { font-size: 11px; font-weight: 500; }
+  .status-live { color: var(--teal); }
+  .status-progress { color: var(--amber); }
+  .status-hold { color: var(--text-muted); }
+  .status-done { color: #60a5fa; }
+
+  .update-body {
+    display: none;
+    padding: 0 24px 16px 24px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--text-muted);
+    border-top: 1px solid rgba(255,255,255,0.04);
+    padding-top: 12px;
+    margin-top: 0;
+  }
+  .update-item.open .update-body { display: block; }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="logo-mark">CJ</div>
+    <span class="logo-title">Ops Portal</span>
+    <div class="live-badge">
+      <div class="live-dot"></div>
+      LIVE
+    </div>
+    <div class="clock" id="clock"></div>
+  </header>
+
+  <div class="body">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-scroll">
+
+        <div class="group-label">Bergason</div>
+
+        <button class="project-btn active" onclick="selectProject(this)">
+          <div class="proj-row">
+            <span class="proj-name">Block Management</span>
+            <span class="badge badge-wip">WIP</span>
+          </div>
+          <div class="proj-sub">Residents Portal · Admin Portal · Tenant Rights Act</div>
+          <div class="proj-bar"><div class="proj-fill" style="width:72%;background:var(--amber)"></div></div>
+        </button>
+
+        <button class="project-btn" onclick="selectProject(this)">
+          <div class="proj-row">
+            <span class="proj-name">Landlord Portal</span>
+            <span class="badge badge-wip">WIP</span>
+          </div>
+          <div class="proj-sub">Landlord Portal · Admin Panel</div>
+          <div class="proj-bar"><div class="proj-fill" style="width:55%;background:var(--amber)"></div></div>
+        </button>
+
+        <button class="project-btn" onclick="selectProject(this)">
+          <div class="proj-row">
+            <span class="proj-name">Estate Agents</span>
+            <span class="badge badge-tbc">TBC</span>
+          </div>
+          <div class="proj-sub">Website · Portal TBC</div>
+          <div class="proj-bar"><div class="proj-fill" style="width:10%;background:#4a5568"></div></div>
+        </button>
+
+        <button class="project-btn" onclick="selectProject(this)">
+          <div class="proj-row">
+            <span class="proj-name">Brochure</span>
+            <span class="badge badge-live">LIVE</span>
+          </div>
+          <div class="proj-sub">Generic Template · Site-Specific Flipbook</div>
+          <div class="proj-bar"><div class="proj-fill" style="width:100%;background:var(--teal)"></div></div>
+        </button>
+
+        <button class="project-btn" onclick="selectProject(this)">
+          <div class="proj-row">
+            <span class="proj-name">Inventory App</span>
+            <span class="badge badge-tbc">TBC</span>
+          </div>
+          <div class="proj-sub">App TBC</div>
+          <div class="proj-bar"><div class="proj-fill" style="width:15%;background:#4a5568"></div></div>
+        </button>
+
+        <div class="group-label">CJ</div>
+
+        <button class="project-btn" onclick="selectProject(this)">
+          <div class="proj-row">
+            <span class="proj-name">Forward My Mail</span>
+            <span class="badge badge-wip">WIP</span>
+          </div>
+          <div class="proj-sub">Staff Portal · Client Portal</div>
+          <div class="proj-bar"><div class="proj-fill" style="width:68%;background:var(--amber)"></div></div>
+        </button>
+
+        <button class="project-btn" onclick="selectProject(this)">
+          <div class="proj-row">
+            <span class="proj-name">Velvet</span>
+            <span class="badge badge-tbc">TBC</span>
+          </div>
+          <div class="proj-sub">App TBC</div>
+          <div class="proj-bar"><div class="proj-fill" style="width:20%;background:#4a5568"></div></div>
+        </button>
+
+        <button class="project-btn" onclick="selectProject(this)">
+          <div class="proj-row">
+            <span class="proj-name">Aventus</span>
+            <span class="badge badge-tbc">TBC</span>
+          </div>
+          <div class="proj-sub">TBC</div>
+          <div class="proj-bar"><div class="proj-fill" style="width:5%;background:#4a5568"></div></div>
+        </button>
+
+        <button class="project-btn" onclick="selectProject(this)">
+          <div class="proj-row">
+            <span class="proj-name">Studio Dashboard</span>
+            <span class="badge badge-tbc">TBC</span>
+          </div>
+          <div class="proj-sub">Socials · Content Management</div>
+          <div class="proj-bar"><div class="proj-fill" style="width:5%;background:#4a5568"></div></div>
+        </button>
+
+        <button class="project-btn" onclick="selectProject(this)">
+          <div class="proj-row">
+            <span class="proj-name">CJ Ops Portal</span>
+            <span class="badge badge-wip">WIP</span>
+          </div>
+          <div class="proj-sub">Ops Dashboard · Supabase · GitHub Pages</div>
+          <div class="proj-bar"><div class="proj-fill" style="width:40%;background:var(--amber)"></div></div>
+        </button>
+
+      </div>
+
+      <div class="filter-row">
+        <div class="filter-label">Quick Filter</div>
+        <button class="chip on-dev" data-tag="dev" onclick="toggleChip(this)">DEV</button>
+        <button class="chip on-ops" data-tag="ops" onclick="toggleChip(this)">OPS</button>
+        <button class="chip" data-tag="legal" onclick="toggleChip(this)">LEGAL</button>
+        <button class="chip on-design" data-tag="design" onclick="toggleChip(this)">DESIGN</button>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="main">
+
+      <!-- STATS -->
+      <div class="stats-bar">
+        <div class="stat">
+          <span class="stat-num" id="s-projects">10</span>
+          <span class="stat-lbl">Projects</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <span class="stat-num amber" id="s-open">—</span>
+          <span class="stat-lbl">Open Tasks</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <span class="stat-num teal" id="s-done">—</span>
+          <span class="stat-lbl">Completed</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <span class="stat-num red">2</span>
+          <span class="stat-lbl">Needs Attention</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <span class="stat-num">6</span>
+          <span class="stat-lbl">Updates</span>
+        </div>
+      </div>
+
+      <!-- TABS -->
+      <div class="tab-row">
+        <button class="tab-btn active" onclick="switchTab('block',this)">Block Mgmt &amp; Landlord</button>
+        <button class="tab-btn" onclick="switchTab('fmm',this)">FMM &amp; CJ Projects</button>
+        <button class="tab-btn" onclick="switchTab('updates-bergason',this)">Updates · Bergason</button>
+        <button class="tab-btn" onclick="switchTab('updates-cj',this)">Updates · CJ Projects</button>
+      </div>
+
+      <!-- PANELS -->
+      <div class="panel-area">
+
+        <!-- PANEL 1: Block Mgmt & Landlord -->
+        <div class="panel active" id="panel-block">
+          <div class="panel-hdr">
+            <div class="panel-title">
+              <div class="panel-dot" style="background:#3b82f6"></div>
+              Block Mgmt &amp; Landlord · Tasks
+            </div>
+            <span class="panel-count" id="count-block"></span>
+          </div>
+          <div class="task-list" id="list-block">
+            <div class="task-item" data-tag="dev" onclick="toggleTask(this)"><div class="task-check done"></div><span class="task-text done">Fix Firestore collection name — landlord_sessions → onboarding_sessions</span><span class="tag tag-dev">DEV</span></div>
+            <div class="task-item" data-tag="dev" onclick="toggleTask(this)"><div class="task-check done"></div><span class="task-text done">Build createLandlordSession Cloud Function</span><span class="tag tag-dev">DEV</span></div>
+            <div class="task-item" data-tag="dev" onclick="toggleTask(this)"><div class="task-check done"></div><span class="task-text done">Add New Landlord tab to landlord-admin.html</span><span class="tag tag-dev">DEV</span></div>
+            <div class="task-item" data-tag="dev" onclick="toggleTask(this)"><div class="task-check done"></div><span class="task-text done">Tenant Rights Act Portal — complete v1 (dashboard, batch send, single send)</span><span class="tag tag-dev">DEV</span></div>
+            <div class="task-item" data-tag="dev" onclick="toggleTask(this)"><div class="task-check done"></div><span class="task-text done">Certificate generation with full delivery timeline PDF</span><span class="tag tag-dev">DEV</span></div>
+            <div class="task-item" data-tag="dev" onclick="toggleTask(this)"><div class="task-check done"></div><span class="task-text done">Resend webhook — delivery/open/bounce tracking deployed</span><span class="tag tag-dev">DEV</span></div>
+            <div class="task-item" data-tag="ops" onclick="toggleTask(this)"><div class="task-check done"></div><span class="task-text done">Rename Bergason Estate Agents → Bergason Property Services throughout</span><span class="tag tag-ops">OPS</span></div>
+            <div class="task-item" data-tag="design" onclick="toggleTask(this)"><div class="task-check done"></div><span class="task-text done">Brochure — site-specific flipbook live at bergasonblockmanagement.co.uk/brochure-flipbook.html</span><span class="tag tag-design">DESIGN</span></div>
+            <div class="task-item" data-tag="design" onclick="toggleTask(this)"><div class="task-check done"></div><span class="task-text done">Brochure — generic template live at under450.github.io/-bergason-brochure-template/brochure.html</span><span class="tag tag-design">DESIGN</span></div>
+            <div class="task-item" data-tag="dev" onclick="toggleTask(this)"><div class="task-check"></div><span class="task-text">Deploy createLandlordSession + resetSessionProgress Cloud Functions</span><span class="tag tag-dev">DEV</span></div>
+            <div class="task-item" data-tag="dev" onclick="toggleTask(this)"><div class="task-check"></div><span class="task-text">Test Didit KYC flow end-to-end with fresh session</span><span class="tag tag-dev">DEV</span></div>
+            <div class="task-item" data-tag="ops" onclick="toggleTask(this)"><div class="task-check"></div><span class="task-text">Add fee placeholders to tc_templates/v1 in Firestore</span><span class="tag tag-ops">OPS</span></div>
+            <div class="task-item" data-tag="ops" onclick="toggleTask(this)"><div class="task-check"></div><span class="task-text">Await Firebase project quota increase (2 days)</span><span class="tag tag-ops">OPS</span></div>
+            <div class="task-item" data-tag="dev" onclick="toggleTask(this)"><div class="task-check"></div><span class="task-text">Admin Portal Phase 2 — remove self-registration, role-based routing</span><span class="tag tag-dev">DEV</span></div>
+            <div class="task-item" data-tag="dev" onclick="toggleTask(this)"><div class="task-check"></div><span class="task-text">Admin Portal Phase 3 — document uploads via Firebase Storage</span><span class="tag tag-dev">DEV</span></div>
+            <div class="task-item" data-tag="ops" onclick="toggleTask(this)"><div class="task-check"></div><span class="task-text">Geo-SEO audit — AI search visibility (ChatGPT, Perplexity, Claude)</span><span class="tag tag-ops">OPS</span></div>
+            <div class="task-item" data-tag="dev" onclick="toggleTask(this)"><div class="task-check done"></div><span class="task-text done">SIC Director Search — prototype built (SIC search, director extraction, CSV export)</span><span class="tag tag-dev">DEV</span></div>
+            <div class="task-item" data-tag="dev" onclick="toggleTask(this)"><div class="task-check"></div><span class="task-text">SIC Director Search — connect Companies House API (free key)</span><span class="tag tag-dev">DEV</span></div>
+            <div class="task-item" data-tag="dev" onclick="toggleTask(this)"><div class="task-check"></div><span class="task-text">SIC Director Search — wire Google Custom Search for website/email discovery</span><span class="tag tag-dev">DEV</span></div>
+          </div>
+          <div class="add-task-row">
+            <input class="add-task-input" type="text" placeholder="Add a task..." onkeydown="addTask(event,'list-block')">
+            <button class="add-btn" onclick="addTaskBtn('list-block')">+</button>
+          </div>
+        </div>
+
+        <!-- PANEL 2: FMM & CJ Projects -->
+        <div class="panel" id="panel-fmm">
+          <div class="panel-hdr">
+            <div class="panel-title">
+              <div class="panel-dot" style="background:#00c9a7"></div>
+              Forward My Mail &amp; CJ Projects · Tasks
+            </div>
+            <span class="panel-count" id="count-fmm"></span>
+          </div>
+          <div class="task-list" id="list-fmm">
+            <div class="task-section-label">Forward My Mail</div>
+            <div class="task-item" data-tag="dev" onclick="toggleTask(this)"><div class="task-check done"></div><span class="task-text done">Didit KYC integration complete</span><span class="tag tag-dev">DEV</span></div>
+            <div class="task-item" data-tag="dev" onclick="toggleTask(this)"><div class="task-check done"></div><span class="task-text done">Stripe subscription links — all 4 tiers</span><span class="tag tag-dev">DEV</span></div>
+            <div class="task-item" data-tag="dev" onclick="toggleTask(this)"><div class="task-check done"></div><span class="task-text done">Webhook infrastructure — Stripe lifecycle events</span><span class="tag tag-dev">DEV</span></div>
+            <div class="task-item" data-tag="dev" onclick="toggleTask(this)"><div class="task-check done"></div><span class="task-text done">Welcome email workflow — full lifecycle</span><span class="tag tag-dev">DEV</span></div>
+            <div class="task-item" data-tag="dev" onclick="toggleTask(this)"><div class="task-check"></div><span class="task-text">Cancellation &amp; reactivation flow</span><span class="tag tag-dev">DEV</span></div>
+            <div class="task-item" data-tag="dev" onclick="toggleTask(this)"><div class="task-check"></div><span class="task-text">Staff Portal — build and test</span><span class="tag tag-dev">DEV</span></div>
+            <div class="task-item" data-tag="dev" onclick="toggleTask(this)"><div class="task-check"></div><span class="task-text">Client Portal — build and test</span><span class="tag tag-dev">DEV</span></div>
+            <div class="task-section-label">CJ Ops Portal — On Hold</div>
+            <div class="task-item" data-tag="design" onclick="toggleTask(this)"><div class="task-check done"></div><span class="task-text done">Design &amp; build static HTML dashboard (10 projects, 4-panel grid)</span><span class="tag tag-design">DESIGN</span></div>
+            <div class="task-item" data-tag="ops" onclick="toggleTask(this)"><div class="task-check done"></div><span class="task-text done">Decide stack — Supabase (DB/auth) + GitHub Pages (hosting)</span><span class="tag tag-ops">OPS</span></div>
+            <div class="task-item" data-tag="ops" onclick="toggleTask(this)"><div class="task-check"></div><span class="task-text">Create GitHub repo (CJ-Ops-Portal) — ON HOLD</span><span class="tag tag-ops">OPS</span></div>
+            <div class="task-item" data-tag="ops" onclick="toggleTask(this)"><div class="task-check"></div><span class="task-text">Create Supabase project (free tier) — ON HOLD</span><span class="tag tag-ops">OPS</span></div>
+            <div class="task-item" data-tag="dev" onclick="toggleTask(this)"><div class="task-check"></div><span class="task-text">Supabase DB schema — projects, tasks, updates tables</span><span class="tag tag-dev">DEV</span></div>
+            <div class="task-item" data-tag="dev" onclick="toggleTask(this)"><div class="task-check"></div><span class="task-text">Supabase Auth — email/password login (Craig only)</span><span class="tag tag-dev">DEV</span></div>
+            <div class="task-item" data-tag="dev" onclick="toggleTask(this)"><div class="task-check"></div><span class="task-text">Wire frontend to Supabase — persist tasks, updates, progress</span><span class="tag tag-dev">DEV</span></div>
+            <div class="task-item" data-tag="ops" onclick="toggleTask(this)"><div class="task-check"></div><span class="task-text">Deploy to GitHub Pages</span><span class="tag tag-ops">OPS</span></div>
+            <div class="task-section-label">GEO-SEO Audit Tool</div>
+            <div class="task-item" data-tag="dev" onclick="toggleTask(this)"><div class="task-check done"></div><span class="task-text done">Install geo-seo-claude skill (14 sub-skills, 5 subagents)</span><span class="tag tag-dev">DEV</span></div>
+            <div class="task-item" data-tag="ops" onclick="toggleTask(this)"><div class="task-check"></div><span class="task-text">Run /geo audit on bergasonblockmanagement.co.uk — implement all fixes</span><span class="tag tag-ops">OPS</span></div>
+            <div class="task-item" data-tag="ops" onclick="toggleTask(this)"><div class="task-check"></div><span class="task-text">Generate PDF report with /geo report-pdf</span><span class="tag tag-ops">OPS</span></div>
+            <div class="task-item" data-tag="dev" onclick="toggleTask(this)"><div class="task-check"></div><span class="task-text">Build self-service GEO audit product — user submits URL, gets branded PDF report</span><span class="tag tag-dev">DEV</span></div>
+          </div>
+          <div class="add-task-row">
+            <input class="add-task-input" type="text" placeholder="Add a task..." onkeydown="addTask(event,'list-fmm')">
+            <button class="add-btn" onclick="addTaskBtn('list-fmm')">+</button>
+          </div>
+        </div>
+
+        <!-- PANEL 3: Updates Bergason -->
+        <div class="panel" id="panel-updates-bergason">
+          <div class="panel-hdr">
+            <div class="panel-title">
+              <div class="panel-dot" style="background:var(--amber)"></div>
+              Updates · Bergason
+            </div>
+          </div>
+          <div class="task-list">
+
+            <div class="update-item open" onclick="toggleUpdate(this)">
+              <div class="update-hdr">
+                <span class="update-arrow">›</span>
+                <div class="update-title-col">
+                  <div class="update-title">Tenant Rights Act Portal — Complete v1</div>
+                  <div class="update-meta">
+                    <span class="update-date">30 Mar</span>
+                    <span class="update-status status-live">● LIVE</span>
+                  </div>
+                </div>
+              </div>
+              <div class="update-body">Full portal deployed — dashboard with stats, batch send, single send, proof of posting upload for bounced deliveries. generateCertificate function generates branded PDF with full delivery timeline (Sent → Delivered → Opened → Bounced). Resend webhook tracks delivery/open/bounce events. Header updated to BERGASON PROPERTY SERVICES LIMITED.</div>
+            </div>
+
+            <div class="update-item" onclick="toggleUpdate(this)">
+              <div class="update-hdr">
+                <span class="update-arrow">›</span>
+                <div class="update-title-col">
+                  <div class="update-title">Brochure — Both Versions Live</div>
+                  <div class="update-meta">
+                    <span class="update-date">30 Mar</span>
+                    <span class="update-status status-live">● LIVE</span>
+                  </div>
+                </div>
+              </div>
+              <div class="update-body">Site-specific flipbook: bergasonblockmanagement.co.uk/brochure-flipbook.html — branded digital brochure with heritage/listed building page, navy/gold scheme. Generic template: under450.github.io/-bergason-brochure-template/brochure.html — reusable PDF brochure template, no site name hardcoded.</div>
+            </div>
+
+            <div class="update-item" onclick="toggleUpdate(this)">
+              <div class="update-hdr">
+                <span class="update-arrow">›</span>
+                <div class="update-title-col">
+                  <div class="update-title">Landlord Portal — New Landlord Tab</div>
+                  <div class="update-meta">
+                    <span class="update-date">29 Mar</span>
+                    <span class="update-status status-progress">◐ FUNCTIONS TO DEPLOY</span>
+                  </div>
+                </div>
+              </div>
+              <div class="update-body">Admin form built for onboarding new landlords — name, email, property address, management fee %, setup fee, custom fees, notes. createLandlordSession Cloud Function creates the Firestore doc and sends the magic link. T&C fee placeholders now supported.</div>
+            </div>
+
+            <div class="update-item" onclick="toggleUpdate(this)">
+              <div class="update-hdr">
+                <span class="update-arrow">›</span>
+                <div class="update-title-col">
+                  <div class="update-title">Block Management — Firestore Collection Fix</div>
+                  <div class="update-meta">
+                    <span class="update-date">29 Mar</span>
+                    <span class="update-status status-done">● FIXED</span>
+                  </div>
+                </div>
+              </div>
+              <div class="update-body">All 4 Cloud Functions and both portal HTML files corrected from landlord_sessions to onboarding_sessions. Firestore security rules updated. resetSessionProgress function added.</div>
+            </div>
+
+            <div class="update-item" onclick="toggleUpdate(this)">
+              <div class="update-hdr">
+                <span class="update-arrow">›</span>
+                <div class="update-title-col">
+                  <div class="update-title">Rename — Bergason Property Services Throughout</div>
+                  <div class="update-meta">
+                    <span class="update-date">29 Mar</span>
+                    <span class="update-status status-done">● DONE</span>
+                  </div>
+                </div>
+              </div>
+              <div class="update-body">All references to Bergason Estate Agents renamed to Bergason Property Services across the entire codebase — HTML, Cloud Functions, email templates, PDF certificates.</div>
+            </div>
+
+            <div class="update-item" onclick="toggleUpdate(this)">
+              <div class="update-hdr">
+                <span class="update-arrow">›</span>
+                <div class="update-title-col">
+                  <div class="update-title">Firebase — Separate Project Pending</div>
+                  <div class="update-meta">
+                    <span class="update-date">Flagged</span>
+                    <span class="update-status status-progress">◐ AWAITING APPROVAL</span>
+                  </div>
+                </div>
+              </div>
+              <div class="update-body">Landlord Portal and Block Management currently share bergason-block-management Firebase project. Quota increase for a dedicated project submitted — awaiting approval.</div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- PANEL 4: Updates CJ -->
+        <div class="panel" id="panel-updates-cj">
+          <div class="panel-hdr">
+            <div class="panel-title">
+              <div class="panel-dot" style="background:#a78bfa"></div>
+              Updates · CJ Projects
+            </div>
+          </div>
+          <div class="task-list">
+
+            <div class="update-item open" onclick="toggleUpdate(this)">
+              <div class="update-hdr">
+                <span class="update-arrow">›</span>
+                <div class="update-title-col">
+                  <div class="update-title">CJ Ops Portal — Stack Decided, Repo On Hold</div>
+                  <div class="update-meta">
+                    <span class="update-date">30 Mar</span>
+                    <span class="update-status status-hold">◐ ON HOLD</span>
+                  </div>
+                </div>
+              </div>
+              <div class="update-body">Static HTML dashboard built with all 10 projects, 4-panel grid, editable tasks. Stack decided: Supabase (Postgres DB + auth, free tier) and GitHub Pages (hosting, free). Needs: Supabase project, DB schema (projects/tasks/updates tables), auth (Craig only), wire frontend to persist data. GitHub repo creation on hold.</div>
+            </div>
+
+            <div class="update-item" onclick="toggleUpdate(this)">
+              <div class="update-hdr">
+                <span class="update-arrow">›</span>
+                <div class="update-title-col">
+                  <div class="update-title">Forward My Mail — Core Infrastructure Live</div>
+                  <div class="update-meta">
+                    <span class="update-date">Recent</span>
+                    <span class="update-status status-progress">◐ PORTALS REMAINING</span>
+                  </div>
+                </div>
+              </div>
+              <div class="update-body">Didit KYC integrated. Stripe 4-tier subscriptions live. Webhook lifecycle handling done. Full welcome email workflow deployed via Firebase Cloud Functions. Make.com cancelled — fully migrated to Firebase. Remaining: cancellation/reactivation flow, Staff Portal, Client Portal.</div>
+            </div>
+
+            <div class="update-item" onclick="toggleUpdate(this)">
+              <div class="update-hdr">
+                <span class="update-arrow">›</span>
+                <div class="update-title-col">
+                  <div class="update-title">Velvet — Frontend Deployed</div>
+                  <div class="update-meta">
+                    <span class="update-date">In Progress</span>
+                    <span class="update-status status-progress">◐ BACKEND IN PROGRESS</span>
+                  </div>
+                </div>
+              </div>
+              <div class="update-body">Luxury-themed frontend live on GitHub Pages. Credit-based model and creator-locked account structure designed. Backend (Node.js / Firestore) still in progress. Auth layer and credit deduction logic to be connected.</div>
+            </div>
+
+            <div class="update-item" onclick="toggleUpdate(this)">
+              <div class="update-hdr">
+                <span class="update-arrow">›</span>
+                <div class="update-title-col">
+                  <div class="update-title">Aventus · Studio Dashboard — Planning</div>
+                  <div class="update-meta">
+                    <span class="update-date">Queued</span>
+                    <span class="update-status status-hold">◯ NOT STARTED</span>
+                  </div>
+                </div>
+              </div>
+              <div class="update-body">Both projects queued under CJ. No active development started. Studio Dashboard — internal social/content management tool. Aventus — scope TBC. To be scoped after current Bergason work completes.</div>
+            </div>
+
+          </div>
+        </div>
+
+      </div><!-- /panel-area -->
+    </main>
+  </div>
+</div>
+
+<script>
+// ── CLOCK ──
+function updateClock() {
+  const now = new Date();
+  document.getElementById('clock').textContent =
+    now.toLocaleDateString('en-GB',{weekday:'short',day:'2-digit',month:'short',year:'numeric'}) + ' · ' +
+    now.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+}
+updateClock();
+setInterval(updateClock, 1000);
+
+// ── TAB SWITCHING ──
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('panel-' + id).classList.add('active');
+}
+
+// ── SIDEBAR PROJECT SELECT ──
+function selectProject(btn) {
+  document.querySelectorAll('.project-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+// ── TASK TOGGLE ──
+function toggleTask(item) {
+  const check = item.querySelector('.task-check');
+  const text = item.querySelector('.task-text');
+  check.classList.toggle('done');
+  text.classList.toggle('done');
+  saveState();
+  updateStats();
+}
+
+// ── ADD TASK ──
+function addTask(e, listId) {
+  if (e.key === 'Enter') addTaskBtn(listId);
+}
+function addTaskBtn(listId) {
+  const input = document.querySelector('#' + listId).previousElementSibling.querySelector('.add-task-input') ||
+                document.querySelector('[onkeydown*="' + listId + '"]');
+  const row = document.querySelector('.add-task-row:has([onkeydown*="' + listId + '"])');
+  const inp = row ? row.querySelector('input') : null;
+  if (!inp || !inp.value.trim()) return;
+  const text = inp.value.trim();
+  inp.value = '';
+  const item = document.createElement('div');
+  item.className = 'task-item';
+  item.setAttribute('data-tag', 'dev');
+  item.setAttribute('onclick', 'toggleTask(this)');
+  item.innerHTML = `<div class="task-check"></div><span class="task-text">${text}</span><span class="tag tag-dev">DEV</span>`;
+  document.getElementById(listId).appendChild(item);
+  applyFilters();
+  updateStats();
+  saveState();
+}
+
+// ── UPDATE TOGGLE ──
+function toggleUpdate(item) {
+  item.classList.toggle('open');
+}
+
+// ── FILTER CHIPS ──
+const activeFilters = new Set(['dev','ops','design']);
+
+function toggleChip(chip) {
+  const tag = chip.dataset.tag;
+  if (activeFilters.has(tag)) {
+    activeFilters.delete(tag);
+    chip.classList.remove('on-' + tag);
+  } else {
+    activeFilters.add(tag);
+    chip.classList.add('on-' + tag);
+  }
+  applyFilters();
+}
+
+function applyFilters() {
+  document.querySelectorAll('.task-item').forEach(item => {
+    const tag = item.dataset.tag;
+    if (activeFilters.size === 0 || activeFilters.has(tag)) {
+      item.classList.remove('task-hidden');
+    } else {
+      item.classList.add('task-hidden');
+    }
+  });
+  updateStats();
+  updateCounts();
+}
+
+// ── STATS ──
+function updateStats() {
+  const all = document.querySelectorAll('.task-item:not(.task-hidden)');
+  let done = 0, open = 0;
+  all.forEach(t => {
+    if (t.querySelector('.task-check.done')) done++;
+    else open++;
+  });
+  document.getElementById('s-open').textContent = open;
+  document.getElementById('s-done').textContent = done;
+  updateCounts();
+}
+
+function updateCounts() {
+  ['block','fmm'].forEach(id => {
+    const list = document.getElementById('list-' + id);
+    if (!list) return;
+    const items = list.querySelectorAll('.task-item:not(.task-hidden)');
+    const done = list.querySelectorAll('.task-item:not(.task-hidden) .task-check.done').length;
+    const el = document.getElementById('count-' + id);
+    if (el) el.textContent = done + ' / ' + items.length;
+  });
+}
+
+// ── PERSIST ──
+function saveState() {
+  const state = {};
+  document.querySelectorAll('.task-item').forEach((item, i) => {
+    state[i] = item.querySelector('.task-check').classList.contains('done');
+  });
+  try { localStorage.setItem('cj-tasks', JSON.stringify(state)); } catch(e) {}
+}
+
+function loadState() {
+  try {
+    const state = JSON.parse(localStorage.getItem('cj-tasks') || '{}');
+    document.querySelectorAll('.task-item').forEach((item, i) => {
+      if (state[i]) {
+        item.querySelector('.task-check').classList.add('done');
+        item.querySelector('.task-text').classList.add('done');
+      }
+    });
+  } catch(e) {}
+}
+
+// ── INIT ──
+loadState();
+applyFilters();
+updateStats();
+</script>
+</body>
 </html>
