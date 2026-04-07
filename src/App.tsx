@@ -98,48 +98,26 @@ function App() {
 
           {/* Single panel — full width */}
           <AnimatePresence mode="wait" custom={tabDirection}>
-            <motion.div
-              key={activeTab}
-              custom={tabDirection}
-              variants={slideVariants}
-              initial="enter"
-              animate="center"
-              exit="exit"
-              transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
-            >
-              {activeTab === 'bergason-tasks' && (
-                <TaskPanel
-                  title="BLOCK MGMT & LANDLORD · TASKS"
-                  tasks={tasks.filter(t => t.panel === 1)}
-                  onToggle={toggleTask}
-                  onAdd={(text) => addTask(text, 1)}
-                  filter={activeFilter}
-                />
-              )}
-              {activeTab === 'cj-tasks' && (
-                <TaskPanel
-                  title="FORWARD MY MAIL & CJ PROJECTS · TASKS"
-                  tasks={tasks.filter(t => t.panel === 2)}
-                  onToggle={toggleTask}
-                  onAdd={(text) => addTask(text, 2)}
-                  filter={activeFilter}
-                />
-              )}
-              {activeTab === 'bergason-updates' && (
-                <UpdatePanel
-                  title="BERGASON · UPDATES"
-                  updates={updates.filter(u => u.panel === 3)}
-                  onToggle={toggleUpdate}
-                />
-              )}
-              {activeTab === 'cj-updates' && (
-                <UpdatePanel
-                  title="CJ PROJECTS · UPDATES"
-                  updates={updates.filter(u => u.panel === 4)}
-                  onToggle={toggleUpdate}
-                />
-              )}
-            </motion.div>
+            {activeTab === 'bergason-tasks' && (
+              <motion.div key="bergason-tasks" custom={tabDirection} variants={slideVariants} initial="enter" animate="center" exit="exit" transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}>
+                <TaskPanel title="BLOCK MGMT & LANDLORD · TASKS" tasks={tasks.filter(t => t.panel === 1)} onToggle={toggleTask} onAdd={(text) => addTask(text, 1)} filter={activeFilter} />
+              </motion.div>
+            )}
+            {activeTab === 'cj-tasks' && (
+              <motion.div key="cj-tasks" custom={tabDirection} variants={slideVariants} initial="enter" animate="center" exit="exit" transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}>
+                <TaskPanel title="FORWARD MY MAIL & CJ PROJECTS · TASKS" tasks={tasks.filter(t => t.panel === 2)} onToggle={toggleTask} onAdd={(text) => addTask(text, 2)} filter={activeFilter} />
+              </motion.div>
+            )}
+            {activeTab === 'bergason-updates' && (
+              <motion.div key="bergason-updates" custom={tabDirection} variants={slideVariants} initial="enter" animate="center" exit="exit" transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}>
+                <UpdatePanel title="BERGASON · UPDATES" updates={updates.filter(u => u.panel === 3)} onToggle={toggleUpdate} />
+              </motion.div>
+            )}
+            {activeTab === 'cj-updates' && (
+              <motion.div key="cj-updates" custom={tabDirection} variants={slideVariants} initial="enter" animate="center" exit="exit" transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}>
+                <UpdatePanel title="CJ PROJECTS · UPDATES" updates={updates.filter(u => u.panel === 4)} onToggle={toggleUpdate} />
+              </motion.div>
+            )}
           </AnimatePresence>
         </main>
       </div>
