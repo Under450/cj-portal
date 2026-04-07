@@ -41,59 +41,62 @@ export function Tasks() {
 
   return (
     <PageTransition>
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-xl font-bold">Tasks</h1>
-        <button onClick={() => setAdding(true)} className="h-8 px-3 rounded-lg bg-[#1a1a1a] text-white text-xs font-semibold flex items-center gap-1.5">
-          <Plus size={14} /> Add Task
+      <div className="flex items-center justify-between mb-8">
+        <h1 className="text-2xl font-extrabold">Tasks</h1>
+        <button onClick={() => setAdding(true)} className="h-10 px-5 rounded-xl bg-[#111] text-white text-[13px] font-bold flex items-center gap-2 hover:bg-[#222]">
+          <Plus size={15} strokeWidth={2.5} /> Add Task
         </button>
       </div>
 
       {adding && (
-        <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="bg-white rounded-xl border border-[#e8e6e2] p-4 mb-4">
+        <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}
+          className="bg-white rounded-2xl border border-[#e8e6e2] p-5 mb-6" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.03)' }}>
           <div className="grid grid-cols-4 gap-3">
-            <input value={newTitle} onChange={e => setNewTitle(e.target.value)} onKeyDown={e => e.key === 'Enter' && addTask()} placeholder="Task title" className="col-span-2 h-9 px-3 text-sm rounded-lg border border-[#e8e6e2] outline-none" autoFocus />
-            <select value={newBrand} onChange={e => setNewBrand(e.target.value)} className="h-9 px-2 text-sm rounded-lg border border-[#e8e6e2] outline-none">
+            <input value={newTitle} onChange={e => setNewTitle(e.target.value)} onKeyDown={e => e.key === 'Enter' && addTask()} placeholder="Task title"
+              className="col-span-2 h-10 px-4 text-sm rounded-xl border border-[#e8e6e2] outline-none focus:border-[#9ca3af]" autoFocus />
+            <select value={newBrand} onChange={e => setNewBrand(e.target.value)} className="h-10 px-3 text-sm rounded-xl border border-[#e8e6e2] outline-none">
               {brands.map(b => <option key={b.id} value={b.id}>{b.name}</option>)}
             </select>
-            <select value={newPriority} onChange={e => setNewPriority(e.target.value as 'low' | 'medium' | 'high')} className="h-9 px-2 text-sm rounded-lg border border-[#e8e6e2] outline-none">
+            <select value={newPriority} onChange={e => setNewPriority(e.target.value as 'low' | 'medium' | 'high')} className="h-10 px-3 text-sm rounded-xl border border-[#e8e6e2] outline-none">
               <option value="low">Low</option>
               <option value="medium">Medium</option>
               <option value="high">High</option>
             </select>
           </div>
-          <div className="flex gap-2 mt-3">
-            <button onClick={addTask} className="h-8 px-4 rounded-lg bg-[#1a1a1a] text-white text-xs font-semibold">Save</button>
-            <button onClick={() => setAdding(false)} className="h-8 px-4 rounded-lg border border-[#e8e6e2] text-xs font-medium text-[#6b7280]">Cancel</button>
+          <div className="flex gap-2 mt-4">
+            <button onClick={addTask} className="h-10 px-5 rounded-xl bg-[#111] text-white text-sm font-bold hover:bg-[#222]">Save</button>
+            <button onClick={() => setAdding(false)} className="h-10 px-5 rounded-xl border border-[#e8e6e2] text-sm font-medium text-[#9ca3af]">Cancel</button>
           </div>
         </motion.div>
       )}
 
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-3 gap-5">
         {COLUMNS.map(col => (
           <div key={col.key}>
-            <div className="flex items-center gap-2 mb-3">
-              <div className="w-2 h-2 rounded-full" style={{ background: col.colour }} />
-              <span className="text-xs font-bold text-[#6b7280] uppercase tracking-wider">{col.label}</span>
-              <span className="text-xs text-[#9ca3af] ml-auto">{tasks.filter(t => t.status === col.key).length}</span>
+            <div className="flex items-center gap-2.5 mb-4">
+              <div className="w-2.5 h-2.5 rounded-full" style={{ background: col.colour }} />
+              <span className="text-[13px] font-bold text-[#9ca3af] uppercase tracking-wider">{col.label}</span>
+              <span className="text-[13px] text-[#d1d5db] font-semibold ml-auto">{tasks.filter(t => t.status === col.key).length}</span>
             </div>
-            <div className="space-y-2 min-h-[200px]">
+            <div className="space-y-3 min-h-[250px]">
               {tasks.filter(t => t.status === col.key).map((task, i) => {
                 const brand = brands.find(b => b.id === task.brand_id)
                 const nextStatus: TaskStatus = col.key === 'open' ? 'in-progress' : col.key === 'in-progress' ? 'done' : 'open'
                 return (
                   <motion.div key={task.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}
                     onClick={() => moveTask(task.id, nextStatus)}
-                    className="bg-white rounded-xl border border-[#e8e6e2] p-3 cursor-pointer hover:shadow-md transition-shadow group">
-                    <div className="flex items-start gap-2">
-                      <GripVertical size={14} className="text-[#d1d5db] mt-0.5 opacity-0 group-hover:opacity-100 flex-shrink-0" />
+                    className="bg-white rounded-2xl border border-[#e8e6e2] p-4 cursor-pointer hover:shadow-lg transition-shadow group"
+                    style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.03)' }}>
+                    <div className="flex items-start gap-2.5">
+                      <GripVertical size={15} className="text-[#e8e6e2] mt-0.5 opacity-0 group-hover:opacity-100 flex-shrink-0" />
                       <div className="flex-1 min-w-0">
-                        <div className="text-sm font-medium mb-1.5">{task.title}</div>
-                        <div className="flex items-center gap-2">
-                          <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded" style={{ background: brand?.colour + '15', color: brand?.colour }}>
+                        <div className="text-[15px] font-semibold mb-2">{task.title}</div>
+                        <div className="flex items-center gap-2.5">
+                          <span className="text-xs font-bold px-2 py-0.5 rounded-md" style={{ background: brand?.colour + '15', color: brand?.colour }}>
                             {brand?.name.split(' ')[0]}
                           </span>
-                          <span className="w-1.5 h-1.5 rounded-full" style={{ background: PRIORITY_COLOURS[task.priority] }} />
-                          <span className="text-[10px] text-[#9ca3af] capitalize">{task.priority}</span>
+                          <span className="w-2 h-2 rounded-full" style={{ background: PRIORITY_COLOURS[task.priority] }} />
+                          <span className="text-xs text-[#9ca3af] capitalize font-medium">{task.priority}</span>
                         </div>
                       </div>
                     </div>

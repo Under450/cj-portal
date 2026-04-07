@@ -24,10 +24,10 @@ export function RevenueHero() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="rounded-2xl bg-[#1a1a1a] text-white p-6 mb-6 overflow-hidden relative"
-      style={{ boxShadow: '0 8px 32px rgba(0,0,0,0.15)' }}
+      className="rounded-2xl bg-[#111111] text-white p-8 mb-8 overflow-hidden relative"
+      style={{ boxShadow: '0 12px 40px rgba(0,0,0,0.2)' }}
     >
-      <div className="absolute inset-0 opacity-[0.03]">
+      <div className="absolute inset-0 opacity-[0.04]">
         <svg viewBox="0 0 800 200" className="w-full h-full">
           <line x1="0" y1="200" x2="200" y2="80" stroke="white" strokeWidth="1" />
           <line x1="200" y1="80" x2="400" y2="120" stroke="white" strokeWidth="1" />
@@ -36,24 +36,24 @@ export function RevenueHero() {
         </svg>
       </div>
       <div className="relative z-10">
-        <div className="flex items-center gap-2 text-white/50 text-xs font-medium mb-2">
-          <TrendingUp size={14} />
+        <div className="flex items-center gap-2 text-white/40 text-[13px] font-semibold mb-3 tracking-wide uppercase">
+          <TrendingUp size={15} />
           April 2026 Revenue
         </div>
-        <div className="text-4xl font-extrabold tracking-tight mb-4">
+        <div className="text-5xl font-extrabold tracking-tight mb-6">
           <AnimatedCounter value={total} />
         </div>
-        <div className="flex gap-3">
+        <div className="flex gap-4">
           {brands.map((brand) => {
             const rev = revenueForBrand(brand.id)
             const pct = total > 0 ? (rev / total) * 100 : 0
             return (
               <div key={brand.id} className="flex-1">
-                <div className="flex items-center justify-between text-xs mb-1">
-                  <span className="text-white/50">{brand.name.split(' ')[0]}</span>
-                  <span className="text-white/70 font-semibold">£{rev.toLocaleString()}</span>
+                <div className="flex items-center justify-between text-[13px] mb-1.5">
+                  <span className="text-white/45 font-medium">{brand.name.split(' ')[0]}</span>
+                  <span className="text-white/70 font-bold">£{rev.toLocaleString()}</span>
                 </div>
-                <div className="h-2 rounded-full bg-white/10 overflow-hidden">
+                <div className="h-2.5 rounded-full bg-white/10 overflow-hidden">
                   <motion.div
                     initial={{ width: 0 }}
                     animate={{ width: `${pct}%` }}

@@ -16,48 +16,54 @@ export function Overview() {
     { icon: Users, label: 'Brands Managed', value: String(brands.length), color: '#7c3aed' },
   ]
 
-  if (loading) return <PageTransition><div className="flex items-center justify-center h-64 text-sm text-[#6b7280]">Loading...</div></PageTransition>
+  if (loading) return <PageTransition><div className="flex items-center justify-center h-64 text-base text-[#9ca3af]">Loading...</div></PageTransition>
 
   return (
     <PageTransition>
       <RevenueHero />
-      <div className="grid grid-cols-3 gap-4 mb-6">
+
+      <div className="grid grid-cols-3 gap-5 mb-8">
         {STATS.map((stat, i) => (
           <motion.div key={stat.label} initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 + i * 0.08 }}
-            className="bg-white rounded-xl border border-[#e8e6e2] p-4 flex items-center gap-3">
-            <div className="w-9 h-9 rounded-lg flex items-center justify-center" style={{ background: stat.color + '12' }}>
-              <stat.icon size={18} style={{ color: stat.color }} />
+            className="bg-white rounded-2xl border border-[#e8e6e2] p-5 flex items-center gap-4"
+            style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.03)' }}>
+            <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ background: stat.color + '12' }}>
+              <stat.icon size={22} style={{ color: stat.color }} />
             </div>
             <div>
-              <div className="text-xl font-bold">{stat.value}</div>
-              <div className="text-xs text-[#6b7280]">{stat.label}</div>
+              <div className="text-2xl font-extrabold">{stat.value}</div>
+              <div className="text-sm text-[#9ca3af] font-medium">{stat.label}</div>
             </div>
           </motion.div>
         ))}
       </div>
-      <div className="grid grid-cols-2 gap-4 mb-6">
+
+      <div className="grid grid-cols-2 gap-5 mb-8">
         {brands.map((brand, i) => <BrandTile key={brand.id} brand={brand} index={i} />)}
       </div>
+
       {pinnedTasks.length > 0 && (
-        <div className="bg-white rounded-xl border border-[#e8e6e2] p-4 mb-4">
-          <div className="flex items-center gap-2 text-xs font-bold text-[#6b7280] mb-3"><Pin size={13} /> PINNED TASKS</div>
-          <div className="space-y-1.5">
+        <div className="bg-white rounded-2xl border border-[#e8e6e2] p-6 mb-6" style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.03)' }}>
+          <div className="flex items-center gap-2.5 text-[13px] font-bold text-[#9ca3af] mb-4 uppercase tracking-wider"><Pin size={14} /> Pinned Tasks</div>
+          <div className="space-y-2.5">
             {pinnedTasks.map(task => {
               const brand = brands.find(b => b.id === task.brand_id)
               return (
-                <div key={task.id} className="flex items-center gap-2 text-sm">
-                  <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: brand?.colour || '#6b7280' }} />
+                <div key={task.id} className="flex items-center gap-3 text-[15px]">
+                  <div className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ background: brand?.colour || '#6b7280' }} />
                   <span className="font-medium">{task.title}</span>
-                  <span className="text-[10px] px-1.5 py-0.5 rounded font-semibold" style={{ background: (brand?.colour || '#6b7280') + '15', color: brand?.colour }}>{brand?.name.split(' ')[0]}</span>
+                  <span className="text-xs px-2 py-0.5 rounded-md font-semibold" style={{ background: (brand?.colour || '#6b7280') + '15', color: brand?.colour }}>{brand?.name.split(' ')[0]}</span>
                 </div>
               )
             })}
           </div>
         </div>
       )}
+
       <motion.a href="http://localhost:3000" target="_blank" rel="noopener noreferrer" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 }}
-        className="flex items-center justify-center gap-2 w-full py-3 rounded-xl border border-[#e8e6e2] bg-white text-sm font-semibold text-[#1a1a1a] hover:bg-[#f8f8f8] transition-colors">
-        <ExternalLink size={15} /> Open Aventus Studio
+        className="flex items-center justify-center gap-2.5 w-full py-4 rounded-2xl border border-[#e8e6e2] bg-white text-[15px] font-bold text-[#1a1a1a] hover:bg-[#fafafa] transition-colors"
+        style={{ boxShadow: '0 2px 12px rgba(0,0,0,0.03)' }}>
+        <ExternalLink size={16} /> Open Aventus Studio
       </motion.a>
     </PageTransition>
   )

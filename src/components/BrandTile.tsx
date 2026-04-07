@@ -92,15 +92,15 @@ export function BrandTile({ brand, index }: { brand: Brand; index: number }) {
       transition={{ delay: index * 0.1, duration: 0.4, ease: 'easeOut' }}
       whileHover={{ y: -4, scale: 1.02 }}
       onClick={() => navigate(`/brand/${brand.slug}`)}
-      className={`relative rounded-2xl ${tileBg} ${tileText} p-5 cursor-pointer border border-[#e8e6e2]/10 overflow-hidden`}
-      style={{ boxShadow: '0 4px 24px rgba(0,0,0,0.06)' }}
+      className={`relative rounded-2xl ${tileBg} ${tileText} p-7 cursor-pointer border border-[#e8e6e2]/10 overflow-hidden`}
+      style={{ boxShadow: '0 6px 30px rgba(0,0,0,0.08)' }}
     >
       {Bg && <Bg />}
       <div className="relative z-10">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
             <div className="w-3 h-3 rounded-full" style={{ background: brand.colour }} />
-            <span className="font-bold text-sm">{brand.name}</span>
+            <span className="font-bold text-base">{brand.name}</span>
           </div>
           <span
             className={`text-[10px] font-semibold px-2 py-0.5 rounded-full ${
@@ -112,8 +112,8 @@ export function BrandTile({ brand, index }: { brand: Brand; index: number }) {
             {brand.status.toUpperCase()}
           </span>
         </div>
-        <p className="text-xs opacity-60 mb-4">{brand.description}</p>
-        <div className="text-2xl font-extrabold mb-1">
+        <p className="text-sm opacity-60 mb-5">{brand.description}</p>
+        <div className="text-3xl font-extrabold mb-1">
           £{revenue.toLocaleString()}
         </div>
         <div className="flex items-center gap-2 mb-3">
