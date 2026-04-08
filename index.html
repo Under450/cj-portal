@@ -8,161 +8,156 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --navy:#0c0f1a;--navy2:#111827;--navy3:#162032;
-  --amber:#f0a500;--amber-bg:rgba(240,165,0,0.1);--amber-border:rgba(240,165,0,0.25);
+  --navy:#0c0f1a;--navy2:#111827;--navy3:#162032;--navy4:#1e2d45;
+  --amber:#f0a500;--amber-bg:rgba(240,165,0,0.1);--amber-dim:rgba(240,165,0,0.06);
   --teal:#00c9a7;--teal-bg:rgba(0,201,167,0.1);
-  --text:#e2e8f0;--muted:#64748b;--dim:#334155;
+  --text:#e2e8f0;--muted:#64748b;--dim:#2d3748;
   --border:rgba(255,255,255,0.06);--border2:rgba(255,255,255,0.1);
-  --blue-bg:rgba(59,130,246,0.12);--blue:#60a5fa;
-  --purple-bg:rgba(167,139,250,0.12);--purple:#a78bfa;
-  --pink-bg:rgba(244,114,182,0.12);--pink:#f472b6;
+  --blue:#60a5fa;--blue-bg:rgba(59,130,246,0.1);
+  --purple:#a78bfa;--purple-bg:rgba(167,139,250,0.1);
+  --pink:#f472b6;--pink-bg:rgba(244,114,182,0.1);
+  --green:#4ade80;--green-bg:rgba(74,222,128,0.1);
   --red:#f87171;
 }
 html,body{height:100%;background:var(--navy);color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;overflow:hidden}
-
-/* LAYOUT */
 .app{display:flex;flex-direction:column;height:100vh;width:100vw}
 
 /* HEADER */
-.hdr{display:flex;align-items:center;height:54px;padding:0 20px;background:var(--navy2);border-bottom:1px solid var(--border);flex-shrink:0;gap:10px}
-.logo{width:32px;height:32px;background:var(--amber);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:14px;font-weight:700;color:#1a0d00;box-shadow:0 0 20px rgba(240,165,0,0.35);flex-shrink:0}
-.hdr-title{font-family:'Fraunces',serif;font-size:18px;font-weight:700;color:var(--text)}
-.hdr-right{margin-left:auto;display:flex;align-items:center;gap:16px}
-.live{display:flex;align-items:center;gap:6px;font-family:'DM Mono',monospace;font-size:11px;color:var(--teal);letter-spacing:.05em}
-.live-dot{width:7px;height:7px;border-radius:50%;background:var(--teal);box-shadow:0 0 8px var(--teal);animation:blink 2s ease-in-out infinite}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.4}}
-.clock{font-family:'DM Mono',monospace;font-size:13px;color:var(--muted)}
+.hdr{display:flex;align-items:center;height:52px;padding:0 20px;background:var(--navy2);border-bottom:1px solid var(--border);flex-shrink:0;gap:10px}
+.logo{width:30px;height:30px;background:var(--amber);border-radius:7px;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:13px;font-weight:700;color:#1a0d00;box-shadow:0 0 18px rgba(240,165,0,0.4);flex-shrink:0}
+.hdr-title{font-family:'Fraunces',serif;font-size:17px;font-weight:700;color:var(--text)}
+.hdr-right{margin-left:auto;display:flex;align-items:center;gap:14px}
+.live{display:flex;align-items:center;gap:5px;font-family:'DM Mono',monospace;font-size:11px;color:var(--teal)}
+.ldot{width:6px;height:6px;border-radius:50%;background:var(--teal);box-shadow:0 0 7px var(--teal);animation:blink 2s ease-in-out infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.clock{font-family:'DM Mono',monospace;font-size:12px;color:var(--muted)}
 
 /* BODY */
 .body{display:flex;flex:1;overflow:hidden;min-height:0}
 
 /* SIDEBAR */
-.sidebar{width:230px;min-width:230px;background:var(--navy2);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
-.sb-scroll{flex:1;overflow-y:auto;padding:8px 0}
-.sb-scroll::-webkit-scrollbar{width:3px}
-.sb-scroll::-webkit-scrollbar-thumb{background:var(--dim);border-radius:2px}
-.grp{font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);padding:14px 16px 5px}
+.sb{width:220px;min-width:220px;background:var(--navy2);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
+.sb-inner{flex:1;overflow-y:auto;padding:6px 0}
+.sb-inner::-webkit-scrollbar{width:3px}
+.sb-inner::-webkit-scrollbar-thumb{background:var(--dim);border-radius:2px}
+.grp{font-size:9px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);padding:12px 14px 4px;opacity:.6}
 
-.proj{display:block;width:100%;text-align:left;background:none;border:none;border-left:2px solid transparent;padding:9px 14px;cursor:pointer;transition:background .12s,border-color .12s}
-.proj:hover{background:rgba(255,255,255,0.03)}
-.proj.active{background:var(--amber-bg);border-left-color:var(--amber)}
-.proj-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:2px}
-.proj-name{font-size:14px;font-weight:500;color:var(--text)}
-.proj.active .proj-name{color:var(--amber)}
-.proj-sub{font-size:11px;color:var(--muted);line-height:1.4;margin-bottom:5px}
-.proj-links{display:flex;flex-direction:column;gap:3px;margin-bottom:5px}
-.proj-link{font-size:11px;color:var(--blue);text-decoration:none;display:flex;align-items:center;gap:4px;transition:color .12s}
-.proj-link:hover{color:#93c5fd}
-.proj-link svg{flex-shrink:0}
-.bar{height:2px;background:rgba(255,255,255,0.07);border-radius:1px}
-.bar-fill{height:100%;border-radius:1px}
+.pj{display:block;width:100%;text-align:left;background:none;border:none;border-left:2px solid transparent;padding:10px 14px;cursor:pointer;transition:background .12s,border-color .12s}
+.pj:hover{background:rgba(255,255,255,0.03)}
+.pj.on{background:var(--amber-bg);border-left-color:var(--amber)}
+.pj-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:1px}
+.pj-name{font-size:13px;font-weight:500;color:var(--text);text-align:left}
+.pj.on .pj-name{color:var(--amber)}
+.pj-sub{font-size:11px;color:var(--muted);text-align:left;line-height:1.3;margin-bottom:4px}
+.pj-bar{height:2px;background:rgba(255,255,255,0.07);border-radius:1px}
+.pj-fill{height:100%;border-radius:1px;transition:width .3s}
 
-.bdg{font-family:'DM Mono',monospace;font-size:9px;font-weight:500;padding:2px 5px;border-radius:3px;letter-spacing:.04em;flex-shrink:0}
-.bdg-live{background:var(--teal-bg);color:var(--teal)}
-.bdg-wip{background:var(--amber-bg);color:var(--amber)}
-.bdg-tbc{background:rgba(255,255,255,0.06);color:var(--muted)}
-.bdg-dev{background:var(--blue-bg);color:var(--blue)}
-
-/* FILTER */
-.filters{padding:10px 12px;border-top:1px solid var(--border)}
-.flbl{font-size:9px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-bottom:6px}
-.chips{display:flex;gap:5px;flex-wrap:wrap}
-.chip{font-family:'DM Mono',monospace;font-size:10px;font-weight:500;padding:4px 9px;border-radius:4px;cursor:pointer;border:1px solid var(--border2);color:var(--muted);background:transparent;transition:all .12s;letter-spacing:.04em}
-.chip:active{transform:scale(.95)}
-.chip.on-dev{background:var(--blue-bg);color:var(--blue);border-color:rgba(59,130,246,.3)}
-.chip.on-ops{background:var(--amber-bg);color:var(--amber);border-color:var(--amber-border)}
-.chip.on-legal{background:var(--purple-bg);color:var(--purple);border-color:rgba(167,139,250,.3)}
-.chip.on-design{background:var(--pink-bg);color:var(--pink);border-color:rgba(244,114,182,.3)}
+.bdg{font-family:'DM Mono',monospace;font-size:9px;font-weight:500;padding:2px 5px;border-radius:3px;letter-spacing:.03em;flex-shrink:0}
+.live-bdg{background:var(--teal-bg);color:var(--teal)}
+.wip-bdg{background:var(--amber-bg);color:var(--amber)}
+.tbc-bdg{background:rgba(255,255,255,0.06);color:var(--muted)}
+.dev-bdg{background:var(--blue-bg);color:var(--blue)}
 
 /* MAIN */
-.main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+.main{flex:1;overflow:hidden;display:flex;flex-direction:column;min-width:0}
 
-/* STATS */
-.stats{display:flex;align-items:center;height:52px;padding:0 24px;background:var(--navy2);border-bottom:1px solid var(--border);flex-shrink:0;gap:0}
-.stat{display:flex;align-items:baseline;gap:7px;padding-right:24px;border-right:1px solid var(--border2);margin-right:24px}
-.stat:last-child{border-right:none}
-.snum{font-family:'DM Mono',monospace;font-size:22px;font-weight:500;color:var(--text)}
-.snum.a{color:var(--amber)}.snum.t{color:var(--teal)}.snum.r{color:var(--red)}
-.slbl{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.1em;color:var(--dim)}
+/* PROJECT VIEW */
+.pview{display:none;flex-direction:column;height:100%;overflow:hidden}
+.pview.on{display:flex}
 
-/* TABS */
-.tabs{display:flex;align-items:center;height:46px;padding:0 20px;border-bottom:1px solid var(--border);flex-shrink:0;gap:3px}
-.tab{font-size:14px;font-weight:500;padding:5px 14px;border-radius:6px;border:none;background:transparent;color:var(--muted);cursor:pointer;transition:all .15s;white-space:nowrap}
-.tab:hover{background:rgba(255,255,255,0.04);color:var(--text)}
-.tab.on{background:var(--amber);color:#1a0d00;font-weight:600}
-.tab:active{transform:scale(.97)}
+.pvhdr{display:flex;align-items:center;gap:16px;padding:18px 28px;border-bottom:1px solid var(--border);flex-shrink:0;background:var(--navy2)}
+.pvhdr-icon{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.pvhdr-text{}
+.pvhdr-name{font-family:'Fraunces',serif;font-size:20px;font-weight:700;color:var(--text);line-height:1.2}
+.pvhdr-desc{font-size:13px;color:var(--muted);margin-top:2px}
+.pvhdr-badge{margin-left:auto;display:flex;align-items:center;gap:8px}
 
-/* PANELS */
-.panels{flex:1;overflow:hidden;position:relative;min-height:0}
-.panel{display:none;flex-direction:column;height:100%;overflow:hidden}
-.panel.on{display:flex}
+.pvcontent{flex:1;overflow-y:auto;padding:24px 28px;display:flex;flex-direction:column;gap:24px}
+.pvcontent::-webkit-scrollbar{width:3px}
+.pvcontent::-webkit-scrollbar-thumb{background:var(--dim);border-radius:2px}
 
-/* PANEL HEADER */
-.phdr{display:flex;align-items:center;justify-content:space-between;padding:13px 24px;border-bottom:1px solid var(--border);flex-shrink:0}
-.ptitle{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
-.pdot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
-.pcount{font-family:'DM Mono',monospace;font-size:12px;color:var(--dim)}
+/* SECTION */
+.sec{}
+.sec-title{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.sec-title::after{content:'';flex:1;height:1px;background:var(--border)}
 
-/* TASK LIST */
-.tlist{flex:1;overflow-y:auto;min-height:0}
-.tlist::-webkit-scrollbar{width:3px}
-.tlist::-webkit-scrollbar-thumb{background:var(--dim);border-radius:2px}
-.tsec{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--dim);padding:12px 24px 4px}
+/* LINK CARDS */
+.links{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
+.lcard{display:flex;align-items:center;gap:12px;padding:13px 16px;background:var(--navy3);border:1px solid var(--border);border-radius:10px;text-decoration:none;transition:all .15s;cursor:pointer}
+.lcard:hover{background:var(--navy4);border-color:var(--border2);transform:translateY(-1px)}
+.lcard:active{transform:translateY(0) scale(.98)}
+.lcard-icon{width:34px;height:34px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:15px}
+.lcard-body{flex:1;min-width:0}
+.lcard-label{font-size:14px;font-weight:500;color:var(--text);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lcard-url{font-family:'DM Mono',monospace;font-size:10px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lcard-arr{color:var(--muted);font-size:14px;flex-shrink:0;opacity:.5}
+.lcard:hover .lcard-arr{opacity:1;color:var(--amber)}
 
-.ti{display:flex;align-items:flex-start;gap:12px;padding:11px 24px;cursor:pointer;transition:background .1s;border-bottom:1px solid rgba(255,255,255,0.025)}
-.ti:hover{background:rgba(255,255,255,0.025)}
-.ti:active{background:rgba(255,255,255,0.05)}
-.ti.hidden{display:none}
+/* COLOUR VARIANTS */
+.ic-amber{background:var(--amber-bg)}.ic-teal{background:var(--teal-bg)}.ic-blue{background:var(--blue-bg)}.ic-purple{background:var(--purple-bg)}.ic-pink{background:var(--pink-bg)}.ic-green{background:var(--green-bg)}.ic-red{background:rgba(248,113,113,.1)}
 
-.chk{width:18px;height:18px;min-width:18px;border-radius:4px;border:1.5px solid var(--dim);margin-top:1px;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0}
-.chk.done{background:var(--teal);border-color:var(--teal);box-shadow:0 0 8px rgba(0,201,167,.25)}
-.chk.done::after{content:'';display:block;width:6px;height:4px;border-left:2px solid #0c1a18;border-bottom:2px solid #0c1a18;transform:rotate(-45deg) translate(.5px,-1px)}
-
-.tt{flex:1;font-size:15px;line-height:1.5;color:var(--text);transition:color .15s}
-.tt.done{color:var(--dim);text-decoration:line-through;text-decoration-color:rgba(255,255,255,.15)}
-
-.tag{font-family:'DM Mono',monospace;font-size:10px;font-weight:500;padding:2px 6px;border-radius:3px;white-space:nowrap;margin-top:2px;flex-shrink:0}
-.tag-dev{background:var(--blue-bg);color:var(--blue)}
-.tag-ops{background:var(--amber-bg);color:var(--amber)}
-.tag-legal{background:var(--purple-bg);color:var(--purple)}
-.tag-design{background:var(--pink-bg);color:var(--pink)}
+/* TASKS SECTION */
+.tasks{display:flex;flex-direction:column;gap:0;border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.task{display:flex;align-items:flex-start;gap:12px;padding:11px 16px;background:var(--navy3);border-bottom:1px solid var(--border);cursor:pointer;transition:background .1s}
+.task:last-child{border-bottom:none}
+.task:hover{background:var(--navy4)}
+.chk{width:17px;height:17px;min-width:17px;border-radius:4px;border:1.5px solid var(--muted);margin-top:1px;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0}
+.chk.done{background:var(--teal);border-color:var(--teal)}
+.chk.done::after{content:'';display:block;width:5px;height:3px;border-left:2px solid #0c1a18;border-bottom:2px solid #0c1a18;transform:rotate(-45deg) translate(.5px,-1px)}
+.tt{flex:1;font-size:14px;line-height:1.45;color:var(--text)}
+.tt.done{color:var(--muted);text-decoration:line-through;text-decoration-color:rgba(255,255,255,.15)}
+.tg{font-family:'DM Mono',monospace;font-size:10px;font-weight:500;padding:2px 6px;border-radius:3px;white-space:nowrap;flex-shrink:0;margin-top:1px}
+.tg-dev{background:var(--blue-bg);color:var(--blue)}
+.tg-ops{background:var(--amber-bg);color:var(--amber)}
+.tg-design{background:var(--pink-bg);color:var(--pink)}
+.tg-legal{background:var(--purple-bg);color:var(--purple)}
+.task.hidden{display:none}
 
 /* ADD TASK */
-.add-row{display:flex;align-items:center;gap:10px;padding:10px 24px 12px;border-top:1px solid var(--border);flex-shrink:0}
-.add-inp{flex:1;background:rgba(255,255,255,0.04);border:1px solid var(--border2);border-radius:7px;padding:9px 14px;font-family:'DM Sans',sans-serif;font-size:15px;color:var(--text);outline:none;transition:border-color .15s}
-.add-inp::placeholder{color:var(--dim)}
-.add-inp:focus{border-color:var(--amber-border)}
-.add-btn{width:36px;height:36px;border-radius:7px;background:var(--amber);border:none;color:#1a0d00;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .12s;flex-shrink:0;font-weight:500}
-.add-btn:hover{background:#ffc020}
+.add-row{display:flex;gap:8px;margin-top:8px}
+.add-inp{flex:1;background:rgba(255,255,255,0.04);border:1px solid var(--border2);border-radius:7px;padding:9px 13px;font-family:'DM Sans',sans-serif;font-size:14px;color:var(--text);outline:none}
+.add-inp::placeholder{color:var(--muted)}
+.add-inp:focus{border-color:rgba(240,165,0,.3)}
+.add-btn{background:var(--amber);border:none;border-radius:7px;color:#1a0d00;font-size:18px;width:36px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .12s}
 .add-btn:active{transform:scale(.94)}
 
+/* INFO ROW */
+.info-row{display:flex;gap:10px;flex-wrap:wrap}
+.info-chip{display:flex;align-items:center;gap:6px;padding:7px 12px;background:var(--navy3);border:1px solid var(--border);border-radius:8px;font-size:13px;color:var(--text)}
+.info-chip span{color:var(--muted);font-size:12px}
+
 /* UPDATES */
-.upd{border-bottom:1px solid var(--border);cursor:pointer;transition:background .1s}
-.upd:hover{background:rgba(255,255,255,0.02)}
-.upd-hdr{display:flex;align-items:center;padding:14px 24px;gap:12px}
-.arr{font-size:12px;color:var(--dim);transition:transform .2s cubic-bezier(.22,1,.36,1);flex-shrink:0}
+.updates{display:flex;flex-direction:column;gap:0;border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.upd{background:var(--navy3);border-bottom:1px solid var(--border);cursor:pointer;transition:background .1s}
+.upd:last-child{border-bottom:none}
+.upd:hover{background:var(--navy4)}
+.upd-hdr{display:flex;align-items:center;gap:10px;padding:13px 16px}
+.arr{font-size:11px;color:var(--muted);transition:transform .18s cubic-bezier(.22,1,.36,1)}
 .upd.open .arr{transform:rotate(90deg)}
-.upd-col{flex:1}
-.upd-title{font-size:15px;font-weight:500;color:var(--text);margin-bottom:3px}
-.upd-meta{display:flex;align-items:center;gap:10px}
-.upd-date{font-family:'DM Mono',monospace;font-size:11px;color:var(--dim)}
-.upd-status{font-size:11px;font-weight:500}
-.s-live{color:var(--teal)}.s-prog{color:var(--amber)}.s-hold{color:var(--muted)}.s-done{color:var(--blue)}
-.upd-body{display:none;padding:0 24px 16px;font-size:14px;line-height:1.65;color:var(--muted)}
+.upd-title{font-size:14px;font-weight:500;color:var(--text);flex:1}
+.upd-date{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted)}
+.upd-st{font-size:10px;font-weight:500;padding:2px 7px;border-radius:4px}
+.st-live{background:var(--teal-bg);color:var(--teal)}
+.st-prog{background:var(--amber-bg);color:var(--amber)}
+.st-hold{background:rgba(255,255,255,.06);color:var(--muted)}
+.st-done{background:var(--blue-bg);color:var(--blue)}
+.upd-body{display:none;padding:0 16px 14px;font-size:13px;line-height:1.65;color:var(--muted)}
 .upd.open .upd-body{display:block}
-.upd-link{display:inline-flex;align-items:center;gap:5px;margin-top:8px;color:var(--blue);font-size:13px;text-decoration:none;transition:color .12s}
-.upd-link:hover{color:#93c5fd}
+
+/* WELCOME */
+.welcome{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:12px;color:var(--muted)}
+.welcome-logo{font-family:'Fraunces',serif;font-size:48px;font-weight:700;color:var(--amber);opacity:.3}
+.welcome-text{font-size:15px}
 </style>
 </head>
 <body>
 <div class="app">
 
-<!-- HEADER -->
 <header class="hdr">
   <div class="logo">CJ</div>
   <span class="hdr-title">Ops Portal</span>
   <div class="hdr-right">
-    <div class="live"><div class="live-dot"></div>LIVE</div>
+    <div class="live"><div class="ldot"></div>LIVE</div>
     <div class="clock" id="clk"></div>
   </div>
 </header>
@@ -170,332 +165,573 @@ html,body{height:100%;background:var(--navy);color:var(--text);font-family:'DM S
 <div class="body">
 
 <!-- SIDEBAR -->
-<aside class="sidebar">
-  <div class="sb-scroll">
+<aside class="sb">
+  <div class="sb-inner">
 
     <div class="grp">Bergason</div>
 
-    <button class="proj active" onclick="pick(this,'block')">
-      <div class="proj-top"><span class="proj-name">Block Management</span><span class="bdg bdg-wip">WIP</span></div>
-      <div class="proj-sub">Residents Portal · Admin Portal · Tenant Rights Act</div>
-      <div class="proj-links">
-        <a class="proj-link" href="https://bergasonblockmanagement.co.uk" target="_blank" onclick="e(event)">
-          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-          bergasonblockmanagement.co.uk
-        </a>
-        <a class="proj-link" href="https://bergasonblockmanagement.co.uk/landlord-admin.html" target="_blank" onclick="e(event)">
-          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-          Admin Portal
-        </a>
-      </div>
-      <div class="bar"><div class="bar-fill" style="width:72%;background:var(--amber)"></div></div>
+    <button class="pj" onclick="go('block-mgmt',this)">
+      <div class="pj-row"><span class="pj-name">Block Management</span><span class="bdg wip-bdg">WIP</span></div>
+      <div class="pj-sub">Residents · Admin · Tenant Rights Act</div>
+      <div class="pj-bar"><div class="pj-fill" style="width:72%;background:var(--amber)"></div></div>
     </button>
 
-    <button class="proj" onclick="pick(this,'block')">
-      <div class="proj-top"><span class="proj-name">Landlord Portal</span><span class="bdg bdg-wip">WIP</span></div>
-      <div class="proj-sub">Landlord Portal · Admin Panel</div>
-      <div class="bar"><div class="bar-fill" style="width:55%;background:var(--amber)"></div></div>
+    <button class="pj" onclick="go('landlord',this)">
+      <div class="pj-row"><span class="pj-name">Landlord Portal</span><span class="bdg wip-bdg">WIP</span></div>
+      <div class="pj-sub">Landlord Portal · Admin Panel</div>
+      <div class="pj-bar"><div class="pj-fill" style="width:55%;background:var(--amber)"></div></div>
     </button>
 
-    <button class="proj" onclick="pick(this,'block')">
-      <div class="proj-top"><span class="proj-name">Estate Agents</span><span class="bdg bdg-tbc">TBC</span></div>
-      <div class="proj-sub">Website · Portal TBC</div>
-      <div class="bar"><div class="bar-fill" style="width:10%;background:var(--dim)"></div></div>
+    <button class="pj" onclick="go('estate',this)">
+      <div class="pj-row"><span class="pj-name">Estate Agents</span><span class="bdg tbc-bdg">TBC</span></div>
+      <div class="pj-sub">Website · Portal TBC</div>
+      <div class="pj-bar"><div class="pj-fill" style="width:10%;background:var(--muted)"></div></div>
     </button>
 
-    <button class="proj" onclick="pick(this,'block')">
-      <div class="proj-top"><span class="proj-name">Brochure</span><span class="bdg bdg-live">LIVE</span></div>
-      <div class="proj-sub">Generic Template · Site-Specific Flipbook</div>
-      <div class="proj-links">
-        <a class="proj-link" href="https://bergasonblockmanagement.co.uk/brochure-flipbook.html" target="_blank" onclick="e(event)">
-          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-          Site-Specific Flipbook
-        </a>
-        <a class="proj-link" href="https://under450.github.io/-bergason-brochure-template/brochure.html" target="_blank" onclick="e(event)">
-          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-          Generic Template
-        </a>
-      </div>
-      <div class="bar"><div class="bar-fill" style="width:100%;background:var(--teal)"></div></div>
+    <button class="pj" onclick="go('brochure',this)">
+      <div class="pj-row"><span class="pj-name">Brochure</span><span class="bdg live-bdg">LIVE</span></div>
+      <div class="pj-sub">Generic Template · Flipbook</div>
+      <div class="pj-bar"><div class="pj-fill" style="width:100%;background:var(--teal)"></div></div>
     </button>
 
-    <button class="proj" onclick="pick(this,'block')">
-      <div class="proj-top"><span class="proj-name">Inventory App</span><span class="bdg bdg-tbc">TBC</span></div>
-      <div class="proj-sub">App TBC</div>
-      <div class="bar"><div class="bar-fill" style="width:15%;background:var(--dim)"></div></div>
+    <button class="pj" onclick="go('inventory',this)">
+      <div class="pj-row"><span class="pj-name">Inventory App</span><span class="bdg tbc-bdg">TBC</span></div>
+      <div class="pj-sub">App TBC</div>
+      <div class="pj-bar"><div class="pj-fill" style="width:15%;background:var(--muted)"></div></div>
     </button>
 
     <div class="grp">CJ</div>
 
-    <button class="proj" onclick="pick(this,'fmm')">
-      <div class="proj-top"><span class="proj-name">Forward My Mail</span><span class="bdg bdg-wip">WIP</span></div>
-      <div class="proj-sub">Staff Portal · Client Portal</div>
-      <div class="proj-links">
-        <a class="proj-link" href="https://forwardmymail.co.uk" target="_blank" onclick="e(event)">
-          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-          forwardmymail.co.uk
-        </a>
-      </div>
-      <div class="bar"><div class="bar-fill" style="width:68%;background:var(--amber)"></div></div>
+    <button class="pj" onclick="go('fmm',this)">
+      <div class="pj-row"><span class="pj-name">Forward My Mail</span><span class="bdg wip-bdg">WIP</span></div>
+      <div class="pj-sub">Staff Portal · Client Portal</div>
+      <div class="pj-bar"><div class="pj-fill" style="width:68%;background:var(--amber)"></div></div>
     </button>
 
-    <button class="proj" onclick="pick(this,'fmm')">
-      <div class="proj-top"><span class="proj-name">Velvet</span><span class="bdg bdg-tbc">TBC</span></div>
-      <div class="proj-sub">App TBC</div>
-      <div class="bar"><div class="bar-fill" style="width:20%;background:var(--dim)"></div></div>
+    <button class="pj" onclick="go('velvet',this)">
+      <div class="pj-row"><span class="pj-name">Velvet</span><span class="bdg tbc-bdg">TBC</span></div>
+      <div class="pj-sub">Creator Platform</div>
+      <div class="pj-bar"><div class="pj-fill" style="width:20%;background:var(--muted)"></div></div>
     </button>
 
-    <button class="proj" onclick="pick(this,'fmm')">
-      <div class="proj-top"><span class="proj-name">Aventus</span><span class="bdg bdg-tbc">TBC</span></div>
-      <div class="proj-sub">TBC</div>
-      <div class="bar"><div class="bar-fill" style="width:5%;background:var(--dim)"></div></div>
+    <button class="pj" onclick="go('aventus',this)">
+      <div class="pj-row"><span class="pj-name">Aventus</span><span class="bdg tbc-bdg">TBC</span></div>
+      <div class="pj-sub">Digital Media Agency</div>
+      <div class="pj-bar"><div class="pj-fill" style="width:5%;background:var(--muted)"></div></div>
     </button>
 
-    <button class="proj" onclick="pick(this,'fmm')">
-      <div class="proj-top"><span class="proj-name">Studio Dashboard</span><span class="bdg bdg-tbc">TBC</span></div>
-      <div class="proj-sub">Socials · Content Management</div>
-      <div class="bar"><div class="bar-fill" style="width:5%;background:var(--dim)"></div></div>
+    <button class="pj" onclick="go('studio',this)">
+      <div class="pj-row"><span class="pj-name">Studio Dashboard</span><span class="bdg tbc-bdg">TBC</span></div>
+      <div class="pj-sub">Socials · Content Management</div>
+      <div class="pj-bar"><div class="pj-fill" style="width:5%;background:var(--muted)"></div></div>
     </button>
 
-    <button class="proj" onclick="pick(this,'fmm')">
-      <div class="proj-top"><span class="proj-name">CJ Ops Portal</span><span class="bdg bdg-wip">WIP</span></div>
-      <div class="proj-sub">Ops Dashboard · Supabase · GitHub Pages</div>
-      <div class="proj-links">
-        <a class="proj-link" href="https://under450.github.io/cj-portal/" target="_blank" onclick="e(event)">
-          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-          Live Portal
-        </a>
-        <a class="proj-link" href="https://github.com/Under450/cj-portal" target="_blank" onclick="e(event)">
-          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-          GitHub Repo
-        </a>
-      </div>
-      <div class="bar"><div class="bar-fill" style="width:40%;background:var(--amber)"></div></div>
+    <button class="pj" onclick="go('cjportal',this)">
+      <div class="pj-row"><span class="pj-name">CJ Ops Portal</span><span class="bdg wip-bdg">WIP</span></div>
+      <div class="pj-sub">This Dashboard</div>
+      <div class="pj-bar"><div class="pj-fill" style="width:40%;background:var(--amber)"></div></div>
     </button>
 
-  </div>
-
-  <div class="filters">
-    <div class="flbl">Quick Filter</div>
-    <div class="chips">
-      <button class="chip on-dev" data-f="dev" onclick="tog(this)">DEV</button>
-      <button class="chip on-ops" data-f="ops" onclick="tog(this)">OPS</button>
-      <button class="chip" data-f="legal" onclick="tog(this)">LEGAL</button>
-      <button class="chip on-design" data-f="design" onclick="tog(this)">DESIGN</button>
-    </div>
   </div>
 </aside>
 
-<!-- MAIN -->
+<!-- MAIN PANELS -->
 <main class="main">
 
-  <!-- STATS -->
-  <div class="stats">
-    <div class="stat"><span class="snum">10</span><span class="slbl">Projects</span></div>
-    <div class="stat"><span class="snum a" id="s-open">—</span><span class="slbl">Open Tasks</span></div>
-    <div class="stat"><span class="snum t" id="s-done">—</span><span class="slbl">Completed</span></div>
-    <div class="stat"><span class="snum r">2</span><span class="slbl">Needs Attention</span></div>
-    <div class="stat"><span class="snum">6</span><span class="slbl">Updates</span></div>
+  <!-- WELCOME -->
+  <div class="pview on" id="v-welcome">
+    <div class="welcome">
+      <div class="welcome-logo">CJ</div>
+      <div class="welcome-text">Select a project from the sidebar</div>
+    </div>
   </div>
 
-  <!-- TABS -->
-  <div class="tabs">
-    <button class="tab on" id="tab-block" onclick="show('block',this)">Block Mgmt &amp; Landlord</button>
-    <button class="tab" id="tab-fmm" onclick="show('fmm',this)">FMM &amp; CJ Projects</button>
-    <button class="tab" id="tab-berg" onclick="show('berg',this)">Updates · Bergason</button>
-    <button class="tab" id="tab-cj" onclick="show('cj',this)">Updates · CJ</button>
+  <!-- BLOCK MANAGEMENT -->
+  <div class="pview" id="v-block-mgmt">
+    <div class="pvhdr">
+      <div class="pvhdr-icon ic-amber">🏢</div>
+      <div class="pvhdr-text">
+        <div class="pvhdr-name">Block Management</div>
+        <div class="pvhdr-desc">Bergason Property Services — residents, landlords, compliance</div>
+      </div>
+      <div class="pvhdr-badge"><span class="bdg wip-bdg">WIP</span></div>
+    </div>
+    <div class="pvcontent">
+
+      <div class="sec">
+        <div class="sec-title">Live Sites & Portals</div>
+        <div class="links">
+          <a class="lcard" href="https://bergasonblockmanagement.co.uk" target="_blank">
+            <div class="lcard-icon ic-amber">🌐</div>
+            <div class="lcard-body"><div class="lcard-label">Main Website</div><div class="lcard-url">bergasonblockmanagement.co.uk</div></div>
+            <div class="lcard-arr">›</div>
+          </a>
+          <a class="lcard" href="https://bergasonblockmanagement.co.uk/landlord-admin.html" target="_blank">
+            <div class="lcard-icon ic-blue">⚙️</div>
+            <div class="lcard-body"><div class="lcard-label">Admin Portal</div><div class="lcard-url">bergasonblockmanagement.co.uk/landlord-admin.html</div></div>
+            <div class="lcard-arr">›</div>
+          </a>
+          <a class="lcard" href="https://bergasonblockmanagement.co.uk/residents" target="_blank">
+            <div class="lcard-icon ic-teal">🏠</div>
+            <div class="lcard-body"><div class="lcard-label">Residents Portal</div><div class="lcard-url">bergasonblockmanagement.co.uk/residents</div></div>
+            <div class="lcard-arr">›</div>
+          </a>
+          <a class="lcard" href="https://bergasonblockmanagement.co.uk/tenant-rights" target="_blank">
+            <div class="lcard-icon ic-purple">⚖️</div>
+            <div class="lcard-body"><div class="lcard-label">Tenant Rights Act Portal</div><div class="lcard-url">bergasonblockmanagement.co.uk/tenant-rights</div></div>
+            <div class="lcard-arr">›</div>
+          </a>
+        </div>
+      </div>
+
+      <div class="sec">
+        <div class="sec-title">GitHub Repos</div>
+        <div class="links">
+          <a class="lcard" href="https://github.com/Under450/bergason-block-management" target="_blank">
+            <div class="lcard-icon ic-blue">💾</div>
+            <div class="lcard-body"><div class="lcard-label">Block Management Repo</div><div class="lcard-url">github.com/Under450/bergason-block-management</div></div>
+            <div class="lcard-arr">›</div>
+          </a>
+          <a class="lcard" href="https://github.com/Under450/Bergason-Inventory-App" target="_blank">
+            <div class="lcard-icon ic-blue">💾</div>
+            <div class="lcard-body"><div class="lcard-label">Inventory App Repo</div><div class="lcard-url">github.com/Under450/Bergason-Inventory-App</div></div>
+            <div class="lcard-arr">›</div>
+          </a>
+        </div>
+      </div>
+
+      <div class="sec">
+        <div class="sec-title">Open Tasks</div>
+        <div class="tasks" id="t-block-mgmt">
+          <div class="task" data-t="dev" onclick="tick(this)"><div class="chk"></div><span class="tt">Deploy createLandlordSession + resetSessionProgress Cloud Functions</span><span class="tg tg-dev">DEV</span></div>
+          <div class="task" data-t="dev" onclick="tick(this)"><div class="chk"></div><span class="tt">Test Didit KYC flow end-to-end with fresh session</span><span class="tg tg-dev">DEV</span></div>
+          <div class="task" data-t="ops" onclick="tick(this)"><div class="chk"></div><span class="tt">Add fee placeholders to tc_templates/v1 in Firestore</span><span class="tg tg-ops">OPS</span></div>
+          <div class="task" data-t="ops" onclick="tick(this)"><div class="chk"></div><span class="tt">Await Firebase project quota increase</span><span class="tg tg-ops">OPS</span></div>
+          <div class="task" data-t="dev" onclick="tick(this)"><div class="chk"></div><span class="tt">Admin Portal Phase 2 — remove self-registration, role-based routing</span><span class="tg tg-dev">DEV</span></div>
+          <div class="task" data-t="dev" onclick="tick(this)"><div class="chk"></div><span class="tt">Admin Portal Phase 3 — document uploads via Firebase Storage</span><span class="tg tg-dev">DEV</span></div>
+          <div class="task" data-t="ops" onclick="tick(this)"><div class="chk"></div><span class="tt">Geo-SEO audit — AI search visibility</span><span class="tg tg-ops">OPS</span></div>
+        </div>
+        <div class="add-row">
+          <input class="add-inp" placeholder="Add a task…" onkeydown="if(event.key==='Enter')addT('t-block-mgmt',this)">
+          <button class="add-btn" onclick="addT('t-block-mgmt',this.previousElementSibling)">+</button>
+        </div>
+      </div>
+
+      <div class="sec">
+        <div class="sec-title">Recent Updates</div>
+        <div class="updates">
+          <div class="upd open" onclick="xpd(this)">
+            <div class="upd-hdr"><span class="arr">›</span><span class="upd-title">Tenant Rights Act Portal — Complete v1</span><span class="upd-date">30 Mar</span><span class="upd-st st-live">LIVE</span></div>
+            <div class="upd-body">Full portal deployed — dashboard with stats, batch send, single send, proof of posting upload. generateCertificate function generates branded PDF with full delivery timeline. Resend webhook tracks delivery/open/bounce events.</div>
+          </div>
+          <div class="upd" onclick="xpd(this)">
+            <div class="upd-hdr"><span class="arr">›</span><span class="upd-title">Firestore Collection Fix — landlord_sessions → onboarding_sessions</span><span class="upd-date">29 Mar</span><span class="upd-st st-done">DONE</span></div>
+            <div class="upd-body">All 4 Cloud Functions and both portal HTML files corrected. Firestore security rules updated. resetSessionProgress function added.</div>
+          </div>
+          <div class="upd" onclick="xpd(this)">
+            <div class="upd-hdr"><span class="arr">›</span><span class="upd-title">Firebase Separate Project Pending</span><span class="upd-date">Flagged</span><span class="upd-st st-prog">WAITING</span></div>
+            <div class="upd-body">Quota increase for a dedicated Firebase project submitted — awaiting approval.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
   </div>
 
-  <!-- PANELS -->
-  <div class="panels">
-
-    <!-- BLOCK MGMT PANEL -->
-    <div class="panel on" id="p-block">
-      <div class="phdr">
-        <div class="ptitle"><div class="pdot" style="background:var(--blue)"></div>Block Mgmt &amp; Landlord · Tasks</div>
-        <span class="pcount" id="c-block"></span>
+  <!-- LANDLORD PORTAL -->
+  <div class="pview" id="v-landlord">
+    <div class="pvhdr">
+      <div class="pvhdr-icon ic-blue">🔑</div>
+      <div class="pvhdr-text">
+        <div class="pvhdr-name">Landlord Portal</div>
+        <div class="pvhdr-desc">Landlord onboarding, session management, admin panel</div>
       </div>
-      <div class="tlist" id="l-block">
-        <div class="ti" data-f="dev" onclick="tick(this)"><div class="chk done"></div><span class="tt done">Fix Firestore collection name — landlord_sessions → onboarding_sessions</span><span class="tag tag-dev">DEV</span></div>
-        <div class="ti" data-f="dev" onclick="tick(this)"><div class="chk done"></div><span class="tt done">Build createLandlordSession Cloud Function</span><span class="tag tag-dev">DEV</span></div>
-        <div class="ti" data-f="dev" onclick="tick(this)"><div class="chk done"></div><span class="tt done">Add New Landlord tab to landlord-admin.html</span><span class="tag tag-dev">DEV</span></div>
-        <div class="ti" data-f="dev" onclick="tick(this)"><div class="chk done"></div><span class="tt done">Tenant Rights Act Portal — complete v1 (dashboard, batch send, single send)</span><span class="tag tag-dev">DEV</span></div>
-        <div class="ti" data-f="dev" onclick="tick(this)"><div class="chk done"></div><span class="tt done">Certificate generation with full delivery timeline PDF</span><span class="tag tag-dev">DEV</span></div>
-        <div class="ti" data-f="dev" onclick="tick(this)"><div class="chk done"></div><span class="tt done">Resend webhook — delivery/open/bounce tracking deployed</span><span class="tag tag-dev">DEV</span></div>
-        <div class="ti" data-f="ops" onclick="tick(this)"><div class="chk done"></div><span class="tt done">Rename Bergason Estate Agents → Bergason Property Services throughout</span><span class="tag tag-ops">OPS</span></div>
-        <div class="ti" data-f="design" onclick="tick(this)"><div class="chk done"></div><span class="tt done">Brochure — site-specific flipbook live at bergasonblockmanagement.co.uk/brochure-flipbook.html</span><span class="tag tag-design">DESIGN</span></div>
-        <div class="ti" data-f="design" onclick="tick(this)"><div class="chk done"></div><span class="tt done">Brochure — generic template live at under450.github.io/-bergason-brochure-template/brochure.html</span><span class="tag tag-design">DESIGN</span></div>
-        <div class="ti" data-f="dev" onclick="tick(this)"><div class="chk"></div><span class="tt">Deploy createLandlordSession + resetSessionProgress Cloud Functions</span><span class="tag tag-dev">DEV</span></div>
-        <div class="ti" data-f="dev" onclick="tick(this)"><div class="chk"></div><span class="tt">Test Didit KYC flow end-to-end with fresh session</span><span class="tag tag-dev">DEV</span></div>
-        <div class="ti" data-f="ops" onclick="tick(this)"><div class="chk"></div><span class="tt">Add fee placeholders to tc_templates/v1 in Firestore</span><span class="tag tag-ops">OPS</span></div>
-        <div class="ti" data-f="ops" onclick="tick(this)"><div class="chk"></div><span class="tt">Await Firebase project quota increase (2 days)</span><span class="tag tag-ops">OPS</span></div>
-        <div class="ti" data-f="dev" onclick="tick(this)"><div class="chk"></div><span class="tt">Admin Portal Phase 2 — remove self-registration, role-based routing</span><span class="tag tag-dev">DEV</span></div>
-        <div class="ti" data-f="dev" onclick="tick(this)"><div class="chk"></div><span class="tt">Admin Portal Phase 3 — document uploads via Firebase Storage</span><span class="tag tag-dev">DEV</span></div>
-        <div class="ti" data-f="ops" onclick="tick(this)"><div class="chk"></div><span class="tt">Geo-SEO audit — AI search visibility (ChatGPT, Perplexity, Claude)</span><span class="tag tag-ops">OPS</span></div>
-        <div class="ti" data-f="dev" onclick="tick(this)"><div class="chk done"></div><span class="tt done">SIC Director Search — prototype built (SIC search, director extraction, CSV export)</span><span class="tag tag-dev">DEV</span></div>
-        <div class="ti" data-f="dev" onclick="tick(this)"><div class="chk"></div><span class="tt">SIC Director Search — connect Companies House API (free key)</span><span class="tag tag-dev">DEV</span></div>
-        <div class="ti" data-f="dev" onclick="tick(this)"><div class="chk"></div><span class="tt">SIC Director Search — wire Google Custom Search for website/email discovery</span><span class="tag tag-dev">DEV</span></div>
-      </div>
-      <div class="add-row">
-        <input class="add-inp" type="text" placeholder="Add a task…" onkeydown="if(event.key==='Enter')addTask('l-block',this)">
-        <button class="add-btn" onclick="addTask('l-block',this.previousElementSibling)">+</button>
-      </div>
+      <div class="pvhdr-badge"><span class="bdg wip-bdg">WIP</span></div>
     </div>
-
-    <!-- FMM PANEL -->
-    <div class="panel" id="p-fmm">
-      <div class="phdr">
-        <div class="ptitle"><div class="pdot" style="background:var(--teal)"></div>Forward My Mail &amp; CJ Projects · Tasks</div>
-        <span class="pcount" id="c-fmm"></span>
-      </div>
-      <div class="tlist" id="l-fmm">
-        <div class="tsec">Forward My Mail</div>
-        <div class="ti" data-f="dev" onclick="tick(this)"><div class="chk done"></div><span class="tt done">Didit KYC integration complete</span><span class="tag tag-dev">DEV</span></div>
-        <div class="ti" data-f="dev" onclick="tick(this)"><div class="chk done"></div><span class="tt done">Stripe subscription links — all 4 tiers</span><span class="tag tag-dev">DEV</span></div>
-        <div class="ti" data-f="dev" onclick="tick(this)"><div class="chk done"></div><span class="tt done">Webhook infrastructure — Stripe lifecycle events</span><span class="tag tag-dev">DEV</span></div>
-        <div class="ti" data-f="dev" onclick="tick(this)"><div class="chk done"></div><span class="tt done">Welcome email workflow — full lifecycle</span><span class="tag tag-dev">DEV</span></div>
-        <div class="ti" data-f="dev" onclick="tick(this)"><div class="chk"></div><span class="tt">Cancellation &amp; reactivation flow</span><span class="tag tag-dev">DEV</span></div>
-        <div class="ti" data-f="dev" onclick="tick(this)"><div class="chk"></div><span class="tt">Staff Portal — build and test</span><span class="tag tag-dev">DEV</span></div>
-        <div class="ti" data-f="dev" onclick="tick(this)"><div class="chk"></div><span class="tt">Client Portal — build and test</span><span class="tag tag-dev">DEV</span></div>
-        <div class="tsec">CJ Ops Portal — On Hold</div>
-        <div class="ti" data-f="design" onclick="tick(this)"><div class="chk done"></div><span class="tt done">Design &amp; build static HTML dashboard (10 projects, 4-panel grid)</span><span class="tag tag-design">DESIGN</span></div>
-        <div class="ti" data-f="ops" onclick="tick(this)"><div class="chk done"></div><span class="tt done">Decide stack — Supabase (DB/auth) + GitHub Pages (hosting)</span><span class="tag tag-ops">OPS</span></div>
-        <div class="ti" data-f="ops" onclick="tick(this)"><div class="chk"></div><span class="tt">Create GitHub repo (CJ-Ops-Portal) — ON HOLD</span><span class="tag tag-ops">OPS</span></div>
-        <div class="ti" data-f="ops" onclick="tick(this)"><div class="chk"></div><span class="tt">Create Supabase project (free tier) — ON HOLD</span><span class="tag tag-ops">OPS</span></div>
-        <div class="ti" data-f="dev" onclick="tick(this)"><div class="chk"></div><span class="tt">Supabase DB schema — projects, tasks, updates tables</span><span class="tag tag-dev">DEV</span></div>
-        <div class="ti" data-f="dev" onclick="tick(this)"><div class="chk"></div><span class="tt">Supabase Auth — email/password login (Craig only)</span><span class="tag tag-dev">DEV</span></div>
-        <div class="ti" data-f="dev" onclick="tick(this)"><div class="chk"></div><span class="tt">Wire frontend to Supabase — persist tasks, updates, progress</span><span class="tag tag-dev">DEV</span></div>
-        <div class="ti" data-f="ops" onclick="tick(this)"><div class="chk"></div><span class="tt">Deploy to GitHub Pages</span><span class="tag tag-ops">OPS</span></div>
-        <div class="tsec">GEO-SEO Audit Tool</div>
-        <div class="ti" data-f="dev" onclick="tick(this)"><div class="chk done"></div><span class="tt done">Install geo-seo-claude skill (14 sub-skills, 5 subagents)</span><span class="tag tag-dev">DEV</span></div>
-        <div class="ti" data-f="ops" onclick="tick(this)"><div class="chk"></div><span class="tt">Run /geo audit on bergasonblockmanagement.co.uk — implement all fixes</span><span class="tag tag-ops">OPS</span></div>
-        <div class="ti" data-f="ops" onclick="tick(this)"><div class="chk"></div><span class="tt">Generate PDF report with /geo report-pdf</span><span class="tag tag-ops">OPS</span></div>
-        <div class="ti" data-f="dev" onclick="tick(this)"><div class="chk"></div><span class="tt">Build self-service GEO audit product — user submits URL, gets branded PDF report</span><span class="tag tag-dev">DEV</span></div>
-      </div>
-      <div class="add-row">
-        <input class="add-inp" type="text" placeholder="Add a task…" onkeydown="if(event.key==='Enter')addTask('l-fmm',this)">
-        <button class="add-btn" onclick="addTask('l-fmm',this.previousElementSibling)">+</button>
-      </div>
-    </div>
-
-    <!-- BERGASON UPDATES -->
-    <div class="panel" id="p-berg">
-      <div class="phdr">
-        <div class="ptitle"><div class="pdot" style="background:var(--amber)"></div>Updates · Bergason</div>
-      </div>
-      <div class="tlist">
-
-        <div class="upd open" onclick="expand(this)">
-          <div class="upd-hdr"><span class="arr">›</span><div class="upd-col">
-            <div class="upd-title">Tenant Rights Act Portal — Complete v1</div>
-            <div class="upd-meta"><span class="upd-date">30 Mar</span><span class="upd-status s-live">● LIVE</span></div>
-          </div></div>
-          <div class="upd-body">Full portal deployed — dashboard with stats, batch send, single send, proof of posting upload for bounced deliveries. generateCertificate function generates branded PDF with full delivery timeline (Sent → Delivered → Opened → Bounced). Resend webhook tracks delivery/open/bounce events.</div>
+    <div class="pvcontent">
+      <div class="sec">
+        <div class="sec-title">Live Sites & Portals</div>
+        <div class="links">
+          <a class="lcard" href="https://bergasonblockmanagement.co.uk/landlord-admin.html" target="_blank">
+            <div class="lcard-icon ic-blue">⚙️</div>
+            <div class="lcard-body"><div class="lcard-label">Admin Panel</div><div class="lcard-url">bergasonblockmanagement.co.uk/landlord-admin.html</div></div>
+            <div class="lcard-arr">›</div>
+          </a>
+          <a class="lcard" href="https://bergasonblockmanagement.co.uk" target="_blank">
+            <div class="lcard-icon ic-amber">🌐</div>
+            <div class="lcard-body"><div class="lcard-label">Bergason Main Site</div><div class="lcard-url">bergasonblockmanagement.co.uk</div></div>
+            <div class="lcard-arr">›</div>
+          </a>
+          <a class="lcard" href="https://console.firebase.google.com" target="_blank">
+            <div class="lcard-icon ic-amber">🔥</div>
+            <div class="lcard-body"><div class="lcard-label">Firebase Console</div><div class="lcard-url">console.firebase.google.com</div></div>
+            <div class="lcard-arr">›</div>
+          </a>
         </div>
-
-        <div class="upd" onclick="expand(this)">
-          <div class="upd-hdr"><span class="arr">›</span><div class="upd-col">
-            <div class="upd-title">Brochure — Both Versions Live</div>
-            <div class="upd-meta"><span class="upd-date">30 Mar</span><span class="upd-status s-live">● LIVE</span></div>
-          </div></div>
-          <div class="upd-body">
-            Site-specific flipbook: navy/gold scheme with heritage/listed building page.<br>Generic template: reusable PDF brochure, no site name hardcoded.<br>
-            <a class="upd-link" href="https://bergasonblockmanagement.co.uk/brochure-flipbook.html" target="_blank" onclick="e(event)">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-              View Flipbook
-            </a>
-            &nbsp;&nbsp;
-            <a class="upd-link" href="https://under450.github.io/-bergason-brochure-template/brochure.html" target="_blank" onclick="e(event)">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-              View Generic Template
-            </a>
+      </div>
+      <div class="sec">
+        <div class="sec-title">Open Tasks</div>
+        <div class="tasks" id="t-landlord">
+          <div class="task" data-t="dev" onclick="tick(this)"><div class="chk"></div><span class="tt">Deploy createLandlordSession + resetSessionProgress Cloud Functions</span><span class="tg tg-dev">DEV</span></div>
+          <div class="task" data-t="dev" onclick="tick(this)"><div class="chk"></div><span class="tt">New Landlord tab — test magic link end-to-end</span><span class="tg tg-dev">DEV</span></div>
+          <div class="task" data-t="ops" onclick="tick(this)"><div class="chk"></div><span class="tt">Add fee placeholders to tc_templates/v1 in Firestore</span><span class="tg tg-ops">OPS</span></div>
+          <div class="task" data-t="dev" onclick="tick(this)"><div class="chk"></div><span class="tt">Landlord Portal — property overview page</span><span class="tg tg-dev">DEV</span></div>
+          <div class="task" data-t="dev" onclick="tick(this)"><div class="chk"></div><span class="tt">Landlord Portal — financial summary page</span><span class="tg tg-dev">DEV</span></div>
+          <div class="task" data-t="dev" onclick="tick(this)"><div class="chk"></div><span class="tt">Landlord Portal — document vault</span><span class="tg tg-dev">DEV</span></div>
+        </div>
+        <div class="add-row">
+          <input class="add-inp" placeholder="Add a task…" onkeydown="if(event.key==='Enter')addT('t-landlord',this)">
+          <button class="add-btn" onclick="addT('t-landlord',this.previousElementSibling)">+</button>
+        </div>
+      </div>
+      <div class="sec">
+        <div class="sec-title">Recent Updates</div>
+        <div class="updates">
+          <div class="upd open" onclick="xpd(this)">
+            <div class="upd-hdr"><span class="arr">›</span><span class="upd-title">New Landlord Tab Added</span><span class="upd-date">29 Mar</span><span class="upd-st st-prog">DEPLOY PENDING</span></div>
+            <div class="upd-body">Admin form built for onboarding new landlords — name, email, property address, management fee %, setup fee, custom fees, notes. createLandlordSession Cloud Function creates the Firestore doc and sends the magic link.</div>
           </div>
         </div>
-
-        <div class="upd" onclick="expand(this)">
-          <div class="upd-hdr"><span class="arr">›</span><div class="upd-col">
-            <div class="upd-title">Landlord Portal — New Landlord Tab</div>
-            <div class="upd-meta"><span class="upd-date">29 Mar</span><span class="upd-status s-prog">◐ FUNCTIONS TO DEPLOY</span></div>
-          </div></div>
-          <div class="upd-body">Admin form built for onboarding new landlords — name, email, property address, management fee %, setup fee, custom fees, notes. createLandlordSession Cloud Function creates the Firestore doc and sends the magic link.</div>
-        </div>
-
-        <div class="upd" onclick="expand(this)">
-          <div class="upd-hdr"><span class="arr">›</span><div class="upd-col">
-            <div class="upd-title">Block Management — Firestore Collection Fix</div>
-            <div class="upd-meta"><span class="upd-date">29 Mar</span><span class="upd-status s-done">● FIXED</span></div>
-          </div></div>
-          <div class="upd-body">All 4 Cloud Functions and both portal HTML files corrected from landlord_sessions to onboarding_sessions. Firestore security rules updated. resetSessionProgress function added.</div>
-        </div>
-
-        <div class="upd" onclick="expand(this)">
-          <div class="upd-hdr"><span class="arr">›</span><div class="upd-col">
-            <div class="upd-title">Rename — Bergason Property Services Throughout</div>
-            <div class="upd-meta"><span class="upd-date">29 Mar</span><span class="upd-status s-done">● DONE</span></div>
-          </div></div>
-          <div class="upd-body">All references to Bergason Estate Agents renamed to Bergason Property Services across the entire codebase — HTML, Cloud Functions, email templates, PDF certificates.</div>
-        </div>
-
-        <div class="upd" onclick="expand(this)">
-          <div class="upd-hdr"><span class="arr">›</span><div class="upd-col">
-            <div class="upd-title">Firebase — Separate Project Pending</div>
-            <div class="upd-meta"><span class="upd-date">Flagged</span><span class="upd-status s-prog">◐ AWAITING APPROVAL</span></div>
-          </div></div>
-          <div class="upd-body">Landlord Portal and Block Management currently share bergason-block-management Firebase project. Quota increase for a dedicated project submitted — awaiting approval.</div>
-        </div>
-
       </div>
     </div>
+  </div>
 
-    <!-- CJ UPDATES -->
-    <div class="panel" id="p-cj">
-      <div class="phdr">
-        <div class="ptitle"><div class="pdot" style="background:var(--purple)"></div>Updates · CJ Projects</div>
+  <!-- ESTATE AGENTS -->
+  <div class="pview" id="v-estate">
+    <div class="pvhdr">
+      <div class="pvhdr-icon ic-purple">🏘️</div>
+      <div class="pvhdr-text">
+        <div class="pvhdr-name">Estate Agents</div>
+        <div class="pvhdr-desc">Website and portal — TBC</div>
       </div>
-      <div class="tlist">
-
-        <div class="upd open" onclick="expand(this)">
-          <div class="upd-hdr"><span class="arr">›</span><div class="upd-col">
-            <div class="upd-title">CJ Ops Portal — Stack Decided, Repo On Hold</div>
-            <div class="upd-meta"><span class="upd-date">30 Mar</span><span class="upd-status s-hold">◐ ON HOLD</span></div>
-          </div></div>
-          <div class="upd-body">Static HTML dashboard built with all 10 projects. Stack: Supabase + GitHub Pages. Needs DB schema, auth (Craig only), wire frontend to persist data. GitHub repo creation on hold.</div>
+      <div class="pvhdr-badge"><span class="bdg tbc-bdg">TBC</span></div>
+    </div>
+    <div class="pvcontent">
+      <div class="sec">
+        <div class="sec-title">Status</div>
+        <div class="info-row">
+          <div class="info-chip">🔲 <span>Website</span> Not started</div>
+          <div class="info-chip">🔲 <span>Portal</span> Not started</div>
         </div>
+      </div>
+      <div class="sec">
+        <div class="sec-title">Open Tasks</div>
+        <div class="tasks" id="t-estate">
+          <div class="task" data-t="dev" onclick="tick(this)"><div class="chk"></div><span class="tt">Define scope for estate agents website</span><span class="tg tg-dev">DEV</span></div>
+          <div class="task" data-t="dev" onclick="tick(this)"><div class="chk"></div><span class="tt">Define scope for estate agents portal</span><span class="tg tg-dev">DEV</span></div>
+        </div>
+        <div class="add-row">
+          <input class="add-inp" placeholder="Add a task…" onkeydown="if(event.key==='Enter')addT('t-estate',this)">
+          <button class="add-btn" onclick="addT('t-estate',this.previousElementSibling)">+</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
-        <div class="upd" onclick="expand(this)">
-          <div class="upd-hdr"><span class="arr">›</span><div class="upd-col">
-            <div class="upd-title">Forward My Mail — Core Infrastructure Live</div>
-            <div class="upd-meta"><span class="upd-date">Recent</span><span class="upd-status s-prog">◐ PORTALS REMAINING</span></div>
-          </div></div>
-          <div class="upd-body">
-            Didit KYC integrated. Stripe 4-tier subscriptions live. Webhook lifecycle handling done. Full welcome email workflow deployed via Firebase Cloud Functions. Make.com cancelled — fully migrated to Firebase. Remaining: cancellation/reactivation flow, Staff Portal, Client Portal.<br>
-            <a class="upd-link" href="https://forwardmymail.co.uk" target="_blank" onclick="e(event)">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
-              View Site
-            </a>
+  <!-- BROCHURE -->
+  <div class="pview" id="v-brochure">
+    <div class="pvhdr">
+      <div class="pvhdr-icon ic-teal">📄</div>
+      <div class="pvhdr-text">
+        <div class="pvhdr-name">Brochure</div>
+        <div class="pvhdr-desc">Generic template and site-specific flipbook — both live</div>
+      </div>
+      <div class="pvhdr-badge"><span class="bdg live-bdg">LIVE</span></div>
+    </div>
+    <div class="pvcontent">
+      <div class="sec">
+        <div class="sec-title">Live Brochures</div>
+        <div class="links">
+          <a class="lcard" href="https://bergasonblockmanagement.co.uk/brochure-flipbook.html" target="_blank">
+            <div class="lcard-icon ic-teal">📖</div>
+            <div class="lcard-body"><div class="lcard-label">Site-Specific Flipbook</div><div class="lcard-url">bergasonblockmanagement.co.uk/brochure-flipbook.html</div></div>
+            <div class="lcard-arr">›</div>
+          </a>
+          <a class="lcard" href="https://under450.github.io/-bergason-brochure-template/brochure.html" target="_blank">
+            <div class="lcard-icon ic-amber">📋</div>
+            <div class="lcard-body"><div class="lcard-label">Generic Template</div><div class="lcard-url">under450.github.io/-bergason-brochure-template/brochure.html</div></div>
+            <div class="lcard-arr">›</div>
+          </a>
+        </div>
+      </div>
+      <div class="sec">
+        <div class="sec-title">GitHub Repos</div>
+        <div class="links">
+          <a class="lcard" href="https://github.com/Under450/-bergason-brochure-template" target="_blank">
+            <div class="lcard-icon ic-blue">💾</div>
+            <div class="lcard-body"><div class="lcard-label">Brochure Template Repo</div><div class="lcard-url">github.com/Under450/-bergason-brochure-template</div></div>
+            <div class="lcard-arr">›</div>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- INVENTORY APP -->
+  <div class="pview" id="v-inventory">
+    <div class="pvhdr">
+      <div class="pvhdr-icon ic-green">📦</div>
+      <div class="pvhdr-text">
+        <div class="pvhdr-name">Inventory App</div>
+        <div class="pvhdr-desc">Property inventory management — in development</div>
+      </div>
+      <div class="pvhdr-badge"><span class="bdg tbc-bdg">TBC</span></div>
+    </div>
+    <div class="pvcontent">
+      <div class="sec">
+        <div class="sec-title">GitHub Repos</div>
+        <div class="links">
+          <a class="lcard" href="https://github.com/Under450/Bergason-Inventory-App" target="_blank">
+            <div class="lcard-icon ic-blue">💾</div>
+            <div class="lcard-body"><div class="lcard-label">Inventory App Repo</div><div class="lcard-url">github.com/Under450/Bergason-Inventory-App</div></div>
+            <div class="lcard-arr">›</div>
+          </a>
+        </div>
+      </div>
+      <div class="sec">
+        <div class="sec-title">Open Tasks</div>
+        <div class="tasks" id="t-inventory">
+          <div class="task" data-t="dev" onclick="tick(this)"><div class="chk"></div><span class="tt">Signing workflow — five-step status bar</span><span class="tg tg-dev">DEV</span></div>
+          <div class="task" data-t="dev" onclick="tick(this)"><div class="chk"></div><span class="tt">Office signing portal</span><span class="tg tg-dev">DEV</span></div>
+          <div class="task" data-t="dev" onclick="tick(this)"><div class="chk"></div><span class="tt">Tenant review flow with mandatory photos on disputed items</span><span class="tg tg-dev">DEV</span></div>
+        </div>
+        <div class="add-row">
+          <input class="add-inp" placeholder="Add a task…" onkeydown="if(event.key==='Enter')addT('t-inventory',this)">
+          <button class="add-btn" onclick="addT('t-inventory',this.previousElementSibling)">+</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FORWARD MY MAIL -->
+  <div class="pview" id="v-fmm">
+    <div class="pvhdr">
+      <div class="pvhdr-icon ic-amber">✉️</div>
+      <div class="pvhdr-text">
+        <div class="pvhdr-name">Forward My Mail</div>
+        <div class="pvhdr-desc">Virtual address and mail forwarding service</div>
+      </div>
+      <div class="pvhdr-badge"><span class="bdg wip-bdg">WIP</span></div>
+    </div>
+    <div class="pvcontent">
+      <div class="sec">
+        <div class="sec-title">Live Sites & Portals</div>
+        <div class="links">
+          <a class="lcard" href="https://forwardmymail.co.uk" target="_blank">
+            <div class="lcard-icon ic-amber">🌐</div>
+            <div class="lcard-body"><div class="lcard-label">Main Website</div><div class="lcard-url">forwardmymail.co.uk</div></div>
+            <div class="lcard-arr">›</div>
+          </a>
+          <a class="lcard" href="https://forwardmymail.co.uk/staff" target="_blank">
+            <div class="lcard-icon ic-blue">👔</div>
+            <div class="lcard-body"><div class="lcard-label">Staff Portal</div><div class="lcard-url">forwardmymail.co.uk/staff</div></div>
+            <div class="lcard-arr">›</div>
+          </a>
+          <a class="lcard" href="https://forwardmymail.co.uk/client" target="_blank">
+            <div class="lcard-icon ic-teal">👤</div>
+            <div class="lcard-body"><div class="lcard-label">Client Portal</div><div class="lcard-url">forwardmymail.co.uk/client</div></div>
+            <div class="lcard-arr">›</div>
+          </a>
+          <a class="lcard" href="https://console.firebase.google.com" target="_blank">
+            <div class="lcard-icon ic-amber">🔥</div>
+            <div class="lcard-body"><div class="lcard-label">Firebase Console</div><div class="lcard-url">console.firebase.google.com</div></div>
+            <div class="lcard-arr">›</div>
+          </a>
+          <a class="lcard" href="https://dashboard.stripe.com" target="_blank">
+            <div class="lcard-icon ic-purple">💳</div>
+            <div class="lcard-body"><div class="lcard-label">Stripe Dashboard</div><div class="lcard-url">dashboard.stripe.com</div></div>
+            <div class="lcard-arr">›</div>
+          </a>
+          <a class="lcard" href="https://app.resend.com" target="_blank">
+            <div class="lcard-icon ic-blue">📨</div>
+            <div class="lcard-body"><div class="lcard-label">Resend Email</div><div class="lcard-url">app.resend.com</div></div>
+            <div class="lcard-arr">›</div>
+          </a>
+        </div>
+      </div>
+      <div class="sec">
+        <div class="sec-title">Subscription Tiers</div>
+        <div class="info-row">
+          <div class="info-chip">📬 <span>Personal Mailbox</span></div>
+          <div class="info-chip">🏢 <span>Business Address</span></div>
+          <div class="info-chip">📋 <span>Registered Office</span></div>
+          <div class="info-chip">🏛️ <span>Full Virtual Office</span></div>
+        </div>
+      </div>
+      <div class="sec">
+        <div class="sec-title">Open Tasks</div>
+        <div class="tasks" id="t-fmm">
+          <div class="task" data-t="dev" onclick="tick(this)"><div class="chk"></div><span class="tt">Cancellation &amp; reactivation flow</span><span class="tg tg-dev">DEV</span></div>
+          <div class="task" data-t="dev" onclick="tick(this)"><div class="chk"></div><span class="tt">Staff Portal — build and test</span><span class="tg tg-dev">DEV</span></div>
+          <div class="task" data-t="dev" onclick="tick(this)"><div class="chk"></div><span class="tt">Client Portal — build and test</span><span class="tg tg-dev">DEV</span></div>
+        </div>
+        <div class="add-row">
+          <input class="add-inp" placeholder="Add a task…" onkeydown="if(event.key==='Enter')addT('t-fmm',this)">
+          <button class="add-btn" onclick="addT('t-fmm',this.previousElementSibling)">+</button>
+        </div>
+      </div>
+      <div class="sec">
+        <div class="sec-title">Recent Updates</div>
+        <div class="updates">
+          <div class="upd open" onclick="xpd(this)">
+            <div class="upd-hdr"><span class="arr">›</span><span class="upd-title">Core Infrastructure Live</span><span class="upd-date">Recent</span><span class="upd-st st-prog">PORTALS REMAINING</span></div>
+            <div class="upd-body">Didit KYC integrated. Stripe 4-tier subscriptions live. Webhook lifecycle handling done. Full welcome email workflow deployed via Firebase Cloud Functions. Make.com cancelled — fully migrated to Firebase.</div>
           </div>
         </div>
-
-        <div class="upd" onclick="expand(this)">
-          <div class="upd-hdr"><span class="arr">›</span><div class="upd-col">
-            <div class="upd-title">Velvet — Frontend Deployed</div>
-            <div class="upd-meta"><span class="upd-date">In Progress</span><span class="upd-status s-prog">◐ BACKEND IN PROGRESS</span></div>
-          </div></div>
-          <div class="upd-body">Luxury-themed frontend live on GitHub Pages. Credit-based model and creator-locked account structure designed. Backend (Node.js / Firestore) still in progress. Auth layer and credit deduction logic to be connected.</div>
-        </div>
-
-        <div class="upd" onclick="expand(this)">
-          <div class="upd-hdr"><span class="arr">›</span><div class="upd-col">
-            <div class="upd-title">Aventus · Studio Dashboard — Planning</div>
-            <div class="upd-meta"><span class="upd-date">Queued</span><span class="upd-status s-hold">◯ NOT STARTED</span></div>
-          </div></div>
-          <div class="upd-body">Both projects queued under CJ. No active development started. Studio Dashboard — internal social/content management tool. Aventus — scope TBC. To be scoped after current Bergason work completes.</div>
-        </div>
-
       </div>
     </div>
+  </div>
 
-  </div><!-- /panels -->
+  <!-- VELVET -->
+  <div class="pview" id="v-velvet">
+    <div class="pvhdr">
+      <div class="pvhdr-icon ic-pink">💜</div>
+      <div class="pvhdr-text">
+        <div class="pvhdr-name">Velvet</div>
+        <div class="pvhdr-desc">Adult content creator platform — credit-based model</div>
+      </div>
+      <div class="pvhdr-badge"><span class="bdg tbc-bdg">TBC</span></div>
+    </div>
+    <div class="pvcontent">
+      <div class="sec">
+        <div class="sec-title">Live Sites</div>
+        <div class="links">
+          <a class="lcard" href="https://under450.github.io/velvet" target="_blank">
+            <div class="lcard-icon ic-pink">🌐</div>
+            <div class="lcard-body"><div class="lcard-label">Velvet Frontend (GitHub Pages)</div><div class="lcard-url">under450.github.io/velvet</div></div>
+            <div class="lcard-arr">›</div>
+          </a>
+          <a class="lcard" href="https://github.com/Under450/velvet" target="_blank">
+            <div class="lcard-icon ic-blue">💾</div>
+            <div class="lcard-body"><div class="lcard-label">GitHub Repo</div><div class="lcard-url">github.com/Under450/velvet</div></div>
+            <div class="lcard-arr">›</div>
+          </a>
+        </div>
+      </div>
+      <div class="sec">
+        <div class="sec-title">Open Tasks</div>
+        <div class="tasks" id="t-velvet">
+          <div class="task" data-t="dev" onclick="tick(this)"><div class="chk"></div><span class="tt">Backend — Node.js / Firestore auth layer</span><span class="tg tg-dev">DEV</span></div>
+          <div class="task" data-t="dev" onclick="tick(this)"><div class="chk"></div><span class="tt">Credit deduction logic (25p/message, £1.50/photo)</span><span class="tg tg-dev">DEV</span></div>
+          <div class="task" data-t="dev" onclick="tick(this)"><div class="chk"></div><span class="tt">Creator-locked account structure</span><span class="tg tg-dev">DEV</span></div>
+        </div>
+        <div class="add-row">
+          <input class="add-inp" placeholder="Add a task…" onkeydown="if(event.key==='Enter')addT('t-velvet',this)">
+          <button class="add-btn" onclick="addT('t-velvet',this.previousElementSibling)">+</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AVENTUS -->
+  <div class="pview" id="v-aventus">
+    <div class="pvhdr">
+      <div class="pvhdr-icon ic-amber">▲</div>
+      <div class="pvhdr-text">
+        <div class="pvhdr-name">Aventus Digital Media</div>
+        <div class="pvhdr-desc">Creator management agency</div>
+      </div>
+      <div class="pvhdr-badge"><span class="bdg tbc-bdg">TBC</span></div>
+    </div>
+    <div class="pvcontent">
+      <div class="sec">
+        <div class="sec-title">Open Tasks</div>
+        <div class="tasks" id="t-aventus">
+          <div class="task" data-t="dev" onclick="tick(this)"><div class="chk"></div><span class="tt">Define Aventus scope and requirements</span><span class="tg tg-dev">DEV</span></div>
+          <div class="task" data-t="dev" onclick="tick(this)"><div class="chk"></div><span class="tt">Aventus Studio — carousel builder and posting tool</span><span class="tg tg-dev">DEV</span></div>
+          <div class="task" data-t="dev" onclick="tick(this)"><div class="chk"></div><span class="tt">Zernio API integration for Instagram and TikTok posting</span><span class="tg tg-dev">DEV</span></div>
+        </div>
+        <div class="add-row">
+          <input class="add-inp" placeholder="Add a task…" onkeydown="if(event.key==='Enter')addT('t-aventus',this)">
+          <button class="add-btn" onclick="addT('t-aventus',this.previousElementSibling)">+</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STUDIO DASHBOARD -->
+  <div class="pview" id="v-studio">
+    <div class="pvhdr">
+      <div class="pvhdr-icon ic-purple">🎬</div>
+      <div class="pvhdr-text">
+        <div class="pvhdr-name">Studio Dashboard</div>
+        <div class="pvhdr-desc">Social media content creation and scheduling tool</div>
+      </div>
+      <div class="pvhdr-badge"><span class="bdg tbc-bdg">TBC</span></div>
+    </div>
+    <div class="pvcontent">
+      <div class="sec">
+        <div class="sec-title">GitHub Repos</div>
+        <div class="links">
+          <a class="lcard" href="https://github.com/Under450/aventus-studio" target="_blank">
+            <div class="lcard-icon ic-blue">💾</div>
+            <div class="lcard-body"><div class="lcard-label">Aventus Studio Repo</div><div class="lcard-url">github.com/Under450/aventus-studio</div></div>
+            <div class="lcard-arr">›</div>
+          </a>
+        </div>
+      </div>
+      <div class="sec">
+        <div class="sec-title">Open Tasks</div>
+        <div class="tasks" id="t-studio">
+          <div class="task" data-t="dev" onclick="tick(this)"><div class="chk"></div><span class="tt">7-day calendar homepage — grey/amber/green tick states</span><span class="tg tg-dev">DEV</span></div>
+          <div class="task" data-t="dev" onclick="tick(this)"><div class="chk"></div><span class="tt">Day view pipeline — brief → copy → image → hashtags → post</span><span class="tg tg-dev">DEV</span></div>
+          <div class="task" data-t="dev" onclick="tick(this)"><div class="chk"></div><span class="tt">Carousel builder — 5-10 slides, Instagram/TikTok export</span><span class="tg tg-dev">DEV</span></div>
+          <div class="task" data-t="dev" onclick="tick(this)"><div class="chk"></div><span class="tt">Zernio API integration for posting</span><span class="tg tg-dev">DEV</span></div>
+        </div>
+        <div class="add-row">
+          <input class="add-inp" placeholder="Add a task…" onkeydown="if(event.key==='Enter')addT('t-studio',this)">
+          <button class="add-btn" onclick="addT('t-studio',this.previousElementSibling)">+</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CJ OPS PORTAL -->
+  <div class="pview" id="v-cjportal">
+    <div class="pvhdr">
+      <div class="pvhdr-icon ic-amber">🖥️</div>
+      <div class="pvhdr-text">
+        <div class="pvhdr-name">CJ Ops Portal</div>
+        <div class="pvhdr-desc">This dashboard — ops management across all CJ projects</div>
+      </div>
+      <div class="pvhdr-badge"><span class="bdg wip-bdg">WIP</span></div>
+    </div>
+    <div class="pvcontent">
+      <div class="sec">
+        <div class="sec-title">Live Sites</div>
+        <div class="links">
+          <a class="lcard" href="https://under450.github.io/cj-portal/" target="_blank">
+            <div class="lcard-icon ic-amber">🌐</div>
+            <div class="lcard-body"><div class="lcard-label">Live Portal</div><div class="lcard-url">under450.github.io/cj-portal/</div></div>
+            <div class="lcard-arr">›</div>
+          </a>
+          <a class="lcard" href="https://github.com/Under450/cj-portal" target="_blank">
+            <div class="lcard-icon ic-blue">💾</div>
+            <div class="lcard-body"><div class="lcard-label">GitHub Repo</div><div class="lcard-url">github.com/Under450/cj-portal</div></div>
+            <div class="lcard-arr">›</div>
+          </a>
+          <a class="lcard" href="https://github.com/Under450" target="_blank">
+            <div class="lcard-icon ic-blue">🏢</div>
+            <div class="lcard-body"><div class="lcard-label">Under450 GitHub Org</div><div class="lcard-url">github.com/Under450</div></div>
+            <div class="lcard-arr">›</div>
+          </a>
+        </div>
+      </div>
+      <div class="sec">
+        <div class="sec-title">Open Tasks</div>
+        <div class="tasks" id="t-cjportal">
+          <div class="task" data-t="dev" onclick="tick(this)"><div class="chk"></div><span class="tt">Supabase DB schema — projects, tasks, updates tables</span><span class="tg tg-dev">DEV</span></div>
+          <div class="task" data-t="dev" onclick="tick(this)"><div class="chk"></div><span class="tt">Supabase Auth — email/password login (Craig only)</span><span class="tg tg-dev">DEV</span></div>
+          <div class="task" data-t="dev" onclick="tick(this)"><div class="chk"></div><span class="tt">Wire frontend to Supabase — persist tasks and updates</span><span class="tg tg-dev">DEV</span></div>
+        </div>
+        <div class="add-row">
+          <input class="add-inp" placeholder="Add a task…" onkeydown="if(event.key==='Enter')addT('t-cjportal',this)">
+          <button class="add-btn" onclick="addT('t-cjportal',this.previousElementSibling)">+</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </main>
 </div>
 </div>
@@ -508,26 +744,14 @@ function clk(){
     n.toLocaleDateString('en-GB',{weekday:'short',day:'2-digit',month:'short',year:'numeric'})+' · '+
     n.toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
 }
-clk(); setInterval(clk,1000);
+clk();setInterval(clk,1000);
 
-// Prevent link clicks bubbling to parent button
-function e(ev){ev.stopPropagation()}
-
-// Tab switching
-function show(id,btn){
-  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('on'));
-  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('on'));
+// Navigate to project view
+function go(id,btn){
+  document.querySelectorAll('.pj').forEach(b=>b.classList.remove('on'));
+  document.querySelectorAll('.pview').forEach(p=>p.classList.remove('on'));
   btn.classList.add('on');
-  document.getElementById('p-'+id).classList.add('on');
-  stats();
-}
-
-// Sidebar project pick — switches tab
-function pick(btn,id){
-  document.querySelectorAll('.proj').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  const tabBtn=document.getElementById('tab-'+id);
-  show(id,tabBtn);
+  document.getElementById('v-'+id).classList.add('on');
 }
 
 // Task toggle
@@ -536,75 +760,41 @@ function tick(item){
   const t=item.querySelector('.tt');
   c.classList.toggle('done');
   t.classList.toggle('done');
-  save(); stats();
+  save();
 }
 
 // Add task
-function addTask(listId,inp){
+function addT(listId,inp){
   const v=inp.value.trim();
   if(!v)return;
   inp.value='';
-  const div=document.createElement('div');
-  div.className='ti';div.dataset.f='dev';div.setAttribute('onclick','tick(this)');
-  div.innerHTML=`<div class="chk"></div><span class="tt">${v}</span><span class="tag tag-dev">DEV</span>`;
-  document.getElementById(listId).appendChild(div);
-  filter(); stats(); save();
+  const d=document.createElement('div');
+  d.className='task';d.dataset.t='dev';d.setAttribute('onclick','tick(this)');
+  d.innerHTML=`<div class="chk"></div><span class="tt">${v}</span><span class="tg tg-dev">DEV</span>`;
+  document.getElementById(listId).appendChild(d);
+  save();
 }
 
-// Update expand
-function expand(el){el.classList.toggle('open')}
+// Expand update
+function xpd(el){el.classList.toggle('open')}
 
-// Filter chips
-const on=new Set(['dev','ops','design']);
-function tog(chip){
-  const f=chip.dataset.f;
-  on.has(f)?on.delete(f):on.add(f);
-  chip.classList.toggle('on-'+f);
-  filter(); stats();
-}
-function filter(){
-  document.querySelectorAll('.ti').forEach(ti=>{
-    ti.classList.toggle('hidden', on.size>0 && !on.has(ti.dataset.f));
-  });
-  cnt();
-}
-
-// Stats
-function stats(){
-  const vis=document.querySelectorAll('.ti:not(.hidden)');
-  let d=0,o=0;
-  vis.forEach(t=>{t.querySelector('.chk').classList.contains('done')?d++:o++});
-  document.getElementById('s-open').textContent=o;
-  document.getElementById('s-done').textContent=d;
-  cnt();
-}
-function cnt(){
-  ['block','fmm'].forEach(id=>{
-    const el=document.getElementById('c-'+id);
-    if(!el)return;
-    const list=document.getElementById('l-'+id);
-    const all=list.querySelectorAll('.ti:not(.hidden)').length;
-    const done=list.querySelectorAll('.ti:not(.hidden) .chk.done').length;
-    el.textContent=done+' / '+all;
-  });
-}
-
-// Persist
+// Persist tasks
 function save(){
   const s={};
-  document.querySelectorAll('.ti').forEach((t,i)=>{s[i]=t.querySelector('.chk').classList.contains('done')});
-  try{localStorage.setItem('cjp',JSON.stringify(s))}catch(e){}
+  document.querySelectorAll('.task').forEach((t,i)=>{
+    s[i]=t.querySelector('.chk').classList.contains('done');
+  });
+  try{localStorage.setItem('cjp2',JSON.stringify(s))}catch(e){}
 }
 function load(){
   try{
-    const s=JSON.parse(localStorage.getItem('cjp')||'{}');
-    document.querySelectorAll('.ti').forEach((t,i)=>{
+    const s=JSON.parse(localStorage.getItem('cjp2')||'{}');
+    document.querySelectorAll('.task').forEach((t,i)=>{
       if(s[i]){t.querySelector('.chk').classList.add('done');t.querySelector('.tt').classList.add('done')}
     });
   }catch(e){}
 }
-
-load(); filter(); stats();
+load();
 </script>
 </body>
 </html>
