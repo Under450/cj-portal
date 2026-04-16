@@ -591,9 +591,14 @@ html,body{height:100%;background:var(--navy);color:var(--text);font-family:'DM S
       <div class="sec">
         <div class="sec-title">Open Tasks</div>
         <div class="tasks" id="t-fmm">
-          <div class="task" data-t="dev" onclick="tick(this)"><div class="chk"></div><span class="tt">Cancellation &amp; reactivation flow</span><span class="tg tg-dev">DEV</span></div>
+          <div class="task done" data-t="dev" onclick="tick(this)"><div class="chk done"></div><span class="tt done">Didit KYC integration complete</span><span class="tg tg-dev">DEV</span></div>
+          <div class="task done" data-t="dev" onclick="tick(this)"><div class="chk done"></div><span class="tt done">Stripe subscription links — all 4 tiers</span><span class="tg tg-dev">DEV</span></div>
+          <div class="task done" data-t="dev" onclick="tick(this)"><div class="chk done"></div><span class="tt done">Webhook infrastructure — Stripe lifecycle events</span><span class="tg tg-dev">DEV</span></div>
+          <div class="task done" data-t="dev" onclick="tick(this)"><div class="chk done"></div><span class="tt done">Welcome email workflow — full lifecycle</span><span class="tg tg-dev">DEV</span></div>
+          <div class="task done" data-t="dev" onclick="tick(this)"><div class="chk done"></div><span class="tt done">Package-aware credit logic — Personal / Business / Reg Office / Full Virtual</span><span class="tg tg-dev">DEV</span></div>
           <div class="task done" data-t="dev" onclick="tick(this)"><div class="chk done"></div><span class="tt done">Staff Portal — build and test</span><span class="tg tg-dev">DEV</span></div>
           <div class="task done" data-t="dev" onclick="tick(this)"><div class="chk done"></div><span class="tt done">Client Portal — build and test</span><span class="tg tg-dev">DEV</span></div>
+          <div class="task" data-t="dev" onclick="tick(this)"><div class="chk"></div><span class="tt">Cancellation &amp; reactivation flow</span><span class="tg tg-dev">DEV</span></div>
         </div>
         <div class="add-row">
           <input class="add-inp" placeholder="Add a task…" onkeydown="if(event.key==='Enter')addT('t-fmm',this)">
@@ -667,8 +672,9 @@ html,body{height:100%;background:var(--navy);color:var(--text);font-family:'DM S
       <div class="sec">
         <div class="sec-title">Open Tasks</div>
         <div class="tasks" id="t-aventus">
-          <div class="task done" data-t="dev" onclick="tick(this)"><div class="chk done"></div><span class="tt done">Define Aventus scope and requirements</span><span class="tg tg-dev">DEV</span></div>
+          <div class="task" data-t="dev" onclick="tick(this)"><div class="chk"></div><span class="tt">Define Aventus scope and requirements</span><span class="tg tg-dev">DEV</span></div>
           <div class="task" data-t="dev" onclick="tick(this)"><div class="chk"></div><span class="tt">Aventus Studio — carousel builder and posting tool</span><span class="tg tg-dev">DEV</span></div>
+          <div class="task" data-t="dev" onclick="tick(this)"><div class="chk"></div><span class="tt">Zernio API integration for Instagram and TikTok posting</span><span class="tg tg-dev">DEV</span></div>
         </div>
         <div class="add-row">
           <input class="add-inp" placeholder="Add a task…" onkeydown="if(event.key==='Enter')addT('t-aventus',this)">
@@ -710,6 +716,7 @@ html,body{height:100%;background:var(--navy);color:var(--text);font-family:'DM S
           <div class="task" data-t="dev" onclick="tick(this)"><div class="chk"></div><span class="tt">7-day calendar homepage — grey/amber/green tick states</span><span class="tg tg-dev">DEV</span></div>
           <div class="task" data-t="dev" onclick="tick(this)"><div class="chk"></div><span class="tt">Day view pipeline — brief → copy → image → hashtags → post</span><span class="tg tg-dev">DEV</span></div>
           <div class="task" data-t="dev" onclick="tick(this)"><div class="chk"></div><span class="tt">Carousel builder — 5-10 slides, Instagram/TikTok export</span><span class="tg tg-dev">DEV</span></div>
+          <div class="task" data-t="dev" onclick="tick(this)"><div class="chk"></div><span class="tt">Zernio API integration for posting</span><span class="tg tg-dev">DEV</span></div>
         </div>
         <div class="add-row">
           <input class="add-inp" placeholder="Add a task…" onkeydown="if(event.key==='Enter')addT('t-studio',this)">
@@ -758,8 +765,10 @@ html,body{height:100%;background:var(--navy);color:var(--text);font-family:'DM S
       <div class="sec">
         <div class="sec-title">Open Tasks</div>
         <div class="tasks" id="t-cjportal">
+          <div class="task done" data-t="design" onclick="tick(this)"><div class="chk done"></div><span class="tt done">Design &amp; build static HTML dashboard (10 projects, 4-panel grid)</span><span class="tg tg-design">DESIGN</span></div>
+          <div class="task done" data-t="ops" onclick="tick(this)"><div class="chk done"></div><span class="tt done">Decide stack — Supabase (DB/auth) + GitHub Pages (hosting)</span><span class="tg tg-ops">OPS</span></div>
           <div class="task" data-t="dev" onclick="tick(this)"><div class="chk"></div><span class="tt">Supabase DB schema — projects, tasks, updates tables</span><span class="tg tg-dev">DEV</span></div>
-          <div class="task" data-t="dev" onclick="tick(this)"><div class="chk"></div><span class="tt">Supabase Auth — email/password login (Craig only)</span><span class="tg tg-dev">DEV</span></div>
+          <div class="task" data-t="ops" onclick="tick(this)"><div class="chk"></div><span class="tt">Supabase Auth — email/password login (Craig only)</span><span class="tg tg-ops">OPS</span></div>
           <div class="task" data-t="dev" onclick="tick(this)"><div class="chk"></div><span class="tt">Wire frontend to Supabase — persist tasks and updates</span><span class="tg tg-dev">DEV</span></div>
         </div>
         <div class="add-row">
