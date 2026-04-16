@@ -308,7 +308,15 @@ html,body{height:100%;background:var(--navy);color:var(--text);font-family:'DM S
       <div class="sec">
         <div class="sec-title">Open Tasks</div>
         <div class="tasks" id="t-block-mgmt">
-          <div class="task" data-t="dev" onclick="tick(this)"><div class="chk"></div><span class="tt">Deploy createLandlordSession + resetSessionProgress Cloud Functions</span><span class="tg tg-dev">DEV</span></div>
+          <div class="task done" data-t="dev" onclick="tick(this)"><div class="chk done"></div><span class="tt done">Fix Firestore collection name — landlord_sessions → onboarding_sessions</span><span class="tg tg-dev">DEV</span></div>
+          <div class="task done" data-t="dev" onclick="tick(this)"><div class="chk done"></div><span class="tt done">Build createLandlordSession Cloud Function</span><span class="tg tg-dev">DEV</span></div>
+          <div class="task done" data-t="dev" onclick="tick(this)"><div class="chk done"></div><span class="tt done">Add New Landlord tab to landlord-admin.html</span><span class="tg tg-dev">DEV</span></div>
+          <div class="task done" data-t="dev" onclick="tick(this)"><div class="chk done"></div><span class="tt done">Tenant Rights Act Portal — complete v1 (dashboard, batch send, single send)</span><span class="tg tg-dev">DEV</span></div>
+          <div class="task done" data-t="dev" onclick="tick(this)"><div class="chk done"></div><span class="tt done">Certificate generation with full delivery timeline PDF</span><span class="tg tg-dev">DEV</span></div>
+          <div class="task done" data-t="dev" onclick="tick(this)"><div class="chk done"></div><span class="tt done">Resend webhook — delivery/open/bounce tracking deployed</span><span class="tg tg-dev">DEV</span></div>
+          <div class="task done" data-t="ops" onclick="tick(this)"><div class="chk done"></div><span class="tt done">Rename Bergason Estate Agents → Bergason Property Services throughout</span><span class="tg tg-ops">OPS</span></div>
+          <div class="task done" data-t="design" onclick="tick(this)"><div class="chk done"></div><span class="tt done">Brochure — site-specific flipbook live at bergasonblockmanagement.co.uk/brochure-flipbook.html</span><span class="tg tg-design">DESIGN</span></div>
+          <div class="task done" data-t="dev" onclick="tick(this)"><div class="chk done"></div><span class="tt done">Deploy createLandlordSession + resetSessionProgress Cloud Functions</span><span class="tg tg-dev">DEV</span></div>
           <div class="task" data-t="dev" onclick="tick(this)"><div class="chk"></div><span class="tt">Test Didit KYC flow end-to-end with fresh session</span><span class="tg tg-dev">DEV</span></div>
           <div class="task" data-t="ops" onclick="tick(this)"><div class="chk"></div><span class="tt">Add fee placeholders to tc_templates/v1 in Firestore</span><span class="tg tg-ops">OPS</span></div>
           <div class="task" data-t="ops" onclick="tick(this)"><div class="chk"></div><span class="tt">Await Firebase project quota increase</span><span class="tg tg-ops">OPS</span></div>
@@ -672,9 +680,8 @@ html,body{height:100%;background:var(--navy);color:var(--text);font-family:'DM S
       <div class="sec">
         <div class="sec-title">Open Tasks</div>
         <div class="tasks" id="t-aventus">
-          <div class="task" data-t="dev" onclick="tick(this)"><div class="chk"></div><span class="tt">Define Aventus scope and requirements</span><span class="tg tg-dev">DEV</span></div>
+          <div class="task done" data-t="dev" onclick="tick(this)"><div class="chk done"></div><span class="tt done">Define Aventus scope and requirements</span><span class="tg tg-dev">DEV</span></div>
           <div class="task" data-t="dev" onclick="tick(this)"><div class="chk"></div><span class="tt">Aventus Studio — carousel builder and posting tool</span><span class="tg tg-dev">DEV</span></div>
-          <div class="task" data-t="dev" onclick="tick(this)"><div class="chk"></div><span class="tt">Zernio API integration for Instagram and TikTok posting</span><span class="tg tg-dev">DEV</span></div>
         </div>
         <div class="add-row">
           <input class="add-inp" placeholder="Add a task…" onkeydown="if(event.key==='Enter')addT('t-aventus',this)">
