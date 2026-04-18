@@ -51,7 +51,7 @@
           errEl.textContent = 'Not authorised.';
         }
       } catch (e) {
-        errEl.textContent = 'Sign in failed.';
+        errEl.textContent = e.code + ': ' + e.message;
       }
     }
 
