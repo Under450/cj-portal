@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Didit ID Queue — CJ Control</title>
+  <link rel="stylesheet" href="shared.css">
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-functions-compat.js"></script>
+</head>
+<body>
+  <a href="index.html" class="back-link">← Back</a>
+  <div class="header">
+    <div>
+      <div class="header-label">FMM</div>
+      <div class="header-title">ID Verification Queue</div>
+    </div>
+    <div id="count" style="font-size: 13px; color: var(--amber); font-weight: 500;"></div>
+  </div>
+
+  <div id="list" class="loading">Loading…</div>
+
+  <script src="shared.js"></script>
+  <script>
+    async function load() {
+      const data = await callFn('panelGetDiditQueue');
+      const listEl = document.getElementById('list');
+
+      if (!data || !data.customers?.length) {
+        listEl.className = 'empty';
+        listEl.textContent = 'No pending verifications.';
+        document.getElementById('count').textContent = '0 pending';
+        return;
+      }
+
+      document.getElementById('count').textContent = `${data.pendingCount} pending`;
+      listEl.className = 'list';
+      listEl.innerHTML = data.customers.map(c => `
+        <div class="list-row">
+          <div class="list-row-title">${escapeHtml(c.name || c.email)}</div>
+          <div class="list-row-sub">${escapeHtml(c.email)}</div>
+          <div class="list-row-meta">
+            <span class="status-badge pending">pending</span>
+            ${c.createdAt ? ' · Signed up ' + formatTime(new Date(c.createdAt)) : ''}
+          </div>
+        </div>
+      `).join('');
+
+      await markViewed('didit');
+    }
+
+    auth.onAuthStateChanged(u => { if (u?.uid === ALLOWED_UID) load(); });
+  </script>
+</body>
+</html>

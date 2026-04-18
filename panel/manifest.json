@@ -1,0 +1,12 @@
+{
+  "name": "CJ Control",
+  "short_name": "CJ",
+  "description": "CJ Operations Control Panel",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#0a0a0a",
+  "icons": [
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
