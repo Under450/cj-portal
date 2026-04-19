@@ -148,6 +148,25 @@ html,body{height:100%;background:var(--navy);color:var(--text);font-family:'DM S
 .welcome{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:12px;color:var(--muted)}
 .welcome-logo{font-family:'Fraunces',serif;font-size:48px;font-weight:700;color:var(--amber);opacity:.3}
 .welcome-text{font-size:15px}
+
+/* BRAINSTORM */
+.bsec-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--amber);margin:20px 0 8px;opacity:.7}
+.bsec-label:first-child{margin-top:0}
+.ideas{display:flex;flex-direction:column;gap:0;border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.idea{display:flex;align-items:flex-start;gap:12px;padding:12px 16px;background:var(--navy3);border-bottom:1px solid var(--border);transition:background .1s}
+.idea:last-child{border-bottom:none}
+.idea:hover{background:var(--navy4)}
+.idea-dot{width:8px;height:8px;min-width:8px;border-radius:50%;margin-top:5px;flex-shrink:0}
+.dot-new{background:var(--amber);box-shadow:0 0 6px rgba(240,165,0,.5)}
+.dot-progress{background:var(--blue)}
+.dot-done{background:var(--teal)}
+.dot-parked{background:var(--muted)}
+.idea-text{flex:1;font-size:14px;line-height:1.45;color:var(--text)}
+.idea-st{font-family:'DM Mono',monospace;font-size:9px;font-weight:500;padding:2px 6px;border-radius:3px;white-space:nowrap;flex-shrink:0;margin-top:2px;cursor:pointer;border:none}
+.ist-new{background:var(--amber-bg);color:var(--amber)}
+.ist-progress{background:var(--blue-bg);color:var(--blue)}
+.ist-done{background:var(--teal-bg);color:var(--teal)}
+.ist-parked{background:rgba(255,255,255,.06);color:var(--muted)}
 </style>
 </head>
 <body>
@@ -201,6 +220,12 @@ html,body{height:100%;background:var(--navy);color:var(--text);font-family:'DM S
     </button>
 
     <div class="grp">CJ</div>
+
+    <button class="pj" onclick="go('brainstorm',this)">
+      <div class="pj-row"><span class="pj-name">Brainstorming</span><span class="bdg live-bdg">IDEAS</span></div>
+      <div class="pj-sub">All projects · Idea tracker</div>
+      <div class="pj-bar"><div class="pj-fill" style="width:100%;background:var(--amber)"></div></div>
+    </button>
 
     <button class="pj" onclick="go('fmm',this)">
       <div class="pj-row"><span class="pj-name">Forward My Mail</span><span class="bdg wip-bdg">WIP</span></div>
@@ -518,6 +543,77 @@ html,body{height:100%;background:var(--navy);color:var(--text);font-family:'DM S
     </div>
   </div>
 
+  <!-- BRAINSTORMING -->
+  <div class="pview" id="v-brainstorm">
+    <div class="pvhdr">
+      <div class="pvhdr-icon ic-amber">🧠</div>
+      <div class="pvhdr-text">
+        <div class="pvhdr-name">Brainstorming</div>
+        <div class="pvhdr-desc">Ideas across all CJ projects — click status to cycle</div>
+      </div>
+      <div class="pvhdr-badge"><span class="bdg live-bdg">IDEAS</span></div>
+    </div>
+    <div class="pvcontent">
+
+      <div class="sec">
+        <div class="sec-title">All Ideas</div>
+
+        <div class="bsec-label">Bergason</div>
+        <div class="ideas" id="bs-bergason">
+          <div class="idea"><div class="idea-dot dot-new"></div><span class="idea-text">Geo-SEO content push — AI search visibility for block management keywords</span><button class="idea-st ist-new" onclick="cycleIdea(this)">NEW</button></div>
+          <div class="idea"><div class="idea-dot dot-new"></div><span class="idea-text">Shrimpton Court onboarding — pitch pack and proposal doc</span><button class="idea-st ist-new" onclick="cycleIdea(this)">NEW</button></div>
+          <div class="idea"><div class="idea-dot dot-parked"></div><span class="idea-text">Resident app — push notifications for maintenance updates</span><button class="idea-st ist-parked" onclick="cycleIdea(this)">PARKED</button></div>
+        </div>
+        <div class="add-row" style="margin-top:8px">
+          <input class="add-inp" placeholder="Add idea…" onkeydown="if(event.key==='Enter')addIdea('bs-bergason',this)">
+          <button class="add-btn" onclick="addIdea('bs-bergason',this.previousElementSibling)">+</button>
+        </div>
+
+        <div class="bsec-label">Forward My Mail</div>
+        <div class="ideas" id="bs-fmm">
+          <div class="idea"><div class="idea-dot dot-new"></div><span class="idea-text">Affiliate / referral programme — discount codes for influencers</span><button class="idea-st ist-new" onclick="cycleIdea(this)">NEW</button></div>
+          <div class="idea"><div class="idea-dot dot-new"></div><span class="idea-text">SMS notifications on mail receipt — Twilio integration</span><button class="idea-st ist-new" onclick="cycleIdea(this)">NEW</button></div>
+          <div class="idea"><div class="idea-dot dot-progress"></div><span class="idea-text">Blog SEO — virtual address guides targeting nomad / expat keywords</span><button class="idea-st ist-progress" onclick="cycleIdea(this)">IN PROGRESS</button></div>
+        </div>
+        <div class="add-row" style="margin-top:8px">
+          <input class="add-inp" placeholder="Add idea…" onkeydown="if(event.key==='Enter')addIdea('bs-fmm',this)">
+          <button class="add-btn" onclick="addIdea('bs-fmm',this.previousElementSibling)">+</button>
+        </div>
+
+        <div class="bsec-label">Aventus</div>
+        <div class="ideas" id="bs-aventus">
+          <div class="idea"><div class="idea-dot dot-new"></div><span class="idea-text">White label chatting seats — sell to agencies as a product</span><button class="idea-st ist-new" onclick="cycleIdea(this)">NEW</button></div>
+          <div class="idea"><div class="idea-dot dot-new"></div><span class="idea-text">Reddit network rental — monetise aged accounts as a service tier</span><button class="idea-st ist-new" onclick="cycleIdea(this)">NEW</button></div>
+          <div class="idea"><div class="idea-dot dot-new"></div><span class="idea-text">Playbook product — sell DM playbooks direct to creators</span><button class="idea-st ist-new" onclick="cycleIdea(this)">NEW</button></div>
+        </div>
+        <div class="add-row" style="margin-top:8px">
+          <input class="add-inp" placeholder="Add idea…" onkeydown="if(event.key==='Enter')addIdea('bs-aventus',this)">
+          <button class="add-btn" onclick="addIdea('bs-aventus',this.previousElementSibling)">+</button>
+        </div>
+
+        <div class="bsec-label">Velvet</div>
+        <div class="ideas" id="bs-velvet">
+          <div class="idea"><div class="idea-dot dot-new"></div><span class="idea-text">Loyalty tiers — VIP credit bundles for top spenders</span><button class="idea-st ist-new" onclick="cycleIdea(this)">NEW</button></div>
+          <div class="idea"><div class="idea-dot dot-new"></div><span class="idea-text">Creator leaderboard — gamified ranking visible to fans</span><button class="idea-st ist-new" onclick="cycleIdea(this)">NEW</button></div>
+        </div>
+        <div class="add-row" style="margin-top:8px">
+          <input class="add-inp" placeholder="Add idea…" onkeydown="if(event.key==='Enter')addIdea('bs-velvet',this)">
+          <button class="add-btn" onclick="addIdea('bs-velvet',this.previousElementSibling)">+</button>
+        </div>
+
+        <div class="bsec-label">CJ / General</div>
+        <div class="ideas" id="bs-cj">
+          <div class="idea"><div class="idea-dot dot-new"></div><span class="idea-text">Supabase backend — wire portal to persist tasks and ideas across sessions</span><button class="idea-st ist-new" onclick="cycleIdea(this)">NEW</button></div>
+        </div>
+        <div class="add-row" style="margin-top:8px">
+          <input class="add-inp" placeholder="Add idea…" onkeydown="if(event.key==='Enter')addIdea('bs-cj',this)">
+          <button class="add-btn" onclick="addIdea('bs-cj',this.previousElementSibling)">+</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
   <!-- FORWARD MY MAIL -->
   <div class="pview" id="v-fmm">
     <div class="pvhdr">
@@ -828,6 +924,37 @@ function addT(listId,inp){
   const d=document.createElement('div');
   d.className='task';d.dataset.t='dev';d.setAttribute('onclick','tick(this)');
   d.innerHTML=`<div class="chk"></div><span class="tt">${v}</span><span class="tg tg-dev">DEV</span>`;
+  document.getElementById(listId).appendChild(d);
+  save();
+}
+
+// Cycle idea status
+const ideaStates=[
+  {cls:'ist-new',dot:'dot-new',label:'NEW'},
+  {cls:'ist-progress',dot:'dot-progress',label:'IN PROGRESS'},
+  {cls:'ist-done',dot:'dot-done',label:'DONE'},
+  {cls:'ist-parked',dot:'dot-parked',label:'PARKED'}
+];
+function cycleIdea(btn){
+  const idea=btn.closest('.idea');
+  const dot=idea.querySelector('.idea-dot');
+  const cur=ideaStates.findIndex(s=>btn.classList.contains(s.cls));
+  const next=ideaStates[(cur+1)%ideaStates.length];
+  ideaStates.forEach(s=>{btn.classList.remove(s.cls);dot.classList.remove(s.dot)});
+  btn.classList.add(next.cls);
+  dot.classList.add(next.dot);
+  btn.textContent=next.label;
+  save();
+}
+
+// Add idea
+function addIdea(listId,inp){
+  const v=inp.value.trim();
+  if(!v)return;
+  inp.value='';
+  const d=document.createElement('div');
+  d.className='idea';
+  d.innerHTML=`<div class="idea-dot dot-new"></div><span class="idea-text">${v}</span><button class="idea-st ist-new" onclick="cycleIdea(this)">NEW</button>`;
   document.getElementById(listId).appendChild(d);
   save();
 }
