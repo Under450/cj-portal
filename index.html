@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -251,6 +251,12 @@ html,body{height:100%;background:var(--navy);color:var(--text);font-family:'DM S
       <div class="pj-bar"><div class="pj-fill" style="width:5%;background:var(--muted)"></div></div>
     </button>
 
+    <button class="pj" onclick="go('trt',this)">
+      <div class="pj-row"><span class="pj-name">TRT Clinic</span><span class="bdg tbc-bdg">TBC</span></div>
+      <div class="pj-sub">Testosterone Replacement Therapy</div>
+      <div class="pj-bar"><div class="pj-fill" style="width:5%;background:var(--muted)"></div></div>
+    </button>
+
     <button class="pj" onclick="go('cjportal',this)">
       <div class="pj-row"><span class="pj-name">CJ Ops Portal</span><span class="bdg wip-bdg">WIP</span></div>
       <div class="pj-sub">This Dashboard</div>
@@ -301,9 +307,9 @@ html,body{height:100%;background:var(--navy);color:var(--text);font-family:'DM S
             <div class="lcard-body"><div class="lcard-label">Residents Portal</div><div class="lcard-url">bergasonblockmanagement.co.uk/residents</div></div>
             <div class="lcard-arr">›</div>
           </a>
-          <a class="lcard" href="https://bergasonblockmanagement.co.uk/tenant-rights" target="_blank">
+          <a class="lcard" href="https://under450.github.io/BergasonTenantPortal/" target="_blank">
             <div class="lcard-icon ic-purple">⚖️</div>
-            <div class="lcard-body"><div class="lcard-label">Tenant Rights Act Portal</div><div class="lcard-url">bergasonblockmanagement.co.uk/tenant-rights</div></div>
+            <div class="lcard-body"><div class="lcard-label">Tenant Rights Act Portal</div><div class="lcard-url">under450.github.io/BergasonTenantPortal/</div></div>
             <div class="lcard-arr">›</div>
           </a>
           <a class="lcard" href="https://bergasonblockmanagement.co.uk/emails/renters-rights-landlord-email.html" target="_blank">
@@ -835,6 +841,41 @@ html,body{height:100%;background:var(--navy);color:var(--text);font-family:'DM S
         <div class="add-row">
           <input class="add-inp" placeholder="Add a task…" onkeydown="if(event.key==='Enter')addT('t-studio',this)">
           <button class="add-btn" onclick="addT('t-studio',this.previousElementSibling)">+</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TRT CLINIC -->
+  <div class="pview" id="v-trt">
+    <div class="pvhdr">
+      <div class="pvhdr-icon ic-amber">💉</div>
+      <div class="pvhdr-text">
+        <div class="pvhdr-name">TRT Clinic</div>
+        <div class="pvhdr-desc">Testosterone Replacement Therapy — clinic panel concept</div>
+      </div>
+      <div class="pvhdr-badge"><span class="bdg tbc-bdg">TBC</span></div>
+    </div>
+    <div class="pvcontent">
+      <div class="sec">
+        <div class="sec-title">Designs</div>
+        <div class="links">
+          <a class="lcard" href="file:///C:/Users/spare/Desktop/trt-clinic-panel.html" target="_blank">
+            <div class="lcard-icon ic-amber">🎨</div>
+            <div class="lcard-body"><div class="lcard-label">TRT Clinic Panel</div><div class="lcard-url">Local — trt-clinic-panel.html</div></div>
+            <div class="lcard-arr">›</div>
+          </a>
+        </div>
+      </div>
+      <div class="sec">
+        <div class="sec-title">Open Tasks</div>
+        <div class="tasks" id="t-trt">
+          <div class="task" data-t="dev" onclick="tick(this)"><div class="chk"></div><span class="tt">Define TRT clinic scope and requirements</span><span class="tg tg-dev">DEV</span></div>
+          <div class="task" data-t="design" onclick="tick(this)"><div class="chk"></div><span class="tt">Finalise panel design and colour palette</span><span class="tg tg-design">DESIGN</span></div>
+        </div>
+        <div class="add-row">
+          <input class="add-inp" placeholder="Add a task…" onkeydown="if(event.key==='Enter')addT('t-trt',this)">
+          <button class="add-btn" onclick="addT('t-trt',this.previousElementSibling)">+</button>
         </div>
       </div>
     </div>
