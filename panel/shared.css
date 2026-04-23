@@ -266,6 +266,7 @@ body {
 .status-badge.pending { background: rgba(212, 160, 76, 0.15); color: var(--amber); }
 .status-badge.approved { background: rgba(74, 153, 96, 0.15); color: var(--green); }
 .status-badge.declined { background: rgba(226, 75, 74, 0.15); color: var(--red); }
+.status-badge.not_started { background: rgba(136, 136, 136, 0.15); color: var(--text-dim); }
 
 /* Chart container */
 .chart-container {
