@@ -252,9 +252,9 @@ html,body{height:100%;background:var(--navy);color:var(--text);font-family:'DM S
     </button>
 
     <button class="pj" onclick="go('trt',this)">
-      <div class="pj-row"><span class="pj-name">TRT Clinic</span><span class="bdg tbc-bdg">TBC</span></div>
+      <div class="pj-row"><span class="pj-name">TRT Clinic</span><span class="bdg live-bdg">LIVE</span></div>
       <div class="pj-sub">Testosterone Replacement Therapy</div>
-      <div class="pj-bar"><div class="pj-fill" style="width:5%;background:var(--muted)"></div></div>
+      <div class="pj-bar"><div class="pj-fill" style="width:100%;background:var(--teal)"></div></div>
     </button>
 
     <button class="pj" onclick="go('cjportal',this)">
@@ -872,9 +872,9 @@ html,body{height:100%;background:var(--navy);color:var(--text);font-family:'DM S
       <div class="pvhdr-icon ic-amber">💉</div>
       <div class="pvhdr-text">
         <div class="pvhdr-name">TRT Clinic</div>
-        <div class="pvhdr-desc">Testosterone Replacement Therapy — clinic panel concept</div>
+        <div class="pvhdr-desc">Testosterone Replacement Therapy — live on Vercel</div>
       </div>
-      <div class="pvhdr-badge"><span class="bdg tbc-bdg">TBC</span></div>
+      <div class="pvhdr-badge"><span class="bdg live-bdg">LIVE</span></div>
     </div>
     <div class="pvcontent">
       <div class="sec">
@@ -895,8 +895,8 @@ html,body{height:100%;background:var(--navy);color:var(--text);font-family:'DM S
       <div class="sec">
         <div class="sec-title">Open Tasks</div>
         <div class="tasks" id="t-trt">
-          <div class="task" data-t="dev" onclick="tick(this)"><div class="chk"></div><span class="tt">Define TRT clinic scope and requirements</span><span class="tg tg-dev">DEV</span></div>
-          <div class="task" data-t="design" onclick="tick(this)"><div class="chk"></div><span class="tt">Finalise panel design and colour palette</span><span class="tg tg-design">DESIGN</span></div>
+          <div class="task done" data-t="dev" onclick="tick(this)"><div class="chk chk-done"></div><span class="tt">Define TRT clinic scope and requirements</span><span class="tg tg-dev">DEV</span></div>
+          <div class="task done" data-t="design" onclick="tick(this)"><div class="chk chk-done"></div><span class="tt">Finalise panel design and colour palette</span><span class="tg tg-design">DESIGN</span></div>
         </div>
         <div class="add-row">
           <input class="add-inp" placeholder="Add a task…" onkeydown="if(event.key==='Enter')addT('t-trt',this)">
