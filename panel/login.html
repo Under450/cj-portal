@@ -20,6 +20,8 @@
     <input type="password" id="password" placeholder="Password" class="search-input" style="max-width: 280px;">
     <button onclick="signIn()" style="width: 100%; max-width: 280px; padding: 12px; background: var(--amber); color: var(--bg); border: none; border-radius: 8px; font-weight: 500; font-size: 14px; cursor: pointer; font-family: inherit;">Continue</button>
     <div id="error" style="color: var(--red); font-size: 12px; min-height: 16px;"></div>
+    <a href="#" onclick="resetPw()" style="font-size: 12px; color: var(--muted); text-decoration: underline; cursor: pointer;">Forgot password?</a>
+    <div id="reset-msg" style="color: var(--green, #4ade80); font-size: 12px; min-height: 16px;"></div>
   </div>
   <script>
     const firebaseConfig = {
@@ -52,6 +54,17 @@
         }
       } catch (e) {
         errEl.textContent = e.code + ': ' + e.message;
+      }
+    }
+
+    async function resetPw() {
+      const email = document.getElementById('email').value || 'caj@me.com';
+      const msgEl = document.getElementById('reset-msg');
+      try {
+        await auth.sendPasswordResetEmail(email);
+        msgEl.textContent = 'Reset link sent to ' + email;
+      } catch (e) {
+        msgEl.textContent = e.message;
       }
     }
 
