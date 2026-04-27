@@ -187,6 +187,12 @@ html,body{height:100%;background:var(--navy);color:var(--text);font-family:'DM S
 <aside class="sb">
   <div class="sb-inner">
 
+    <button class="pj" onclick="go('dashboard-all',this)">
+      <div class="pj-row"><span class="pj-name">Dashboard for All</span><span class="bdg live-bdg">LIVE</span></div>
+      <div class="pj-sub">Stripe · Didit · Customers</div>
+      <div class="pj-bar"><div class="pj-fill" style="width:100%;background:var(--teal)"></div></div>
+    </button>
+
     <button class="pj" onclick="go('brainstorm',this)">
       <div class="pj-row"><span class="pj-name">Brainstorming</span><span class="bdg live-bdg">IDEAS</span></div>
       <div class="pj-sub">All projects · Idea tracker</div>
@@ -274,6 +280,21 @@ html,body{height:100%;background:var(--navy);color:var(--text);font-family:'DM S
     <div class="welcome">
       <div class="welcome-logo">CJ</div>
       <div class="welcome-text">Select a project from the sidebar</div>
+    </div>
+  </div>
+
+  <!-- DASHBOARD FOR ALL -->
+  <div class="pview" id="v-dashboard-all">
+    <div class="pvhdr">
+      <div class="pvhdr-icon ic-teal">📊</div>
+      <div class="pvhdr-text">
+        <div class="pvhdr-name">Dashboard for All</div>
+        <div class="pvhdr-desc">Live Stripe, Didit, and customer data across all CJ businesses</div>
+      </div>
+      <div class="pvhdr-badge"><span class="bdg live-bdg">LIVE</span></div>
+    </div>
+    <div class="pvcontent" style="padding:0;overflow:hidden;">
+      <iframe src="panel/index.html" style="width:100%;height:calc(100vh - 120px);border:none;background:var(--navy);" title="Dashboard for All"></iframe>
     </div>
   </div>
 
