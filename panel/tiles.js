@@ -1,12 +1,12 @@
 // Brand → tile definitions
 const BRAND_TILES = {
   fmm: [
-    { id: 'stripe', label: 'STRIPE', title: 'Dashboard', icon: 'S', iconClass: 'stripe', link: 'stripe.html', badge: 'stripe_events' },
-    { id: 'balance', label: 'BALANCE', title: '', type: 'value', link: 'stripe.html' },
-    { id: 'signups', label: 'NEW SIGNUPS', title: 'Last 24h', icon: 'people', link: 'signups.html', badge: 'signups' },
-    { id: 'inbox', label: 'INBOX', title: 'FMM mail', icon: 'mail', link: 'inbox.html', badge: 'inbox' },
-    { id: 'customers', label: 'CUSTOMERS', title: 'All accounts', icon: 'list', link: 'customers.html' },
-    { id: 'didit', label: 'DIDIT', title: 'ID queue', icon: 'id', link: 'didit.html', badge: 'didit', badgeColor: 'amber' },
+    { id: 'stripe', label: 'STRIPE', title: 'Dashboard', icon: 'S', iconClass: 'stripe', badge: 'stripe_events' },
+    { id: 'balance', label: 'BALANCE', title: '', type: 'value', section: 'stripe' },
+    { id: 'signups', label: 'NEW SIGNUPS', title: 'Last 24h', icon: 'people', badge: 'signups' },
+    { id: 'inbox', label: 'INBOX', title: 'FMM mail', icon: 'mail', badge: 'inbox' },
+    { id: 'customers', label: 'CUSTOMERS', title: 'All accounts', icon: 'list' },
+    { id: 'didit', label: 'DIDIT', title: 'ID queue', icon: 'id', badge: 'didit', badgeColor: 'amber' },
   ],
   bergason: [
     { id: 'placeholder1', label: 'JOBS', title: 'Property jobs', icon: 'clock' },
@@ -40,6 +40,30 @@ const ICONS = {
 let currentBrand = 'fmm';
 let badgeCache = {};
 
+// ===== SPA NAVIGATION =====
+
+function showSection(id) {
+  document.getElementById('home-view').style.display = 'none';
+  document.querySelectorAll('.detail-section').forEach(s => s.style.display = 'none');
+  const section = document.getElementById('section-' + id);
+  if (section) {
+    section.style.display = 'block';
+    // Load data for section
+    if (id === 'stripe') loadStripe();
+    else if (id === 'signups') loadSignups();
+    else if (id === 'inbox') loadInbox();
+    else if (id === 'customers') loadCustomers();
+    else if (id === 'didit') loadDidit();
+  }
+}
+
+function showHome() {
+  document.querySelectorAll('.detail-section').forEach(s => s.style.display = 'none');
+  document.getElementById('home-view').style.display = 'block';
+}
+
+// ===== TILE RENDERING =====
+
 async function render(brand) {
   currentBrand = brand;
   document.getElementById('brand-title').textContent = BRAND_NAMES[brand];
@@ -65,21 +89,28 @@ function renderTile(t) {
     ? `<div class="tile-icon google">${t.icon}</div>`
     : `<div class="tile-icon" style="color: var(--amber)">${ICONS[t.icon] || ''}</div>`;
 
+  // Which section to open (balance reuses stripe)
+  const sectionId = t.section || t.id;
+  const hasSection = document.getElementById('section-' + sectionId);
+  const onclick = hasSection ? `onclick="showSection('${sectionId}')"` : '';
+
   if (t.type === 'value') {
-    return `<a class="tile" href="${t.link || '#'}">
+    return `<div class="tile" ${onclick} style="cursor:${hasSection ? 'pointer' : 'default'}">
       <div class="tile-label">${t.label}</div>
       <div class="tile-value" id="tile-${t.id}-value">—</div>
       <div class="tile-delta" id="tile-${t.id}-delta"></div>
-    </a>`;
+    </div>`;
   }
 
-  return `<a class="tile" href="${t.link || '#'}">
+  return `<div class="tile" ${onclick} style="cursor:${hasSection ? 'pointer' : 'default'}">
     ${badge}
     ${iconHtml}
     <div class="tile-label">${t.label}</div>
     <div class="tile-title">${t.title}</div>
-  </a>`;
+  </div>`;
 }
+
+// ===== HOME DATA LOADING =====
 
 async function loadFmmData() {
   const [balance, stripeEvents, signups, inbox, didit] = await Promise.all([
@@ -135,7 +166,303 @@ async function loadFmmData() {
   }
 }
 
-document.querySelectorAll('.tab').forEach(tab => {
+// ===== SECTION: STRIPE =====
+
+let spaChart = null;
+
+async function loadStripe() {
+  const [balance, events] = await Promise.all([
+    callFn('panelGetStripeBalance'),
+    callFn('panelGetStripeEvents'),
+  ]);
+
+  if (balance) {
+    document.getElementById('spa-available').textContent = formatGBP(balance.available);
+    document.getElementById('spa-pending').textContent = formatGBP(balance.pending);
+    if (balance.history && balance.history.length) {
+      renderStripeChart(balance.history);
+    }
+  }
+
+  const eventsEl = document.getElementById('spa-events');
+  if (!events || !events.events?.length) {
+    eventsEl.className = 'empty';
+    eventsEl.textContent = 'No recent events.';
+  } else {
+    const lastViewed = events.lastViewed ? new Date(events.lastViewed) : new Date(0);
+    eventsEl.className = 'list';
+    eventsEl.innerHTML = events.events.map(e => {
+      const isNew = new Date(e.created) > lastViewed;
+      return `<div class="list-row ${isNew ? 'new' : ''}">
+        <div class="list-row-title">${escapeHtml(e.type)}</div>
+        <div class="list-row-sub">${e.amount ? formatGBP(e.amount) : ''} ${escapeHtml(e.description || '')}</div>
+        <div class="list-row-meta">${formatTime(new Date(e.created))}</div>
+      </div>`;
+    }).join('');
+  }
+
+  await markViewed('stripe_events');
+}
+
+function renderStripeChart(history) {
+  if (spaChart) spaChart.destroy();
+  const ctx = document.getElementById('spa-balanceChart').getContext('2d');
+  spaChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: history.map(h => h.date),
+      datasets: [{
+        data: history.map(h => h.balance),
+        borderColor: '#d4a04c',
+        backgroundColor: 'rgba(212, 160, 76, 0.1)',
+        borderWidth: 2,
+        fill: true,
+        tension: 0.3,
+        pointRadius: 0,
+        pointHitRadius: 10,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: {
+          ticks: { color: '#555', font: { size: 10 }, maxTicksLimit: 6 },
+          grid: { color: 'rgba(255,255,255,0.05)' },
+          border: { color: '#262626' },
+        },
+        y: {
+          ticks: { color: '#555', font: { size: 10 }, callback: v => '£' + v.toLocaleString() },
+          grid: { color: 'rgba(255,255,255,0.05)' },
+          border: { color: '#262626' },
+        }
+      }
+    }
+  });
+}
+
+// ===== SECTION: SIGNUPS =====
+
+async function loadSignups() {
+  const data = await callFn('panelGetRecentSignups');
+  const listEl = document.getElementById('spa-signups-list');
+
+  if (!data || !data.customers?.length) {
+    listEl.className = 'empty';
+    listEl.textContent = 'No recent signups.';
+    return;
+  }
+
+  const lastViewed = data.lastViewed ? new Date(data.lastViewed) : new Date(0);
+  listEl.className = 'list';
+  listEl.innerHTML = data.customers.map(c => {
+    const isNew = new Date(c.createdAt) > lastViewed;
+    return `<div class="list-row ${isNew ? 'new' : ''}">
+      <div class="list-row-title">${escapeHtml(c.name || c.email)}</div>
+      <div class="list-row-sub">${escapeHtml(c.tier || 'No tier')} · ${escapeHtml(c.email)}</div>
+      <div class="list-row-meta">${formatTime(new Date(c.createdAt))}</div>
+    </div>`;
+  }).join('');
+
+  await markViewed('signups');
+}
+
+// ===== SECTION: INBOX =====
+
+let spaEmails = [];
+
+async function loadInbox() {
+  const data = await callFn('panelGetInbox');
+  const contentEl = document.getElementById('spa-inbox-content');
+
+  if (data?.notConfigured) {
+    contentEl.innerHTML = `<div class="not-configured">
+      <div class="not-configured-icon">✉</div>
+      <div class="not-configured-title">Setup needed</div>
+      <div class="not-configured-sub">Gmail API not configured yet.<br>Connect info@forwardmymail.co.uk to enable.</div>
+    </div>`;
+    return;
+  }
+
+  if (!data || !data.messages?.length) {
+    contentEl.className = 'empty';
+    contentEl.textContent = 'No emails.';
+    return;
+  }
+
+  spaEmails = data.messages;
+  renderInboxList();
+  await markViewed('inbox');
+}
+
+function renderInboxList() {
+  const contentEl = document.getElementById('spa-inbox-content');
+  document.getElementById('spa-inbox-title').textContent = 'Inbox';
+  const backEl = document.getElementById('spa-inbox-back');
+  backEl.onclick = function(ev) { ev.preventDefault(); showHome(); };
+
+  contentEl.className = 'list';
+  contentEl.innerHTML = spaEmails.map((e, i) => `
+    <div class="list-row ${e.unread ? 'new' : ''}" onclick="openSpaEmail(${i})">
+      <div class="list-row-title">${escapeHtml(e.from)}</div>
+      <div class="list-row-sub">${escapeHtml(e.subject)}</div>
+      <div class="list-row-meta">${escapeHtml(e.preview || '')} · ${formatTime(new Date(e.date))}</div>
+    </div>
+  `).join('');
+}
+
+function openSpaEmail(idx) {
+  const e = spaEmails[idx];
+  const contentEl = document.getElementById('spa-inbox-content');
+  document.getElementById('spa-inbox-title').textContent = 'Email';
+  const backEl = document.getElementById('spa-inbox-back');
+  backEl.onclick = function(ev) { ev.preventDefault(); renderInboxList(); };
+
+  contentEl.className = '';
+  contentEl.innerHTML = `<div class="email-reader">
+    <div class="email-reader-header">
+      <div class="email-reader-subject">${escapeHtml(e.subject)}</div>
+      <div class="email-reader-from">${escapeHtml(e.from)}</div>
+      <div class="email-reader-date">${formatTime(new Date(e.date))}</div>
+    </div>
+    <div class="email-reader-body">${escapeHtml(e.body || e.preview || 'No content')}</div>
+  </div>`;
+}
+
+// ===== SECTION: CUSTOMERS =====
+
+let spaAllCustomers = [];
+
+async function loadCustomers() {
+  const data = await callFn('panelGetAllCustomers');
+  const listEl = document.getElementById('spa-cust-list');
+
+  if (!data || !data.customers?.length) {
+    listEl.className = 'empty';
+    listEl.textContent = 'No customers found.';
+    return;
+  }
+
+  spaAllCustomers = data.customers;
+  document.getElementById('spa-cust-count').textContent = `${spaAllCustomers.length} total`;
+  renderCustomerList(spaAllCustomers);
+
+  document.getElementById('spa-cust-search').oninput = function(e) {
+    const q = e.target.value.toLowerCase();
+    if (!q) return renderCustomerList(spaAllCustomers);
+    renderCustomerList(spaAllCustomers.filter(c =>
+      (c.name || '').toLowerCase().includes(q) ||
+      (c.email || '').toLowerCase().includes(q)
+    ));
+  };
+}
+
+function renderCustomerList(customers) {
+  const listEl = document.getElementById('spa-cust-list');
+  if (!customers.length) {
+    listEl.className = 'empty';
+    listEl.textContent = 'No matches.';
+    return;
+  }
+
+  listEl.className = 'list';
+  listEl.innerHTML = customers.map(c => {
+    const statusClass = c.idStatus === 'approved' ? 'approved' : c.idStatus === 'declined' ? 'declined' : 'pending';
+    return `<div class="list-row">
+      <div class="list-row-title">${escapeHtml(c.name || 'No name')}</div>
+      <div class="list-row-sub">${escapeHtml(c.email)} ${c.tier ? '· ' + escapeHtml(c.tier) : ''}</div>
+      <div class="list-row-meta">
+        <span class="status-badge ${statusClass}">${c.idStatus || 'unknown'}</span>
+        ${c.createdAt ? ' · ' + formatTime(new Date(c.createdAt)) : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ===== SECTION: DIDIT =====
+
+let spaDiditCustomers = [];
+let spaDiditFilter = 'all';
+
+function diditStatusLabel(s) {
+  return ({ approved: 'Approved', pending: 'Pending', not_started: 'Not Started', declined: 'Declined' })[s] || s;
+}
+
+function renderDiditList() {
+  const listEl = document.getElementById('spa-didit-list');
+  const filtered = spaDiditFilter === 'all'
+    ? spaDiditCustomers
+    : spaDiditCustomers.filter(c => c.idStatus === spaDiditFilter);
+
+  const metaEl = document.getElementById('spa-didit-meta');
+  metaEl.style.display = '';
+  metaEl.textContent = spaDiditFilter === 'all'
+    ? `Showing all ${filtered.length} active customers`
+    : `Showing ${filtered.length} ${diditStatusLabel(spaDiditFilter).toLowerCase()}`;
+
+  if (!filtered.length) {
+    listEl.className = 'empty';
+    listEl.textContent = spaDiditFilter === 'all'
+      ? 'No active customers found.'
+      : `No customers with status: ${diditStatusLabel(spaDiditFilter)}.`;
+    return;
+  }
+
+  listEl.className = 'list';
+  listEl.innerHTML = filtered.map(c => {
+    const updated = c.idStatusUpdatedAt
+      ? ' · Updated ' + formatTime(new Date(c.idStatusUpdatedAt))
+      : (c.createdAt ? ' · Signed up ' + formatTime(new Date(c.createdAt)) : '');
+    return `<div class="list-row">
+      <div class="list-row-title">${escapeHtml(c.name || c.email)}</div>
+      <div class="list-row-sub">${escapeHtml(c.email)}</div>
+      <div class="list-row-pkg">${escapeHtml(c.package)}</div>
+      <div class="list-row-meta">
+        <span class="status-badge ${c.idStatus}">${diditStatusLabel(c.idStatus)}</span>${updated}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+async function loadDidit() {
+  const data = await callFn('panelGetDiditQueue');
+
+  if (!data || !Array.isArray(data.customers)) {
+    document.getElementById('spa-didit-list').className = 'empty';
+    document.getElementById('spa-didit-list').textContent = 'Failed to load customers.';
+    return;
+  }
+
+  spaDiditCustomers = data.customers;
+  const counts = data.counts || { all: 0, approved: 0, pending: 0, not_started: 0, declined: 0 };
+
+  document.getElementById('spa-didit-total').textContent = `${counts.pending} pending`;
+  document.getElementById('spa-didit-tabs').style.display = '';
+  document.getElementById('spa-c-all').textContent = counts.all;
+  document.getElementById('spa-c-pending').textContent = counts.pending;
+  document.getElementById('spa-c-not_started').textContent = counts.not_started;
+  document.getElementById('spa-c-declined').textContent = counts.declined;
+  document.getElementById('spa-c-approved').textContent = counts.approved;
+
+  document.querySelectorAll('#spa-didit-tabs .tab').forEach(t => {
+    t.onclick = function() {
+      spaDiditFilter = t.dataset.filter;
+      document.querySelectorAll('#spa-didit-tabs .tab').forEach(b => {
+        b.classList.toggle('active', b.dataset.filter === spaDiditFilter);
+      });
+      renderDiditList();
+    };
+  });
+
+  spaDiditFilter = 'all';
+  renderDiditList();
+  await markViewed('didit');
+}
+
+// ===== TAB SWITCHING =====
+
+document.querySelectorAll('.tab[data-brand]').forEach(tab => {
   tab.addEventListener('click', () => render(tab.dataset.brand));
 });
 
