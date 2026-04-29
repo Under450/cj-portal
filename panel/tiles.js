@@ -91,18 +91,20 @@ function renderTile(t) {
 
   // Which section to open (balance reuses stripe)
   const sectionId = t.section || t.id;
-  const hasSection = document.getElementById('section-' + sectionId);
+  const SECTIONS = ['stripe', 'signups', 'inbox', 'customers', 'didit'];
+  const hasSection = SECTIONS.includes(sectionId);
   const onclick = hasSection ? `onclick="showSection('${sectionId}')"` : '';
+  const cursor = hasSection ? 'pointer' : 'default';
 
   if (t.type === 'value') {
-    return `<div class="tile" ${onclick} style="cursor:${hasSection ? 'pointer' : 'default'}">
+    return `<div class="tile" ${onclick} style="cursor:${cursor}">
       <div class="tile-label">${t.label}</div>
       <div class="tile-value" id="tile-${t.id}-value">—</div>
       <div class="tile-delta" id="tile-${t.id}-delta"></div>
     </div>`;
   }
 
-  return `<div class="tile" ${onclick} style="cursor:${hasSection ? 'pointer' : 'default'}">
+  return `<div class="tile" ${onclick} style="cursor:${cursor}">
     ${badge}
     ${iconHtml}
     <div class="tile-label">${t.label}</div>
