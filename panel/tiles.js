@@ -189,16 +189,18 @@ async function loadStripe() {
   const eventsEl = document.getElementById('spa-events');
   if (!events || !events.events?.length) {
     eventsEl.className = 'empty';
-    eventsEl.textContent = 'No recent events.';
+    eventsEl.textContent = 'No recent payments.';
   } else {
     const lastViewed = events.lastViewed ? new Date(events.lastViewed) : new Date(0);
     eventsEl.className = 'list';
     eventsEl.innerHTML = events.events.map(e => {
       const isNew = new Date(e.created) > lastViewed;
+      const nameLine = escapeHtml(e.name || 'Unknown');
+      const companyLine = e.company ? ` · ${escapeHtml(e.company)}` : '';
       return `<div class="list-row ${isNew ? 'new' : ''}">
-        <div class="list-row-title">${escapeHtml(e.type)}</div>
-        <div class="list-row-sub">${e.amount ? formatGBP(e.amount) : ''} ${escapeHtml(e.description || '')}</div>
-        <div class="list-row-meta">${formatTime(new Date(e.created))}</div>
+        <div class="list-row-title">${nameLine}${companyLine}</div>
+        <div class="list-row-sub" style="color:var(--amber);font-weight:500;">${formatGBP(e.amount)} · ${escapeHtml(e.package || 'N/A')}</div>
+        <div class="list-row-meta">${escapeHtml(e.email || '')} · ${formatTime(new Date(e.created))}</div>
       </div>`;
     }).join('');
   }
