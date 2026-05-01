@@ -148,6 +148,16 @@ html,body{
   animation:blink 2s ease-in-out infinite;
 }
 @keyframes blink{ 50%{ opacity:.4 } }
+@keyframes wobble{
+  0%,100%{ transform:rotate(0) scale(1) }
+  15%{ transform:rotate(-3deg) scale(1.02) }
+  30%{ transform:rotate(2.5deg) scale(1.01) }
+  45%{ transform:rotate(-2deg) scale(1.02) }
+  60%{ transform:rotate(1.5deg) scale(1.01) }
+  75%{ transform:rotate(-1deg) scale(1.01) }
+  90%{ transform:rotate(.5deg) scale(1) }
+}
+.card[data-id="trt"]{ animation:wobble 2s ease-in-out infinite }
 
 .clock{
   font-family:'Geist Mono',ui-monospace,monospace;
@@ -965,7 +975,7 @@ body.viewing-project .pvcontent{ display:flex !important; flex-direction:column 
       <button class="sb-tile" onclick="go('velvet',this)"><div class="sb-tile-row"><span class="sb-tile-name">Velvet</span><span class="bdg tbc-bdg">TBC</span></div><div class="sb-tile-sub">Creator Platform</div></button>
       <button class="sb-tile" onclick="go('aventus',this)"><div class="sb-tile-row"><span class="sb-tile-name">Aventus</span><span class="bdg tbc-bdg">TBC</span></div><div class="sb-tile-sub">Digital Media Agency</div></button>
       <button class="sb-tile" onclick="go('studio',this)"><div class="sb-tile-row"><span class="sb-tile-name">Studio Dashboard</span><span class="bdg tbc-bdg">TBC</span></div><div class="sb-tile-sub">Socials · Content Management</div></button>
-      <button class="sb-tile" onclick="go('trt',this)"><div class="sb-tile-row"><span class="sb-tile-name">Elevate</span><span class="bdg live-bdg">LIVE</span></div><div class="sb-tile-sub">TRT for him · HRT for her</div></button>
+      <button class="sb-tile" onclick="go('trt',this)"><div class="sb-tile-row"><span class="sb-tile-name">Revive</span><span class="bdg live-bdg">LIVE</span></div><div class="sb-tile-sub">TRT for him · HRT for her</div></button>
     </div>
   </aside>
 
@@ -1129,7 +1139,7 @@ body.viewing-project .pvcontent{ display:flex !important; flex-direction:column 
           <span class="card-icon">◉</span>
           <span class="bdg live-bdg">LIVE</span>
         </div>
-        <div class="card-name">Elevate</div>
+        <div class="card-name">Revive</div>
         <div class="card-sub">TRT for him · HRT for her</div>
         <div class="card-bar"><div class="card-fill" style="width:100%"></div></div>
       </button>
@@ -1811,7 +1821,7 @@ body.viewing-project .pvcontent{ display:flex !important; flex-direction:column 
     <div class="pvhdr">
       <div class="pvhdr-icon ic-amber">💉</div>
       <div class="pvhdr-text">
-        <div class="pvhdr-name">Elevate</div>
+        <div class="pvhdr-name">Revive</div>
         <div class="pvhdr-desc">Clinician-led hormone optimisation for men and women — live on Vercel</div>
       </div>
       <div class="pvhdr-badge"><span class="bdg live-bdg">LIVE</span></div>
@@ -1864,7 +1874,7 @@ body.viewing-project .pvcontent{ display:flex !important; flex-direction:column 
         <div class="links">
           <a class="lcard" href="file:///C:/Users/spare/Desktop/trt-clinic-panel.html" target="_blank">
             <div class="lcard-icon ic-amber">📄</div>
-            <div class="lcard-body"><div class="lcard-label">Elevate Panel (Local)</div><div class="lcard-url">C:\Users\spare\Desktop\trt-clinic-panel.html</div></div>
+            <div class="lcard-body"><div class="lcard-label">Revive Panel (Local)</div><div class="lcard-url">C:\Users\spare\Desktop\trt-clinic-panel.html</div></div>
             <div class="lcard-arr">›</div>
           </a>
         </div>
