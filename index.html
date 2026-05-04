@@ -990,6 +990,15 @@ body.viewing-project .pvcontent{ display:flex !important; flex-direction:column 
     <div class="group">
       <div class="group-label">Operations</div>
       <div class="card-grid">
+  <button class="card" onclick="location.href='panel/tasks.html'" data-id="tasks">
+    <div class="card-top">
+      <span class="card-icon">✅</span>
+      <span class="bdg live-bdg">LIVE</span>
+    </div>
+    <div class="card-name">Tasks</div>
+    <div class="card-sub">Traffic light task board</div>
+    <div class="card-bar"><div class="card-fill" style="width:100%"></div></div>
+  </button>
       <button class="card" onclick="go('dashboard-all', this)" data-id="dashboard-all">
         <div class="card-top">
           <span class="card-icon">📊</span>
