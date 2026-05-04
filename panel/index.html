@@ -34,47 +34,6 @@
       <div class="avatar" onclick="signOut()">CJ</div>
     </div>
 
-    <!-- ===== TASKS SUMMARY TILE ===== -->
-    <div
-      id="tasks-summary-tile"
-      onclick="location.href='tasks.html'"
-      style="
-        background: #141414;
-        border: 0.5px solid #262626;
-        border-radius: 12px;
-        padding: 14px 16px;
-        margin-bottom: 12px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        transition: border-color 0.15s;
-      "
-      onmouseover="this.style.borderColor='#333'"
-      onmouseout="this.style.borderColor='#262626'"
-    >
-      <div>
-        <div style="font-size: 11px; letter-spacing: 2px; color: #d4a04c; font-weight: 500; margin-bottom: 8px;">TASKS</div>
-        <div style="display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
-          <div style="display: flex; align-items: center; gap: 5px;">
-            <span style="width: 8px; height: 8px; border-radius: 50%; background: #e24b4a; display: inline-block; flex-shrink: 0;"></span>
-            <span id="tasks-count-red" style="font-size: 15px; font-weight: 500; color: #e24b4a;">—</span>
-            <span style="font-size: 11px; color: #555;">urgent</span>
-          </div>
-          <div style="display: flex; align-items: center; gap: 5px;">
-            <span style="width: 8px; height: 8px; border-radius: 50%; background: #d4a04c; display: inline-block; flex-shrink: 0;"></span>
-            <span id="tasks-count-amber" style="font-size: 15px; font-weight: 500; color: #d4a04c;">—</span>
-            <span style="font-size: 11px; color: #555;">in progress</span>
-          </div>
-          <div style="display: flex; align-items: center; gap: 5px;">
-            <span style="width: 8px; height: 8px; border-radius: 50%; background: #4a9960; display: inline-block; flex-shrink: 0;"></span>
-            <span id="tasks-count-green" style="font-size: 15px; font-weight: 500; color: #4a9960;">—</span>
-            <span style="font-size: 11px; color: #555;">done</span>
-          </div>
-        </div>
-      </div>
-      <div style="font-size: 12px; color: #555; flex-shrink: 0; margin-left: 12px;">View all →</div>
-    </div>
 
     <div class="tabs">
       <button class="tab active" data-brand="fmm">FMM</button>
