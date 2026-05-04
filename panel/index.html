@@ -138,45 +138,6 @@
   <script src="shared.js"></script>
   <script src="tiles.js"></script>
 
-  <!-- ===== TASKS SUMMARY TILE — live counts from cj-ops-portal Firestore ===== -->
-  <script>
-    (function () {
-      var CJ_CONFIG = {
-        apiKey:            "AIzaSyBBBfuhHKF_N1Pwb86iZLR4Gw3G1ge8xho",
-        authDomain:        "cj-ops-portal.firebaseapp.com",
-        projectId:         "cj-ops-portal",
-        storageBucket:     "cj-ops-portal.firebasestorage.app",
-        messagingSenderId: "713176440860",
-        appId:             "1:713176440860:web:c227072b0bc7c75b5d3fd9"
-      };
-
-      // Named secondary app — avoids collision with the default FMM app in shared.js
-      var cjApp;
-      try {
-        cjApp = firebase.app('cjOps');
-      } catch (e) {
-        cjApp = firebase.initializeApp(CJ_CONFIG, 'cjOps');
-      }
-
-      firebase.firestore(cjApp).collection('cj_tasks').onSnapshot(
-        function (snapshot) {
-          var red = 0, amber = 0, green = 0;
-          snapshot.forEach(function (doc) {
-            var s = doc.data().status;
-            if      (s === 'red')   red++;
-            else if (s === 'amber') amber++;
-            else if (s === 'green') green++;
-          });
-          document.getElementById('tasks-count-red').textContent   = red;
-          document.getElementById('tasks-count-amber').textContent = amber;
-          document.getElementById('tasks-count-green').textContent = green;
-        },
-        function (err) {
-          console.warn('Tasks tile Firestore error:', err.message);
-        }
-      );
-    })();
-  </script>
 
 </body>
 </html>
