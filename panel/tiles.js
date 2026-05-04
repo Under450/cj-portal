@@ -7,18 +7,22 @@ const BRAND_TILES = {
     { id: 'inbox', label: 'INBOX', title: 'FMM mail', icon: 'mail', badge: 'inbox' },
     { id: 'customers', label: 'CUSTOMERS', title: 'All accounts', icon: 'list' },
     { id: 'didit', label: 'DIDIT', title: 'ID queue', icon: 'id', badge: 'didit', badgeColor: 'amber' },
+    { id: 'tasks', label: 'TASKS', title: 'Traffic light board', icon: 'tasks', href: 'tasks.html' },
   ],
   bergason: [
     { id: 'placeholder1', label: 'JOBS', title: 'Property jobs', icon: 'clock' },
     { id: 'placeholder2', label: 'INVOICES', title: 'Pending', icon: 'list' },
     { id: 'placeholder3', label: 'BLOCKS', title: 'Reports', icon: 'list' },
+    { id: 'tasks', label: 'TASKS', title: 'Traffic light board', icon: 'tasks', href: 'tasks.html' },
   ],
   aventus: [
     { id: 'placeholder1', label: 'STUDIO', title: 'Analytics', icon: 'clock' },
     { id: 'placeholder2', label: 'CONTENT', title: 'Queue', icon: 'list' },
+    { id: 'tasks', label: 'TASKS', title: 'Traffic light board', icon: 'tasks', href: 'tasks.html' },
   ],
   velvet: [
     { id: 'placeholder1', label: 'CREATORS', title: 'Dashboard', icon: 'clock' },
+    { id: 'tasks', label: 'TASKS', title: 'Traffic light board', icon: 'tasks', href: 'tasks.html' },
   ],
 };
 
@@ -35,6 +39,7 @@ const ICONS = {
   id: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="12" cy="12" r="3"/></svg>',
   list: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>',
   clock: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+  tasks: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>',
 };
 
 let currentBrand = 'fmm';
@@ -93,8 +98,10 @@ function renderTile(t) {
   const sectionId = t.section || t.id;
   const SECTIONS = ['stripe', 'signups', 'inbox', 'customers', 'didit'];
   const hasSection = SECTIONS.includes(sectionId);
-  const onclick = hasSection ? `onclick="showSection('${sectionId}')"` : '';
-  const cursor = hasSection ? 'pointer' : 'default';
+  const onclick = t.href
+    ? `onclick="location.href='${t.href}'"`
+    : hasSection ? `onclick="showSection('${sectionId}')"` : '';
+  const cursor = (t.href || hasSection) ? 'pointer' : 'default';
 
   if (t.type === 'value') {
     return `<div class="tile" ${onclick} style="cursor:${cursor}">
@@ -478,3 +485,4 @@ function signOut() {
 auth.onAuthStateChanged(user => {
   if (user && user.uid === ALLOWED_UID) render('fmm');
 });
+
