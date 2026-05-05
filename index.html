@@ -1248,6 +1248,23 @@ body.viewing-project .pvcontent{ display:flex !important; flex-direction:column 
           <button class="add-btn" onclick="addIdea('bs-cj',this.previousElementSibling)">+</button>
         </div>
 
+        <div class="bsec-label" style="margin-top:20px;">Infrastructure / AI Brain</div>
+        <div class="ideas" id="bs-infra">
+          <div class="idea"><div class="idea-dot dot-new"></div><span class="idea-text">PRIORITY: Spin up Hetzner CX32 server (~£5.80/mo) — blocks everything below</span><button class="idea-st ist-new" onclick="cycleIdea(this)">NEW</button></div>
+          <div class="idea"><div class="idea-dot dot-new"></div><span class="idea-text">Deploy self-hosted Supabase on Hetzner via Docker Compose — replaces Firebase for all new CJ projects</span><button class="idea-st ist-new" onclick="cycleIdea(this)">NEW</button></div>
+          <div class="idea"><div class="idea-dot dot-new"></div><span class="idea-text">Deploy Open Wearables on same Hetzner box — wearable data (Whoop/Garmin/Oura) for Revive patient portal</span><button class="idea-st ist-new" onclick="cycleIdea(this)">NEW</button></div>
+          <div class="idea"><div class="idea-dot dot-new"></div><span class="idea-text">Deploy Postiz on Hetzner — social media scheduler for Aventus</span><button class="idea-st ist-new" onclick="cycleIdea(this)">NEW</button></div>
+          <div class="idea"><div class="idea-dot dot-new"></div><span class="idea-text">CJ AI Brain — Obsidian vault (already exists at CJ-Vault/CJ-memory) + Supabase pgvector + RAG layer = persistent memory across Claude Code and claude.ai with no memory loss</span><button class="idea-st ist-new" onclick="cycleIdea(this)">NEW</button></div>
+          <div class="idea"><div class="idea-dot dot-new"></div><span class="idea-text">pgvector indexes every project decision, config, brand choice, workflow — query by meaning not keyword</span><button class="idea-st ist-new" onclick="cycleIdea(this)">NEW</button></div>
+          <div class="idea"><div class="idea-dot dot-new"></div><span class="idea-text">Claude Code hook — auto-write decisions to Obsidian vault as they happen, auto-index to vector store</span><button class="idea-st ist-new" onclick="cycleIdea(this)">NEW</button></div>
+          <div class="idea"><div class="idea-dot dot-parked"></div><span class="idea-text">Self-hosted uncensored LLM (Ollama) on Hetzner — powers Velvet AI chatters and Revive patient chatbot</span><button class="idea-st ist-parked" onclick="cycleIdea(this)">PARKED</button></div>
+          <div class="idea"><div class="idea-dot dot-parked"></div><span class="idea-text">NotebookLM as interim brain — upload CJ decisions doc as grounded memory until Hetzner is live</span><button class="idea-st ist-parked" onclick="cycleIdea(this)">PARKED</button></div>
+        </div>
+        <div class="add-row" style="margin-top:8px">
+          <input class="add-inp" placeholder="Add idea…" onkeydown="if(event.key==='Enter')addIdea('bs-infra',this)">
+          <button class="add-btn" onclick="addIdea('bs-infra',this.previousElementSibling)">+</button>
+        </div>
+
       </div>
     </div>
   </div>
