@@ -1909,6 +1909,62 @@ body.viewing-project .pvcontent{ display:flex !important; flex-direction:column 
     </div>
   </div>
 
+  <!-- INFRASTRUCTURE / AI BRAIN -->
+  <div class="pview" id="v-infrastructure">
+    <div class="pvhdr">
+      <div class="pvhdr-icon ic-amber">🧠</div>
+      <div class="pvhdr-text">
+        <div class="pvhdr-name">Infrastructure &amp; AI Brain</div>
+        <div class="pvhdr-desc">Hetzner server · Supabase · pgvector · Persistent AI memory across all CJ projects</div>
+      </div>
+      <div class="pvhdr-badge"><span class="bdg" style="background:#2a1f0a;color:#c9a84c;border:1px solid #c9a84c44;">PENDING</span></div>
+    </div>
+    <div class="pvcontent">
+      <div class="sec">
+        <div class="sec-title">The Plan</div>
+        <div style="padding:14px 0;font-size:0.78rem;color:var(--text-2);line-height:1.75;max-width:640px;">One Hetzner CX32 server (~£5.80/mo) running Docker hosts self-hosted Supabase, Open Wearables, Postiz and Ollama. A pgvector layer indexes the CJ Obsidian vault (already exists at <code style="font-size:0.72rem;background:var(--surface-2);padding:2px 6px;border-radius:3px;">C:\Users\spare\Documents\CJ-Vault\CJ-memory</code>) so both Claude Code and claude.ai retrieve any project decision or config from memory — no more memory loss between sessions.</div>
+      </div>
+      <div class="sec">
+        <div class="sec-title">Server Stack (once Hetzner is live)</div>
+        <div class="links">
+          <div class="lcard" style="cursor:default;"><div class="lcard-icon ic-amber">🖥️</div><div class="lcard-body"><div class="lcard-label">Hetzner CX32</div><div class="lcard-url">4 cores · 8GB RAM · 80GB SSD · ~£5.80/mo · hetzner.com</div></div></div>
+          <div class="lcard" style="cursor:default;"><div class="lcard-icon ic-amber">🗄️</div><div class="lcard-body"><div class="lcard-label">Supabase (self-hosted)</div><div class="lcard-url">PostgreSQL + Auth + Storage + pgvector · replaces Firebase for all new projects</div></div></div>
+          <div class="lcard" style="cursor:default;"><div class="lcard-icon ic-amber">📡</div><div class="lcard-body"><div class="lcard-label">Open Wearables</div><div class="lcard-url">Unified wearable data — Whoop, Garmin, Oura, Apple Health → Revive patient portal</div></div></div>
+          <div class="lcard" style="cursor:default;"><div class="lcard-icon ic-amber">📅</div><div class="lcard-body"><div class="lcard-label">Postiz</div><div class="lcard-url">Self-hosted social media scheduler · Aventus social posting</div></div></div>
+          <div class="lcard" style="cursor:default;"><div class="lcard-icon ic-amber">🤖</div><div class="lcard-body"><div class="lcard-label">Ollama (LLM)</div><div class="lcard-url">Uncensored local model · Velvet AI chatters · Revive patient chatbot · zero per-query cost</div></div></div>
+        </div>
+      </div>
+      <div class="sec">
+        <div class="sec-title">AI Brain Architecture</div>
+        <div class="links">
+          <div class="lcard" style="cursor:default;"><div class="lcard-icon ic-amber">📓</div><div class="lcard-body"><div class="lcard-label">Obsidian Vault (exists)</div><div class="lcard-url">CJ-Vault/CJ-memory · already connected via MCP in Claude Code</div></div></div>
+          <div class="lcard" style="cursor:default;"><div class="lcard-icon ic-amber">🔍</div><div class="lcard-body"><div class="lcard-label">pgvector Index</div><div class="lcard-url">Every note vector-indexed · query by meaning not keyword · no memory loss</div></div></div>
+          <div class="lcard" style="cursor:default;"><div class="lcard-icon ic-amber">🪝</div><div class="lcard-body"><div class="lcard-label">Claude Code Hook</div><div class="lcard-url">Auto-writes decisions to Obsidian as they happen → auto-indexes to vector store</div></div></div>
+          <div class="lcard" style="cursor:default;"><div class="lcard-icon ic-amber">💬</div><div class="lcard-body"><div class="lcard-label">RAG Query Layer</div><div class="lcard-url">Claude Code and claude.ai both query vector store before responding · persistent cross-session memory</div></div></div>
+        </div>
+      </div>
+      <div class="sec">
+        <div class="sec-title">Open Tasks</div>
+        <div class="tasks" id="t-infra">
+          <div class="task" data-t="ops" onclick="tick(this)"><div class="chk"></div><span class="tt">PRIORITY: Create Hetzner account and spin up CX32 (~£5.80/mo) — hetzner.com</span><span class="tg tg-ops">OPS</span></div>
+          <div class="task" data-t="dev" onclick="tick(this)"><div class="chk"></div><span class="tt">Claude Code: SSH into Hetzner, install Docker, deploy self-hosted Supabase via docker-compose</span><span class="tg tg-dev">DEV</span></div>
+          <div class="task" data-t="dev" onclick="tick(this)"><div class="chk"></div><span class="tt">Deploy Open Wearables on same Hetzner box alongside Supabase</span><span class="tg tg-dev">DEV</span></div>
+          <div class="task" data-t="dev" onclick="tick(this)"><div class="chk"></div><span class="tt">Deploy Postiz on Hetzner and assign to Aventus</span><span class="tg tg-dev">DEV</span></div>
+          <div class="task" data-t="dev" onclick="tick(this)"><div class="chk"></div><span class="tt">Deploy Ollama on Hetzner · test uncensored model · wire to Velvet backend</span><span class="tg tg-dev">DEV</span></div>
+          <div class="task" data-t="dev" onclick="tick(this)"><div class="chk"></div><span class="tt">Enable pgvector on Supabase · create embeddings table for CJ Obsidian vault</span><span class="tg tg-dev">DEV</span></div>
+          <div class="task" data-t="dev" onclick="tick(this)"><div class="chk"></div><span class="tt">Write Claude Code hook to auto-index decisions to vector store each session</span><span class="tg tg-dev">DEV</span></div>
+          <div class="task" data-t="dev" onclick="tick(this)"><div class="chk"></div><span class="tt">Wire RAG query layer so Claude Code retrieves relevant context before every response</span><span class="tg tg-dev">DEV</span></div>
+          <div class="task" data-t="ops" onclick="tick(this)"><div class="chk"></div><span class="tt">Configure subdomain for Supabase instance (e.g. db.cj.internal or supabase.yourdomain.com)</span><span class="tg tg-ops">OPS</span></div>
+          <div class="task" data-t="ops" onclick="tick(this)"><div class="chk"></div><span class="tt">Migrate new CJ projects (Revive, FocusTRT, Aventus Studio) from Firebase to self-hosted Supabase</span><span class="tg tg-ops">OPS</span></div>
+        </div>
+        <div class="add-row">
+          <input class="add-inp" placeholder="Add a task…" onkeydown="if(event.key==='Enter')addT('t-infra',this)">
+          <button class="add-btn" onclick="addT('t-infra',this.previousElementSibling)">+</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- CJ OPS PORTAL -->
 
   <!-- EMAILS -->
