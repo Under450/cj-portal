@@ -952,10 +952,12 @@ body.viewing-project .pvcontent{ display:flex !important; flex-direction:column 
 <div id="auth-gate" class="auth-gate">
   <div class="auth-card">
     <h2>CJ Ops Portal</h2>
-    <p class="auth-sub">Sign in with magic link</p>
-    <input id="auth-email" type="email" placeholder="your email" autocomplete="email">
-    <button id="auth-send">Send sign-in link</button>
+    <p class="auth-sub">Sign in</p>
+    <input id="auth-email" type="email" placeholder="email" autocomplete="username">
+    <input id="auth-password" type="password" placeholder="password" autocomplete="current-password">
+    <button id="auth-send">Sign in</button>
     <div id="auth-msg" class="auth-msg"></div>
+    <a href="#" id="auth-link-fallback" style="display:block;margin-top:14px;text-align:center;font-size:12px;color:#6b6455;text-decoration:none">Email me a sign-in link instead</a>
   </div>
 </div>
 
@@ -2397,7 +2399,7 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closePreview(
 
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import { getAuth, sendSignInLinkToEmail, isSignInWithEmailLink, signInWithEmailLink, onAuthStateChanged, signOut, setPersistence, indexedDBLocalPersistence } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { getAuth, signInWithEmailAndPassword, sendSignInLinkToEmail, isSignInWithEmailLink, signInWithEmailLink, onAuthStateChanged, signOut, setPersistence, browserLocalPersistence, indexedDBLocalPersistence } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 
 const FB_CFG = { apiKey: 'AIzaSyCToSDWiFy0zjDo4Amfe4_IV8z7N54jrQU', authDomain: 'forward-my-mail.firebaseapp.com', projectId: 'forward-my-mail', storageBucket: 'forward-my-mail.firebasestorage.app', messagingSenderId: '933044287958', appId: '1:933044287958:web:f28e1b2e3c4d5a6b' };
 const ALLOWED = ['caj@me.com'];
@@ -2406,12 +2408,14 @@ const app = initializeApp(FB_CFG);
 const auth = getAuth(app);
 window.__cjFirebaseApp = app;
 window.__cjFirebaseAuth = auth;
-try { await setPersistence(auth, indexedDBLocalPersistence); } catch(e) { console.warn('persistence failed', e); }
+try { await setPersistence(auth, browserLocalPersistence); } catch(e) { try { await setPersistence(auth, indexedDBLocalPersistence); } catch(e2) { console.warn('persistence failed', e2); } }
 
 const gate = document.getElementById('auth-gate');
 const cjApp = document.getElementById('cj-app');
 const emailIn = document.getElementById('auth-email');
+const pwdIn = document.getElementById('auth-password');
 const sendBtn = document.getElementById('auth-send');
+const linkFallback = document.getElementById('auth-link-fallback');
 const msg = document.getElementById('auth-msg');
 
 function showPortal() { gate.style.display = 'none'; cjApp.style.display = ''; }
@@ -2443,20 +2447,35 @@ onAuthStateChanged(auth, user => {
 
 sendBtn.addEventListener('click', async () => {
   const email = (emailIn.value || '').trim().toLowerCase();
-  if (!email) { msg.textContent = 'Enter your email'; return; }
+  const password = pwdIn.value || '';
+  if (!email || !password) { msg.textContent = 'Enter email and password'; return; }
   if (!ALLOWED.includes(email)) { msg.textContent = 'Email not authorised'; return; }
   sendBtn.disabled = true;
+  msg.textContent = 'Signing in...';
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+    // onAuthStateChanged will show portal
+  } catch (e) {
+    sendBtn.disabled = false;
+    msg.textContent = e.code === 'auth/wrong-password' || e.code === 'auth/invalid-credential' ? 'Wrong password' : 'Error: ' + e.message;
+  }
+});
+
+pwdIn.addEventListener('keydown', e => { if (e.key === 'Enter') sendBtn.click(); });
+emailIn.addEventListener('keydown', e => { if (e.key === 'Enter') pwdIn.focus(); });
+
+linkFallback.addEventListener('click', async (e) => {
+  e.preventDefault();
+  const email = (emailIn.value || '').trim().toLowerCase();
+  if (!email) { msg.textContent = 'Enter your email first'; return; }
+  if (!ALLOWED.includes(email)) { msg.textContent = 'Email not authorised'; return; }
   msg.textContent = 'Sending link...';
   try {
     await sendSignInLinkToEmail(auth, email, { url: window.location.origin + window.location.pathname, handleCodeInApp: true });
     window.localStorage.setItem('cj_signin_email', email);
-    msg.textContent = 'Check your email for the sign-in link. You can close this tab.';
-    sendBtn.style.display = 'none';
-    emailIn.disabled = true;
-  } catch (e) { sendBtn.disabled = false; msg.textContent = 'Error: ' + e.message; }
+    msg.textContent = 'Link sent. Check your inbox.';
+  } catch (e) { msg.textContent = 'Error: ' + e.message; }
 });
-
-emailIn.addEventListener('keydown', e => { if (e.key === 'Enter') sendBtn.click(); });
 </script>
 
 </body>
