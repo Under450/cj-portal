@@ -957,7 +957,7 @@ body.viewing-project .pvcontent{ display:flex !important; flex-direction:column 
     <input id="auth-password" type="password" placeholder="password" autocomplete="current-password">
     <button id="auth-send">Sign in</button>
     <div id="auth-msg" class="auth-msg"></div>
-    <a href="#" id="auth-link-fallback" style="display:block;margin-top:14px;text-align:center;font-size:12px;color:#6b6455;text-decoration:none">Email me a sign-in link instead</a>
+    <a href="#" id="auth-link-fallback" style="display:block;margin-top:14px;text-align:center;font-size:12px;color:#6b6455;text-decoration:none">Forgot password? Email me a reset link</a>
   </div>
 </div>
 
@@ -2399,7 +2399,7 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closePreview(
 
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import { getAuth, signInWithEmailAndPassword, sendSignInLinkToEmail, isSignInWithEmailLink, signInWithEmailLink, onAuthStateChanged, signOut, setPersistence, browserLocalPersistence, indexedDBLocalPersistence } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged, signOut, setPersistence, browserLocalPersistence, indexedDBLocalPersistence } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
 
 const FB_CFG = { apiKey: 'AIzaSyCToSDWiFy0zjDo4Amfe4_IV8z7N54jrQU', authDomain: 'forward-my-mail.firebaseapp.com', projectId: 'forward-my-mail', storageBucket: 'forward-my-mail.firebasestorage.app', messagingSenderId: '933044287958', appId: '1:933044287958:web:f28e1b2e3c4d5a6b' };
 const ALLOWED = ['caj@me.com'];
@@ -2420,20 +2420,6 @@ const msg = document.getElementById('auth-msg');
 
 function showPortal() { gate.style.display = 'none'; cjApp.style.display = ''; }
 function showGate(text) { gate.style.display = ''; cjApp.style.display = 'none'; if (text !== undefined) msg.textContent = text; }
-
-// Magic link callback handling
-if (isSignInWithEmailLink(auth, window.location.href)) {
-  let email = window.localStorage.getItem('cj_signin_email');
-  if (!email) email = window.prompt('Confirm your email for sign-in:') || '';
-  email = email.trim().toLowerCase();
-  if (email) {
-    try {
-      await signInWithEmailLink(auth, email, window.location.href);
-      window.localStorage.removeItem('cj_signin_email');
-      window.history.replaceState({}, document.title, window.location.pathname);
-    } catch (e) { showGate('Sign-in failed: ' + e.message); }
-  }
-}
 
 onAuthStateChanged(auth, user => {
   if (!user) { showGate(''); return; }
@@ -2469,11 +2455,10 @@ linkFallback.addEventListener('click', async (e) => {
   const email = (emailIn.value || '').trim().toLowerCase();
   if (!email) { msg.textContent = 'Enter your email first'; return; }
   if (!ALLOWED.includes(email)) { msg.textContent = 'Email not authorised'; return; }
-  msg.textContent = 'Sending link...';
+  msg.textContent = 'Sending reset link...';
   try {
-    await sendSignInLinkToEmail(auth, email, { url: window.location.origin + window.location.pathname, handleCodeInApp: true });
-    window.localStorage.setItem('cj_signin_email', email);
-    msg.textContent = 'Link sent. Check your inbox.';
+    await sendPasswordResetEmail(auth, email);
+    msg.textContent = 'Reset link sent. Check your inbox.';
   } catch (e) { msg.textContent = 'Error: ' + e.message; }
 });
 </script>
