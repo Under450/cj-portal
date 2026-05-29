@@ -2065,11 +2065,21 @@ body.viewing-project .pvcontent{ display:flex !important; flex-direction:column 
               </button>
             </div>
           </div>
+          <div class="email-card" id="email-fmm-id-day1" style="border-left:3px solid #4a90e2">
+            <div class="email-card-meta">
+              <div class="email-card-from">FMM · ID sequence</div>
+              <div class="email-card-subject">Quick reminder: complete your ID</div>
+              <div class="email-card-desc">Day 1 · auto-fires if idStatus is not_started after 24h</div>
+            </div>
+            <div class="email-card-actions">
+              <span style="font-size:10px;color:#888;font-family:'Geist Mono',monospace">checkIdReminders</span>
+            </div>
+          </div>
           <div class="email-card" id="email-fmm-02">
             <div class="email-card-meta">
-              <div class="email-card-from">FMM</div>
+              <div class="email-card-from">FMM · ID sequence</div>
               <div class="email-card-subject">Identity Verification Reminder</div>
-              <div class="email-card-desc">Day-3 nudge to complete ID verification</div>
+              <div class="email-card-desc">Day 3 · gentle reminder, auto-fires from Cloud Function</div>
             </div>
             <div class="email-card-actions">
               <button class="email-btn email-btn-copy" onclick="copyEmail('fmm-02', this)">
@@ -2080,11 +2090,21 @@ body.viewing-project .pvcontent{ display:flex !important; flex-direction:column 
               </button>
             </div>
           </div>
+          <div class="email-card" id="email-fmm-id-day5" style="border-left:3px solid #4a90e2">
+            <div class="email-card-meta">
+              <div class="email-card-from">FMM · ID sequence</div>
+              <div class="email-card-subject">Your mailbox is waiting — please complete ID</div>
+              <div class="email-card-desc">Day 5 · nudge between reminders</div>
+            </div>
+            <div class="email-card-actions">
+              <span style="font-size:10px;color:#888;font-family:'Geist Mono',monospace">checkIdReminders</span>
+            </div>
+          </div>
           <div class="email-card" id="email-fmm-03">
             <div class="email-card-meta">
-              <div class="email-card-from">FMM</div>
+              <div class="email-card-from">FMM · ID sequence</div>
               <div class="email-card-subject">Account at Risk — Action Required</div>
-              <div class="email-card-desc">Day-7 final warning before account suspension</div>
+              <div class="email-card-desc">Day 7 · final reminder (3 days left before suspend warning)</div>
             </div>
             <div class="email-card-actions">
               <button class="email-btn email-btn-copy" onclick="copyEmail('fmm-03', this)">
@@ -2093,6 +2113,56 @@ body.viewing-project .pvcontent{ display:flex !important; flex-direction:column 
               <button class="email-btn email-btn-preview" onclick="previewEmail('fmm-03')">
                 <span class="email-btn-icon">↗</span> Preview
               </button>
+            </div>
+          </div>
+          <div class="email-card" id="email-fmm-id-day10" style="border-left:3px solid #f59e0b">
+            <div class="email-card-meta">
+              <div class="email-card-from">FMM · ID sequence</div>
+              <div class="email-card-subject">Last chance — suspension in 4 days</div>
+              <div class="email-card-desc">Day 10 · final warning before account suspended at Day 14</div>
+            </div>
+            <div class="email-card-actions">
+              <span style="font-size:10px;color:#888;font-family:'Geist Mono',monospace">checkIdReminders</span>
+            </div>
+          </div>
+          <div class="email-card" id="email-fmm-id-suspended" style="border-left:3px solid #dc2626">
+            <div class="email-card-meta">
+              <div class="email-card-from">FMM · ID sequence</div>
+              <div class="email-card-subject">Account suspended — reactivate anytime</div>
+              <div class="email-card-desc">Day 14 · sets accountStatus=id_suspended</div>
+            </div>
+            <div class="email-card-actions">
+              <span style="font-size:10px;color:#888;font-family:'Geist Mono',monospace">checkIdReminders</span>
+            </div>
+          </div>
+          <div class="email-card" id="email-fmm-id-postsuspend21" style="border-left:3px solid #dc2626">
+            <div class="email-card-meta">
+              <div class="email-card-from">FMM · ID sequence</div>
+              <div class="email-card-subject">Mailbox still on hold — verify to reactivate</div>
+              <div class="email-card-desc">Day 21 · post-suspension reminder</div>
+            </div>
+            <div class="email-card-actions">
+              <span style="font-size:10px;color:#888;font-family:'Geist Mono',monospace">checkIdReminders</span>
+            </div>
+          </div>
+          <div class="email-card" id="email-fmm-id-closurewarn" style="border-left:3px solid #dc2626">
+            <div class="email-card-meta">
+              <div class="email-card-from">FMM · ID sequence</div>
+              <div class="email-card-subject">Account closes in 2 days unless verified</div>
+              <div class="email-card-desc">Day 28 · final closure warning</div>
+            </div>
+            <div class="email-card-actions">
+              <span style="font-size:10px;color:#888;font-family:'Geist Mono',monospace">checkIdReminders</span>
+            </div>
+          </div>
+          <div class="email-card" id="email-fmm-id-closed" style="border-left:3px solid #525252">
+            <div class="email-card-meta">
+              <div class="email-card-from">FMM · ID sequence</div>
+              <div class="email-card-subject">Your account has been closed</div>
+              <div class="email-card-desc">Day 30 · sets accountStatus=id_closed, references refund per Clause 15.2/15.3</div>
+            </div>
+            <div class="email-card-actions">
+              <span style="font-size:10px;color:#888;font-family:'Geist Mono',monospace">checkIdReminders</span>
             </div>
           </div>
           <div class="email-card" id="email-fmm-04">
@@ -2230,11 +2300,21 @@ body.viewing-project .pvcontent{ display:flex !important; flex-direction:column 
               </button>
             </div>
           </div>
+          <div class="email-card" id="email-fmm-refund" style="border-left:3px solid #525252">
+            <div class="email-card-meta">
+              <div class="email-card-from">FMM · Manual</div>
+              <div class="email-card-subject">Customer Refund Response</div>
+              <div class="email-card-desc">Sent manually when customer requests cancellation/refund. Cites Clauses 15.2 + 15.3, offers pro-rata Service Fee refund. Available inside Spam Rescue tool</div>
+            </div>
+            <div class="email-card-actions">
+              <span style="font-size:10px;color:#888;font-family:'Geist Mono',monospace">via Spam Rescue → Customer Refund</span>
+            </div>
+          </div>
           <div class="email-card" id="email-fmm-spam-rescue" style="border-color:#c9a84c22;background:#1a1810;">
             <div class="email-card-meta">
               <div class="email-card-from" style="color:#c9a84c;">FMM · Tool</div>
               <div class="email-card-subject">Spam Rescue — Manual Resend</div>
-              <div class="email-card-desc">Resend any FMM email that landed in spam. Includes address details, contact info &amp; spam whitelist nudge.</div>
+              <div class="email-card-desc">Resend any FMM email that landed in spam. Now includes the Customer Refund email type with pro-rata calculation placeholders.</div>
             </div>
             <div class="email-card-actions">
               <button class="email-btn email-btn-preview" onclick="previewEmail('fmm-spam-rescue')" style="background:#c9a84c22;border-color:#c9a84c55;color:#c9a84c;">
