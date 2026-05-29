@@ -1699,6 +1699,11 @@ body.viewing-project .pvcontent{ display:flex !important; flex-direction:column 
             <div class="lcard-body"><div class="lcard-label">FMM Customer Spreadsheet</div><div class="lcard-url">docs.google.com — Google Sheets</div></div>
             <div class="lcard-arr">›</div>
           </a>
+          <a class="lcard" href="#" onclick="openConsentsLog();return false;">
+            <div class="lcard-icon ic-purple">📜</div>
+            <div class="lcard-body"><div class="lcard-label">Consents Audit Log</div><div class="lcard-url">Per-customer terms + immediate-perf acceptance records</div></div>
+            <div class="lcard-arr">›</div>
+          </a>
           <a class="lcard" href="https://bergasonblockmanagement.co.uk/emails/renters-rights-landlord-email.html" target="_blank">
             <div class="lcard-icon ic-amber">✉️</div>
             <div class="lcard-body"><div class="lcard-label">FMM Email Templates</div><div class="lcard-url">bergasonblockmanagement.co.uk/emails/index_8.html</div></div>
@@ -2397,17 +2402,115 @@ document.addEventListener('keydown', e => { if(e.key === 'Escape') closePreview(
 
 </script>
 
+<!-- Consents Audit Log modal -->
+<div id="consents-modal-overlay" style="position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9000;display:none;align-items:center;justify-content:center;padding:20px">
+  <div style="background:#0c0c0c;border:1px solid #2a2a2a;border-radius:12px;max-width:1100px;width:100%;max-height:90vh;display:flex;flex-direction:column">
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:18px 22px;border-bottom:1px solid #2a2a2a">
+      <div style="font-family:'Geist Mono',monospace;font-size:13px;text-transform:uppercase;letter-spacing:0.08em;color:#f4f4f4">Consents Audit Log</div>
+      <button onclick="document.getElementById('consents-modal-overlay').style.display='none'" style="background:transparent;border:1px solid #3a3a3a;color:#cfcfcf;font-size:18px;cursor:pointer;padding:4px 12px;border-radius:6px">×</button>
+    </div>
+    <div style="padding:14px 22px;border-bottom:1px solid #2a2a2a;display:flex;gap:10px;flex-wrap:wrap">
+      <input id="consents-filter-email" type="text" placeholder="Filter by email or name..." style="flex:1;min-width:220px;background:#1a1a1a;border:1px solid #2a2a2a;color:#f4f4f4;padding:9px 12px;border-radius:6px;font-family:inherit;font-size:13px">
+      <button onclick="window.loadConsents()" style="background:#3a3a3a;border:1px solid #4a4a4a;color:#f4f4f4;padding:9px 18px;border-radius:6px;cursor:pointer;font-size:13px">Refresh</button>
+      <span id="consents-status" style="font-size:12px;color:#cfcfcf;align-self:center"></span>
+    </div>
+    <div style="overflow:auto;flex:1;padding:0 22px 18px">
+      <table style="width:100%;border-collapse:collapse;font-size:12px;color:#e8e2d9" id="consents-table">
+        <thead style="position:sticky;top:0;background:#0c0c0c">
+          <tr style="border-bottom:1px solid #3a3a3a">
+            <th style="padding:8px;text-align:left">When</th>
+            <th style="padding:8px;text-align:left">Customer</th>
+            <th style="padding:8px;text-align:left">Plan</th>
+            <th style="padding:8px;text-align:right">Activation</th>
+            <th style="padding:8px;text-align:right">Service</th>
+            <th style="padding:8px;text-align:left">Terms v</th>
+            <th style="padding:8px;text-align:left">IP</th>
+            <th style="padding:8px;text-align:left">Wording</th>
+          </tr>
+        </thead>
+        <tbody id="consents-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
 import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged, signOut, setPersistence, browserLocalPersistence, indexedDBLocalPersistence } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
+import { getFirestore, collection, query, orderBy, limit, getDocs } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 const FB_CFG = { apiKey: 'AIzaSyCToSDWiFy0zjDo4Amfe4_IV8z7N54jrQU', authDomain: 'forward-my-mail.firebaseapp.com', projectId: 'forward-my-mail', storageBucket: 'forward-my-mail.firebasestorage.app', messagingSenderId: '933044287958', appId: '1:933044287958:web:f28e1b2e3c4d5a6b' };
 const ALLOWED = ['caj@me.com'];
 
 const app = initializeApp(FB_CFG);
 const auth = getAuth(app);
+const db = getFirestore(app);
 window.__cjFirebaseApp = app;
 window.__cjFirebaseAuth = auth;
+window.__cjFirestore = db;
+
+// Consents Audit Log loader (uses staff auth, queries /consents)
+function escapeHtml(s) { return String(s||'').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function fmtDate(ts) {
+  if (!ts) return '';
+  const d = ts.toDate ? ts.toDate() : new Date(ts);
+  return d.toLocaleString('en-GB', { day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit' });
+}
+window.__consentsCache = [];
+window.loadConsents = async function() {
+  const status = document.getElementById('consents-status');
+  const tbody = document.getElementById('consents-tbody');
+  status.textContent = 'Loading...';
+  tbody.innerHTML = '';
+  try {
+    const q = query(collection(db, 'consents'), orderBy('recordedAt', 'desc'), limit(500));
+    const snap = await getDocs(q);
+    window.__consentsCache = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+    status.textContent = `Loaded ${window.__consentsCache.length} records`;
+    window.__renderConsents();
+  } catch (e) {
+    status.textContent = 'Error: ' + e.message;
+    console.error('loadConsents failed', e);
+  }
+};
+window.__renderConsents = function() {
+  const tbody = document.getElementById('consents-tbody');
+  const filter = (document.getElementById('consents-filter-email').value || '').toLowerCase().trim();
+  const rows = window.__consentsCache.filter(r => {
+    if (!filter) return true;
+    return (r.email||'').toLowerCase().includes(filter) || (r.name||'').toLowerCase().includes(filter);
+  });
+  tbody.innerHTML = rows.map(r => `
+    <tr style="border-bottom:1px solid #2a2a2a;vertical-align:top">
+      <td style="padding:8px;white-space:nowrap;color:#cfcfcf">${escapeHtml(fmtDate(r.recordedAt) || r.timestamp || '')}</td>
+      <td style="padding:8px">
+        <div style="font-weight:600">${escapeHtml(r.name || '—')}</div>
+        <div style="color:#9a9a9a;font-size:11px">${escapeHtml(r.email || '')}</div>
+      </td>
+      <td style="padding:8px">${escapeHtml(r.selectedPlanName || '(no plan — account only)')}</td>
+      <td style="padding:8px;text-align:right">${r.activationFee != null ? '£' + r.activationFee : '—'}</td>
+      <td style="padding:8px;text-align:right">${r.serviceFee != null ? '£' + r.serviceFee : '—'}</td>
+      <td style="padding:8px;color:#cfcfcf">${escapeHtml(r.termsVersion || '')}</td>
+      <td style="padding:8px;color:#cfcfcf;font-family:'Geist Mono',monospace;font-size:11px">${escapeHtml(r.ipAddress || '')}</td>
+      <td style="padding:8px;max-width:380px">
+        <details><summary style="cursor:pointer;color:#cfcfcf">View tick-box wording</summary>
+          <div style="margin-top:6px;color:#9a9a9a;font-size:11px;line-height:1.5">
+            <p style="margin-bottom:6px"><strong style="color:#cfcfcf">Terms:</strong> ${escapeHtml(r.termsCheckboxWording||'')}</p>
+            <p><strong style="color:#cfcfcf">Immediate perf:</strong> ${escapeHtml(r.immediatePerformanceCheckboxWording||'')}</p>
+            <p style="margin-top:6px;color:#666;font-size:10px">User agent: ${escapeHtml(r.userAgent||'')}</p>
+          </div>
+        </details>
+      </td>
+    </tr>`).join('') || '<tr><td colspan="8" style="padding:30px;text-align:center;color:#6b6455">No records match the filter</td></tr>';
+};
+window.openConsentsLog = function() {
+  document.getElementById('consents-modal-overlay').style.display = 'flex';
+  window.loadConsents();
+};
+document.getElementById('consents-filter-email').addEventListener('input', () => window.__renderConsents());
+document.getElementById('consents-modal-overlay').addEventListener('click', e => {
+  if (e.target.id === 'consents-modal-overlay') e.target.style.display = 'none';
+});
 try { await setPersistence(auth, browserLocalPersistence); } catch(e) { try { await setPersistence(auth, indexedDBLocalPersistence); } catch(e2) { console.warn('persistence failed', e2); } }
 
 const gate = document.getElementById('auth-gate');
