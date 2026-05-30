@@ -861,7 +861,7 @@ iframe{
 .email-modal-overlay{
   position:fixed; inset:0;
   background:rgba(0,0,0,0.75);
-  z-index:1000;
+  z-index:10000;
   display:none;
   align-items:center; justify-content:center;
   padding:20px;
@@ -2679,8 +2679,18 @@ const sendBtn = document.getElementById('auth-send');
 const linkFallback = document.getElementById('auth-link-fallback');
 const msg = document.getElementById('auth-msg');
 
-function showPortal() { gate.style.display = 'none'; cjApp.style.display = ''; }
-function showGate(text) { gate.style.display = ''; cjApp.style.display = 'none'; if (text !== undefined) msg.textContent = text; }
+let __hasAuthenticatedOnce = false;
+function showPortal() { __hasAuthenticatedOnce = true; gate.style.display = 'none'; gate.style.pointerEvents = 'none'; gate.style.visibility = 'hidden'; cjApp.style.display = ''; }
+function showGate(text) {
+  // Once authenticated, never show the gate again from transient auth-state flickers
+  // (iframe Firebase inits can briefly flip state). If user genuinely signs out, page reload re-runs the check.
+  if (__hasAuthenticatedOnce) { console.warn('Suppressed gate redisplay after successful auth'); return; }
+  gate.style.display = '';
+  gate.style.pointerEvents = '';
+  gate.style.visibility = '';
+  cjApp.style.display = 'none';
+  if (text !== undefined) msg.textContent = text;
+}
 
 onAuthStateChanged(auth, user => {
   if (!user) { showGate(''); return; }
